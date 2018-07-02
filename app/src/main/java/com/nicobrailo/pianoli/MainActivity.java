@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         setContentView(R.layout.activity_main);
+
+        this.setContentView(new DrawingCanvas(this));
     }
 
     public void onClick_ExitTrapsToggle(View v) {
