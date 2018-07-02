@@ -90,25 +90,34 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_MOVE: // fallthrough
-            case MotionEvent.ACTION_DOWN: {
-                int key_idx = (int) event.getX() / KEYS_WIDTH;
-                if (current_key_press == null || key_idx != current_key_press) {
-                    Log.d("XXXXXXXXX", "Pressed key " + key_idx);
-                    current_key_press = key_idx;
-                    this.redraw();
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:           // fallthrough
+            case MotionEvent.ACTION_POINTER_DOWN:   // fallthrough
+            // case MotionEvent.ACTION_MOVE: // fallthrough
+            case MotionEvent.ACTION_POINTER_UP:     // fallthrough
+            case MotionEvent.ACTION_UP: {
+                for (int i=0; i < event.getPointerCount(); ++i) {
+                    final int ptr_id = event.getPointerId(i);
+                    // ptr_pos = event.getX(ptr_id), event.getY(ptr_id)
+
+                    final int key_idx = (int) event.getX(ptr_id) / KEYS_WIDTH;
+                    boolean key_pressed = true;
+                    if ((event.getActionMasked() == MotionEvent.ACTION_POINTER_UP) ||
+                            (event.getActionMasked() == MotionEvent.ACTION_UP)) {
+                        key_pressed = false;
+                    }
+
+                    Log.d("XXXXXXXXX", "Key " + key_idx + " is pressed? " + key_pressed);
                 }
-                return true;
-            } case MotionEvent.ACTION_UP: {
-                current_key_press = null;
-                this.redraw();
-                Log.d("XXXXXXXXX", "UP key");
+                Log.d("XXXXXXXXX", "K-----------");
+
+
                 return true;
             }
-        }
 
-        return super.onTouchEvent(event);
+            default:
+                return super.onTouchEvent(event);
+        }
     }
 
     @Override
