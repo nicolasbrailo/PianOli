@@ -12,6 +12,9 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -88,29 +91,63 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
+    void on_key_up(int key_idx) {
+        Log.d("XXXXXXXXX", "Key " + key_idx + " is now UP");
+    }
+
+    void on_key_down(int key_idx) {
+        Log.d("XXXXXXXXX", "Key " + key_idx + " is now DOWN");
+    }
+
+    Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        final int ptr_id = event.getPointerId(event.getActionIndex());
+        // final int ptr_idx = event.findPointerIndex(ptr_id);
+        // ptr_pos = event.getX(ptr_id), event.getY(ptr_id)
+        final int key_idx = (int) event.getX(event.getActionIndex()) / KEYS_WIDTH;
+
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:           // fallthrough
-            case MotionEvent.ACTION_POINTER_DOWN:   // fallthrough
-            // case MotionEvent.ACTION_MOVE: // fallthrough
+            case MotionEvent.ACTION_POINTER_DOWN: {
+                if (touch_pointer_to_keys.containsKey(ptr_id)) {
+                    // throw new Exception("");
+                    // XXX TODO
+                    Log.e("XXXXXXXXX", "Bad things happened");
+                }
+
+                // Mark key down ptr_id
+                touch_pointer_to_keys.put(ptr_id, key_idx);
+                on_key_down(key_idx);
+
+                return true;
+            }
+            case MotionEvent.ACTION_MOVE: {
+                if (!touch_pointer_to_keys.containsKey(ptr_id)) {
+                    // throw new Exception("");
+                    // XXX TODO
+                    Log.e("XXXXXXXXX", "Bad things happened");
+                }
+
+                // check if key changed
+                if (touch_pointer_to_keys.get(ptr_id) != key_idx) {
+                    touch_pointer_to_keys.put(ptr_id, key_idx);
+                    on_key_up(touch_pointer_to_keys.get(ptr_id));
+                    on_key_down(key_idx);
+                }
+
+                return true;
+            }
             case MotionEvent.ACTION_POINTER_UP:     // fallthrough
             case MotionEvent.ACTION_UP: {
-                for (int i=0; i < event.getPointerCount(); ++i) {
-                    final int ptr_id = event.getPointerId(i);
-                    // ptr_pos = event.getX(ptr_id), event.getY(ptr_id)
-
-                    final int key_idx = (int) event.getX(ptr_id) / KEYS_WIDTH;
-                    boolean key_pressed = true;
-                    if ((event.getActionMasked() == MotionEvent.ACTION_POINTER_UP) ||
-                            (event.getActionMasked() == MotionEvent.ACTION_UP)) {
-                        key_pressed = false;
-                    }
-
-                    Log.d("XXXXXXXXX", "Key " + key_idx + " is pressed? " + key_pressed);
+                if (!touch_pointer_to_keys.containsKey(ptr_id)) {
+                    // throw new Exception("");
+                    // XXX TODO
+                    Log.e("XXXXXXXXX", "Bad things happened");
                 }
-                Log.d("XXXXXXXXX", "K-----------");
 
+                touch_pointer_to_keys.remove(ptr_id);
+                on_key_up(key_idx);
 
                 return true;
             }
@@ -119,6 +156,7 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
                 return super.onTouchEvent(event);
         }
     }
+
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
