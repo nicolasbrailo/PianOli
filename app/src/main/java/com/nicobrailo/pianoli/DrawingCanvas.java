@@ -18,10 +18,12 @@ import java.util.Map;
 
 class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
+    private static final double KEYS_FLAT_HEIGHT_RATIO = 0.55;
     private final Point screen_size = new Point();
     final int keys_count;
     boolean key_pressed[];
-    final int KEYS_WIDTH = 220;
+    private static final int KEYS_WIDTH = 220;
+    private static final int KEYS_FLAT_WIDTH = 130;
 
     final int[][] KEY_COLORS = new int[][]{
             {148,   0, 211},    // Violet
@@ -31,6 +33,10 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             {255, 255,   0},    // Yellow
             {255, 127,   0},    // Orange
             {255,   0 ,  0},    // Red
+    };
+
+    enum Keys {
+        Do, Re, Mi, Fa, Sol, La, Si
     };
 
     void draw_all_keys(final Canvas canvas) {
@@ -44,6 +50,11 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
         for (int i=0; i < keys_count; ++i) {
             draw_key(canvas, i, key_pressed[i]);
         }
+
+        // Round up (draw half a key if needed)
+        for (int i=0; i < keys_count; ++i) {
+            draw_flat(canvas, i, key_pressed[i]);
+        }
     }
 
     void draw_key(Canvas canvas, int key_idx, boolean pressed) {
@@ -55,11 +66,24 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
         final int col_idx = key_idx % KEY_COLORS.length;
         Paint p = new Paint();
-        final int d = (pressed)? 50 : 0;
+        final int d = (pressed) ? 60 : 0;
         p.setARGB(255, Math.max(KEY_COLORS[col_idx][0] - d, 0),
-                          Math.max(KEY_COLORS[col_idx][1] - d, 0),
-                          Math.max(KEY_COLORS[col_idx][2] - d, 0));
+                Math.max(KEY_COLORS[col_idx][1] - d, 0),
+                Math.max(KEY_COLORS[col_idx][2] - d, 0));
 
+        canvas.drawRect(r, p);
+    }
+
+    void draw_flat(final Canvas canvas, int key_idx, boolean pressed) {
+        Rect r = new Rect();
+        final int offset = KEYS_WIDTH - (KEYS_FLAT_WIDTH / 2);
+        r.left = key_idx * KEYS_WIDTH + offset;
+        r.right = r.left + KEYS_FLAT_WIDTH;
+        r.top = 0;
+        r.bottom = (int) (KEYS_FLAT_HEIGHT_RATIO * screen_size.y);
+        Paint p = new Paint();
+
+        p.setColor(Color.BLACK);
         canvas.drawRect(r, p);
     }
 
