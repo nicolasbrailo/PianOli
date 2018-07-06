@@ -1,10 +1,12 @@
 package com.nicobrailo.pianoli;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -33,10 +35,6 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             {255, 255,   0},    // Yellow
             {255, 127,   0},    // Orange
             {255,   0 ,  0},    // Red
-    };
-
-    enum Keys {
-        Do, Re, Mi, Fa, Sol, La, Si
     };
 
     void draw_all_keys(final Canvas canvas) {
@@ -87,10 +85,12 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawRect(r, p);
     }
 
+    final Context context;
     public DrawingCanvas(AppCompatActivity context) {
         super(context);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
+        this.context = context;
 
         Display display = context.getWindowManager().getDefaultDisplay();
         display.getSize(screen_size);
@@ -142,6 +142,8 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
         key_pressed[key_idx] = true;
         redraw();
+
+        foo(key_idx);
     }
 
     Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
@@ -214,4 +216,31 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
 
     }
+
+    MediaPlayer KEYS_TO_SOUND[] = {
+            MediaPlayer.create(getContext(), R.raw.n01),
+            MediaPlayer.create(getContext(), R.raw.n02),
+            MediaPlayer.create(getContext(), R.raw.n03),
+            MediaPlayer.create(getContext(), R.raw.n04),
+            MediaPlayer.create(getContext(), R.raw.n05),
+            MediaPlayer.create(getContext(), R.raw.n06),
+            MediaPlayer.create(getContext(), R.raw.n07),
+            MediaPlayer.create(getContext(), R.raw.n08),
+            MediaPlayer.create(getContext(), R.raw.n09),
+            MediaPlayer.create(getContext(), R.raw.n10),
+            MediaPlayer.create(getContext(), R.raw.n11),
+            MediaPlayer.create(getContext(), R.raw.n12),
+            MediaPlayer.create(getContext(), R.raw.n13),
+            MediaPlayer.create(getContext(), R.raw.n14),
+            MediaPlayer.create(getContext(), R.raw.n15),
+    };
+
+    void foo(final int i) {
+        if (KEYS_TO_SOUND[i].isPlaying()) {
+            //
+        }
+        KEYS_TO_SOUND[i].seekTo(0);
+        KEYS_TO_SOUND[i].start();
+    }
+
 }
