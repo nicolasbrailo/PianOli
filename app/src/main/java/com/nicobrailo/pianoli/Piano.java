@@ -36,10 +36,35 @@ class Piano {
         return keys_count;
     }
 
+
+    private boolean is_position_inside_of_key(final float pos_x, final KeyArea keyArea) {
+        // pos_y not checked, as it's compared before
+        if (keyArea != null) {
+            if (pos_x > keyArea.x_i && pos_x < keyArea.x_f) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public int pos_to_key_idx(float pos_x, float pos_y) {
         final int big_key_idx = (int) pos_x / KEYS_WIDTH;
         if (pos_y > keys_flats_height) return big_key_idx;
-        return 0;
+
+        // Check if press is inside rect of flat key
+        KeyArea flat = get_area_for_flat_key(big_key_idx);
+        // TODO dummy idx
+        if (is_position_inside_of_key(pos_x, flat))  return big_key_idx + 2;
+
+        if (big_key_idx > 0) {
+            // TODO dummy idx
+            KeyArea prev_flat = get_area_for_flat_key(big_key_idx - 1);
+            if (is_position_inside_of_key(pos_x, prev_flat)) return big_key_idx + 3;
+        }
+
+        // If not in the current or previous flat, it must be a hit in the big key
+        return big_key_idx;
     }
 
     public boolean is_key_pressed(int key_idx) {
