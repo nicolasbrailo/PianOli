@@ -20,12 +20,7 @@ import java.util.Map;
 
 class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
-    private static final double KEYS_FLAT_HEIGHT_RATIO = 0.55;
-    private final Point screen_size = new Point();
-    final int keys_count;
-    boolean key_pressed[];
-    private static final int KEYS_WIDTH = 220;
-    private static final int KEYS_FLAT_WIDTH = 130;
+    final Piano piano;
 
     final int[][] KEY_COLORS = new int[][]{
             {148,   0, 211},    // Violet
@@ -44,44 +39,34 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawPaint(p);
         }
 
-        // Round up (draw half a key if needed)
-        for (int i=0; i < keys_count; ++i) {
-            draw_key(canvas, i, key_pressed[i]);
+        for (int i=0; i < piano.get_keys_count(); ++i) {
+            // Draw big key
+            final int col_idx = i % KEY_COLORS.length;
+            Paint big_key_paint = new Paint();
+            final int d = piano.is_key_pressed(i) ? 60 : 0;
+            big_key_paint.setARGB(255, Math.max(KEY_COLORS[col_idx][0] - d, 0),
+                    Math.max(KEY_COLORS[col_idx][1] - d, 0),
+                    Math.max(KEY_COLORS[col_idx][2] - d, 0));
+            draw_key(canvas, piano.get_area_for_key(i), big_key_paint);
         }
 
-        // Round up (draw half a key if needed)
-        for (int i=0; i < keys_count; ++i) {
-            draw_flat(canvas, i, key_pressed[i]);
+        // Small keys drawn after big keys to ensure z-index
+        for (int i=0; i < piano.get_keys_count(); ++i) {
+            // Draw small key
+            Paint flat_key_paint = new Paint();
+            flat_key_paint.setColor(Color.BLACK);
+            if (piano.get_area_for_flat_key(i) != null) {
+                draw_key(canvas, piano.get_area_for_flat_key(i), flat_key_paint);
+            }
         }
     }
 
-    void draw_key(Canvas canvas, int key_idx, boolean pressed) {
+    void draw_key(final Canvas canvas, final Piano.KeyArea rect, final Paint p) {
         Rect r = new Rect();
-        r.left = key_idx * KEYS_WIDTH;
-        r.right = r.left + KEYS_WIDTH;
-        r.top = 0;
-        r.bottom = screen_size.y;
-
-        final int col_idx = key_idx % KEY_COLORS.length;
-        Paint p = new Paint();
-        final int d = (pressed) ? 60 : 0;
-        p.setARGB(255, Math.max(KEY_COLORS[col_idx][0] - d, 0),
-                Math.max(KEY_COLORS[col_idx][1] - d, 0),
-                Math.max(KEY_COLORS[col_idx][2] - d, 0));
-
-        canvas.drawRect(r, p);
-    }
-
-    void draw_flat(final Canvas canvas, int key_idx, boolean pressed) {
-        Rect r = new Rect();
-        final int offset = KEYS_WIDTH - (KEYS_FLAT_WIDTH / 2);
-        r.left = key_idx * KEYS_WIDTH + offset;
-        r.right = r.left + KEYS_FLAT_WIDTH;
-        r.top = 0;
-        r.bottom = (int) (KEYS_FLAT_HEIGHT_RATIO * screen_size.y);
-        Paint p = new Paint();
-
-        p.setColor(Color.BLACK);
+        r.left = rect.x_i;
+        r.right = rect.x_f;
+        r.top = rect.y_i;
+        r.bottom = rect.y_f;
         canvas.drawRect(r, p);
     }
 
@@ -92,15 +77,14 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
         this.getHolder().addCallback(this);
         this.context = context;
 
+        final Point screen_size = new Point();
         Display display = context.getWindowManager().getDefaultDisplay();
         display.getSize(screen_size);
-        keys_count = 1 + (screen_size.x / KEYS_WIDTH);
 
-        key_pressed = new boolean[keys_count];
-        for (int i=0; i < key_pressed.length; ++i) key_pressed[i] = false;
+        this.piano = new Piano(screen_size.x, screen_size.y);
 
         Log.d("XXXXXXXXX", "Display is " + screen_size.x + "x" + screen_size.y +
-                                      ", there are " + keys_count + " keys");
+                                      ", there are " + piano.get_keys_count() + " keys");
     }
 
     @Override
@@ -121,26 +105,26 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
     void on_key_up(int key_idx) {
         Log.d("XXXXXXXXX", "Key " + key_idx + " is now UP");
 
-        if (key_idx > keys_count) {
+        if (key_idx > piano.get_keys_count()) {
             // throw new Exception("");
             // XXX TODO
             Log.e("XXXXXXXXX", "Bad things happened");
         }
 
-        key_pressed[key_idx] = false;
+        piano.on_key_up(key_idx);
         redraw();
     }
 
     void on_key_down(int key_idx) {
         Log.d("XXXXXXXXX", "Key " + key_idx + " is now DOWN");
 
-        if (key_idx > keys_count) {
+        if (key_idx > piano.get_keys_count()) {
             // throw new Exception("");
             // XXX TODO
             Log.e("XXXXXXXXX", "Bad things happened");
         }
 
-        key_pressed[key_idx] = true;
+        piano.on_key_down(key_idx);
         redraw();
 
         foo(key_idx);
@@ -152,7 +136,8 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
         final int ptr_id = event.getPointerId(event.getActionIndex());
         // final int ptr_idx = event.findPointerIndex(ptr_id);
         // ptr_pos = event.getX(ptr_id), event.getY(ptr_id)
-        final int key_idx = (int) event.getX(event.getActionIndex()) / KEYS_WIDTH;
+        final int key_idx = piano.pos_to_key_idx(event.getX(event.getActionIndex()),
+                                                 event.getY(event.getActionIndex()));
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:           // fallthrough
