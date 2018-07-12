@@ -31,7 +31,9 @@ class Piano {
         keys_flats_height = (int) (screen_size_y * KEYS_FLAT_HEIGHT_RATIO);
 
         // Round up for possible half-key display
-        keys_count = 1 + (screen_size_x / KEYS_WIDTH);
+        final int big_keys = 1 + (screen_size_x / KEYS_WIDTH);
+        // Count flats too
+        keys_count = big_keys * 2;
 
         key_pressed = new boolean[keys_count];
         for (int i=0; i < key_pressed.length; ++i) key_pressed[i] = false;
@@ -54,18 +56,18 @@ class Piano {
     }
 
     public int pos_to_key_idx(float pos_x, float pos_y) {
-        final int big_key_idx = (int) pos_x / KEYS_WIDTH;
+        final int big_key_idx = 2*((int) pos_x / KEYS_WIDTH);
         if (pos_y > keys_flats_height) return big_key_idx;
 
         // Check if press is inside rect of flat key
         KeyArea flat = get_area_for_flat_key(big_key_idx);
         // TODO dummy idx
-        if (flat.contains(pos_x, pos_y)) return big_key_idx + 2;
+        if (flat.contains(pos_x, pos_y)) return big_key_idx + 1;
 
         if (big_key_idx > 0) {
             // TODO dummy idx
-            KeyArea prev_flat = get_area_for_flat_key(big_key_idx - 1);
-            if (prev_flat.contains(pos_x, pos_y)) return big_key_idx + 3;
+            KeyArea prev_flat = get_area_for_flat_key(big_key_idx - 2);
+            if (prev_flat.contains(pos_x, pos_y)) return big_key_idx - 1;
         }
 
         // If not in the current or previous flat, it must be a hit in the big key
@@ -73,19 +75,19 @@ class Piano {
     }
 
     public KeyArea get_area_for_key(int key_idx) {
-        int x_i = key_idx * KEYS_WIDTH;
+        int x_i = key_idx/2 * KEYS_WIDTH;
         return new KeyArea(x_i,  x_i + KEYS_WIDTH, 0, keys_height);
     }
 
     public KeyArea get_area_for_flat_key(int key_idx) {
-        final int octave_idx = key_idx % 7;
+        final int octave_idx = (key_idx/2) % 7;
         if (octave_idx == 2 || octave_idx == 6) {
             // Keys without flat get a null-area
             return new KeyArea(0, 0, 0, 0);
         }
 
         final int offset = KEYS_WIDTH - (KEYS_FLAT_WIDTH / 2);
-        int x_i = key_idx * KEYS_WIDTH + offset;
+        int x_i = (key_idx/2) * KEYS_WIDTH + offset;
         return new KeyArea(x_i, x_i + KEYS_FLAT_WIDTH, 0, keys_flats_height);
     }
 }

@@ -39,22 +39,22 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawPaint(p);
         }
 
-        for (int i=0; i < piano.get_keys_count(); ++i) {
+        for (int i=0; i < piano.get_keys_count(); i+=2) {
             // Draw big key
-            final int col_idx = i % KEY_COLORS.length;
+            final int col_idx = (i/2) % KEY_COLORS.length;
             Paint big_key_paint = new Paint();
             final int d = piano.is_key_pressed(i) ? 60 : 0;
             big_key_paint.setARGB(255, Math.max(KEY_COLORS[col_idx][0] - d, 0),
-                    Math.max(KEY_COLORS[col_idx][1] - d, 0),
-                    Math.max(KEY_COLORS[col_idx][2] - d, 0));
+                                            Math.max(KEY_COLORS[col_idx][1] - d, 0),
+                                            Math.max(KEY_COLORS[col_idx][2] - d, 0));
             draw_key(canvas, piano.get_area_for_key(i), big_key_paint);
         }
 
         // Small keys drawn after big keys to ensure z-index
-        for (int i=0; i < piano.get_keys_count(); ++i) {
+        for (int i=1; i < piano.get_keys_count(); i+=2) {
             // Draw small key
             Paint flat_key_paint = new Paint();
-            flat_key_paint.setColor(Color.BLACK);
+            flat_key_paint.setColor(piano.is_key_pressed(i)? Color.GRAY : Color.BLACK);
             if (piano.get_area_for_flat_key(i) != null) {
                 draw_key(canvas, piano.get_area_for_flat_key(i), flat_key_paint);
             }
@@ -105,11 +105,12 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
     void on_key_up(int key_idx) {
         Log.d("XXXXXXXXX", "Key " + key_idx + " is now UP");
 
-        if (key_idx > piano.get_keys_count()) {
+        /*
+        if (key_idx > piano.get_big_keys_count()) {
             // throw new Exception("");
             // XXX TODO
             Log.e("XXXXXXXXX", "Bad things happened");
-        }
+        }*/
 
         piano.on_key_up(key_idx);
         redraw();
@@ -118,11 +119,12 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
     void on_key_down(int key_idx) {
         Log.d("XXXXXXXXX", "Key " + key_idx + " is now DOWN");
 
-        if (key_idx > piano.get_keys_count()) {
+        /*
+        if (key_idx > piano.get_big_keys_count()) {
             // throw new Exception("");
             // XXX TODO
             Log.e("XXXXXXXXX", "Bad things happened");
-        }
+        } */
 
         piano.on_key_down(key_idx);
         redraw();
