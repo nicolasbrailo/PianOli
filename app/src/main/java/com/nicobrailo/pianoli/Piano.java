@@ -61,11 +61,9 @@ class Piano {
 
         // Check if press is inside rect of flat key
         KeyArea flat = get_area_for_flat_key(big_key_idx);
-        // TODO dummy idx
         if (flat.contains(pos_x, pos_y)) return big_key_idx + 1;
 
         if (big_key_idx > 0) {
-            // TODO dummy idx
             KeyArea prev_flat = get_area_for_flat_key(big_key_idx - 2);
             if (prev_flat.contains(pos_x, pos_y)) return big_key_idx - 1;
         }
