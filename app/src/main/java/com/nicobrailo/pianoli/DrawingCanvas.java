@@ -210,6 +210,7 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             MediaPlayer.create(getContext(), R.raw.n03),
             MediaPlayer.create(getContext(), R.raw.n04),
             MediaPlayer.create(getContext(), R.raw.n05),
+            null,
             MediaPlayer.create(getContext(), R.raw.n06),
             MediaPlayer.create(getContext(), R.raw.n07),
             MediaPlayer.create(getContext(), R.raw.n08),
@@ -217,12 +218,24 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             MediaPlayer.create(getContext(), R.raw.n10),
             MediaPlayer.create(getContext(), R.raw.n11),
             MediaPlayer.create(getContext(), R.raw.n12),
+            null,
             MediaPlayer.create(getContext(), R.raw.n13),
             MediaPlayer.create(getContext(), R.raw.n14),
             MediaPlayer.create(getContext(), R.raw.n15),
     };
 
     void foo(final int i) {
+        if (i > KEYS_TO_SOUND.length || i < 0) {
+            Log.d("XXXXXXXXX", "This shouldn't happen: non-existing flat keys should have no area. Key idx " + i);
+            return;
+        }
+
+        if (KEYS_TO_SOUND[i] == null) {
+            Log.d("XXXXXXXXX", "This shouldn't happen: non-existing flat keys should have no area. Key idx " + i);
+            return;
+        }
+
+        Log.d("XXXXXXXXX", "Playing key idx " + i);
         if (KEYS_TO_SOUND[i].isPlaying()) {
             //
         }
