@@ -225,8 +225,8 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
     };
 
     void foo(final int i) {
-        if (i > KEYS_TO_SOUND.length || i < 0) {
-            Log.d("XXXXXXXXX", "This shouldn't happen: non-existing flat keys should have no area. Key idx " + i);
+        if (i > KEYS_TO_SOUND.length-1 || i < 0) {
+            Log.d("XXXXXXXXX", "This shouldn't happen: Sound out of range, key" + i);
             return;
         }
 
