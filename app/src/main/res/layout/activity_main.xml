@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
     tools:context=".MainActivity">
 
+    <com.nicobrailo.pianoli.DrawingCanvas
+        android:id="@+id/foo"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
     <Button
-        android:id="@+id/btn_enable_exit_traps"
+        android:id="@+id/btn_exit_request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Exit blocked"
-        android:onClick="onClick_ExitTrapsToggle"/>
+        android:text="@string/exit"
+        android:onClick="onClick_ExitRequest"/>
 
-</LinearLayout>
+</RelativeLayout>

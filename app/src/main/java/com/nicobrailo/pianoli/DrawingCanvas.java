@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -38,15 +39,31 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
     final MediaPlayer KEYS_TO_SOUND[];
 
     final Context context;
-    public DrawingCanvas(AppCompatActivity context) {
+
+    public DrawingCanvas(Context context, AttributeSet as, int defStyle) {
+        this(context, as);
+    }
+
+    public DrawingCanvas(Context context, AttributeSet as) {
+        this(context);
+    }
+
+    public DrawingCanvas(Context context) {
         super(context);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
         this.context = context;
 
         final Point screen_size = new Point();
-        Display display = context.getWindowManager().getDefaultDisplay();
-        display.getSize(screen_size);
+        final AppCompatActivity ctx;
+        try {
+            ctx = (AppCompatActivity) context;
+            Display display = ctx.getWindowManager().getDefaultDisplay();
+            display.getSize(screen_size);
+        } catch (ClassCastException ex) {
+            // TODO
+            Log.e("ASDASD", "XXXXXXXXXX");
+        }
 
         this.piano = new Piano(screen_size.x, screen_size.y);
 
@@ -128,7 +145,7 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
         piano.on_key_down(key_idx);
         redraw();
 
-        foo(key_idx);
+        play_sound(key_idx);
     }
 
     Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
@@ -203,7 +220,7 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
-    void foo(final int i) {
+    void play_sound(final int i) {
         final MediaPlayer key_sound;
         if (i > KEYS_TO_SOUND.length-1 || i < 0) {
             Log.d("XXXXXXXXX", "This shouldn't happen: Sound out of range, key" + i);
