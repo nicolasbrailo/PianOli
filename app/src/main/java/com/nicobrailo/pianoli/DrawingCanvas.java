@@ -204,6 +204,7 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
+    MediaPlayer no_key_sound =MediaPlayer.create(getContext(), R.raw.no_note);
     MediaPlayer KEYS_TO_SOUND[] = {
             MediaPlayer.create(getContext(), R.raw.n01),
             MediaPlayer.create(getContext(), R.raw.n02),
@@ -222,25 +223,33 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             MediaPlayer.create(getContext(), R.raw.n13),
             MediaPlayer.create(getContext(), R.raw.n14),
             MediaPlayer.create(getContext(), R.raw.n15),
+            MediaPlayer.create(getContext(), R.raw.n16),
+            MediaPlayer.create(getContext(), R.raw.n17),
+            null,
+            MediaPlayer.create(getContext(), R.raw.n18),
+            MediaPlayer.create(getContext(), R.raw.n19),
+            MediaPlayer.create(getContext(), R.raw.n20),
     };
 
     void foo(final int i) {
+        final MediaPlayer key_sound;
         if (i > KEYS_TO_SOUND.length-1 || i < 0) {
             Log.d("XXXXXXXXX", "This shouldn't happen: Sound out of range, key" + i);
-            return;
-        }
-
-        if (KEYS_TO_SOUND[i] == null) {
+            key_sound = no_key_sound;
+        } else if (KEYS_TO_SOUND[i] == null) {
             Log.d("XXXXXXXXX", "This shouldn't happen: non-existing flat keys should have no area. Key idx " + i);
+            key_sound = no_key_sound;
             return;
+        } else {
+            Log.d("XXXXXXXXX", "Playing key idx " + i);
+            key_sound = KEYS_TO_SOUND[i];
         }
 
-        Log.d("XXXXXXXXX", "Playing key idx " + i);
-        if (KEYS_TO_SOUND[i].isPlaying()) {
-            //
+        if (key_sound.isPlaying()) {
+            // ?
         }
-        KEYS_TO_SOUND[i].seekTo(0);
-        KEYS_TO_SOUND[i].start();
+        key_sound.seekTo(0);
+        key_sound.start();
     }
 
 }
