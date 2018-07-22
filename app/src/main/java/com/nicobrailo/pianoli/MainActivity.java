@@ -1,11 +1,8 @@
 package com.nicobrailo.pianoli;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.setContentView(new DrawingCanvas(this));
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        startLockTask();
     }
 
     public void onClick_ExitTrapsToggle(View v) {
@@ -39,27 +42,5 @@ public class MainActivity extends AppCompatActivity {
         } else {
             ((Button)v).setText("Exit unblocked");
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if (exit_traps_enabled) {
-            ActivityManager activityManager = (ActivityManager) getApplicationContext()
-                    .getSystemService(Context.ACTIVITY_SERVICE);
-
-            activityManager.moveTaskToFront(getTaskId(), 0);
-        }
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        // Block back button
-        if (exit_traps_enabled && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            return true;
-        }
-
-        return super.dispatchKeyEvent(event);
     }
 }
