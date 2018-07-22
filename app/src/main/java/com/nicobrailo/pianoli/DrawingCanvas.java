@@ -22,6 +22,8 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     final Piano piano;
 
+    // Change in color when pressing a key
+    final int KEY_COLOR_PRESS_DELTA = 60;
     final int[][] KEY_COLORS = new int[][]{
             {148,   0, 211},    // Violet
             {75,    0, 130},    // Indigo
@@ -32,43 +34,8 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             {255,   0 ,  0},    // Red
     };
 
-    void draw_all_keys(final Canvas canvas) {
-        /* Reset canvas */ {
-            Paint p = new Paint();
-            p.setColor(Color.BLACK);
-            canvas.drawPaint(p);
-        }
-
-        for (int i=0; i < piano.get_keys_count(); i+=2) {
-            // Draw big key
-            final int col_idx = (i/2) % KEY_COLORS.length;
-            Paint big_key_paint = new Paint();
-            final int d = piano.is_key_pressed(i) ? 60 : 0;
-            big_key_paint.setARGB(255, Math.max(KEY_COLORS[col_idx][0] - d, 0),
-                                            Math.max(KEY_COLORS[col_idx][1] - d, 0),
-                                            Math.max(KEY_COLORS[col_idx][2] - d, 0));
-            draw_key(canvas, piano.get_area_for_key(i), big_key_paint);
-        }
-
-        // Small keys drawn after big keys to ensure z-index
-        for (int i=1; i < piano.get_keys_count(); i+=2) {
-            // Draw small key
-            Paint flat_key_paint = new Paint();
-            flat_key_paint.setColor(piano.is_key_pressed(i)? Color.GRAY : Color.BLACK);
-            if (piano.get_area_for_flat_key(i) != null) {
-                draw_key(canvas, piano.get_area_for_flat_key(i), flat_key_paint);
-            }
-        }
-    }
-
-    void draw_key(final Canvas canvas, final Piano.KeyArea rect, final Paint p) {
-        Rect r = new Rect();
-        r.left = rect.x_i;
-        r.right = rect.x_f;
-        r.top = rect.y_i;
-        r.bottom = rect.y_f;
-        canvas.drawRect(r, p);
-    }
+    final MediaPlayer no_key_sound;
+    final MediaPlayer KEYS_TO_SOUND[];
 
     final Context context;
     public DrawingCanvas(AppCompatActivity context) {
@@ -83,8 +50,56 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
         this.piano = new Piano(screen_size.x, screen_size.y);
 
-        Log.d("XXXXXXXXX", "Display is " + screen_size.x + "x" + screen_size.y +
-                                      ", there are " + piano.get_keys_count() + " keys");
+        no_key_sound = MediaPlayer.create(context, piano.get_null_sound_res());
+        KEYS_TO_SOUND = new MediaPlayer[piano.get_keys_count()];
+        for (int i=0; i < piano.get_keys_count(); i+=1) {
+            if (piano.get_sound_res_for_key(i) != null) {
+                KEYS_TO_SOUND[i] = MediaPlayer.create(context, piano.get_sound_res_for_key(i));
+            } else {
+                KEYS_TO_SOUND[i] = null;
+            }
+        }
+
+        Log.d("PianOli", "Display is " + screen_size.x + "x" + screen_size.y +
+                                  ", there are " + piano.get_keys_count() + " keys");
+    }
+
+    void draw_all_keys(final Canvas canvas) {
+        /* Reset canvas */ {
+            Paint p = new Paint();
+            p.setColor(Color.BLACK);
+            canvas.drawPaint(p);
+        }
+
+        for (int i=0; i < piano.get_keys_count(); i+=2) {
+            // Draw big key
+            final int col_idx = (i/2) % KEY_COLORS.length;
+            Paint big_key_paint = new Paint();
+            final int d = piano.is_key_pressed(i) ? KEY_COLOR_PRESS_DELTA : 0;
+            big_key_paint.setARGB(255, Math.max(KEY_COLORS[col_idx][0] - d, 0),
+                    Math.max(KEY_COLORS[col_idx][1] - d, 0),
+                    Math.max(KEY_COLORS[col_idx][2] - d, 0));
+            draw_key(canvas, piano.get_area_for_key(i), big_key_paint);
+        }
+
+        // Small keys drawn after big keys to ensure z-index
+        for (int i=1; i < piano.get_keys_count(); i+=2) {
+            // Draw small key
+            Paint flat_key_paint = new Paint();
+            flat_key_paint.setColor(piano.is_key_pressed(i)? Color.GRAY : Color.BLACK);
+            if (piano.get_area_for_flat_key(i) != null) {
+                draw_key(canvas, piano.get_area_for_flat_key(i), flat_key_paint);
+            }
+        }
+    }
+
+    void draw_key(final Canvas canvas, final Piano.Key rect, final Paint p) {
+        Rect r = new Rect();
+        r.left = rect.x_i;
+        r.right = rect.x_f;
+        r.top = rect.y_i;
+        r.bottom = rect.y_f;
+        canvas.drawRect(r, p);
     }
 
     @Override
@@ -104,28 +119,12 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     void on_key_up(int key_idx) {
         Log.d("XXXXXXXXX", "Key " + key_idx + " is now UP");
-
-        /*
-        if (key_idx > piano.get_big_keys_count()) {
-            // throw new Exception("");
-            // XXX TODO
-            Log.e("XXXXXXXXX", "Bad things happened");
-        }*/
-
         piano.on_key_up(key_idx);
         redraw();
     }
 
     void on_key_down(int key_idx) {
         Log.d("XXXXXXXXX", "Key " + key_idx + " is now DOWN");
-
-        /*
-        if (key_idx > piano.get_big_keys_count()) {
-            // throw new Exception("");
-            // XXX TODO
-            Log.e("XXXXXXXXX", "Bad things happened");
-        } */
-
         piano.on_key_down(key_idx);
         redraw();
 
@@ -203,33 +202,6 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
 
     }
-
-    MediaPlayer no_key_sound =MediaPlayer.create(getContext(), R.raw.no_note);
-    MediaPlayer KEYS_TO_SOUND[] = {
-            MediaPlayer.create(getContext(), R.raw.n01),
-            MediaPlayer.create(getContext(), R.raw.n02),
-            MediaPlayer.create(getContext(), R.raw.n03),
-            MediaPlayer.create(getContext(), R.raw.n04),
-            MediaPlayer.create(getContext(), R.raw.n05),
-            null,
-            MediaPlayer.create(getContext(), R.raw.n06),
-            MediaPlayer.create(getContext(), R.raw.n07),
-            MediaPlayer.create(getContext(), R.raw.n08),
-            MediaPlayer.create(getContext(), R.raw.n09),
-            MediaPlayer.create(getContext(), R.raw.n10),
-            MediaPlayer.create(getContext(), R.raw.n11),
-            MediaPlayer.create(getContext(), R.raw.n12),
-            null,
-            MediaPlayer.create(getContext(), R.raw.n13),
-            MediaPlayer.create(getContext(), R.raw.n14),
-            MediaPlayer.create(getContext(), R.raw.n15),
-            MediaPlayer.create(getContext(), R.raw.n16),
-            MediaPlayer.create(getContext(), R.raw.n17),
-            null,
-            MediaPlayer.create(getContext(), R.raw.n18),
-            MediaPlayer.create(getContext(), R.raw.n19),
-            MediaPlayer.create(getContext(), R.raw.n20),
-    };
 
     void foo(final int i) {
         final MediaPlayer key_sound;

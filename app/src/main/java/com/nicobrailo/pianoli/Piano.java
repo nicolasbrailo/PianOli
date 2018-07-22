@@ -1,9 +1,10 @@
 package com.nicobrailo.pianoli;
 
 class Piano {
-    class KeyArea {
+    class Key {
         int x_i, x_f, y_i, y_f;
-        KeyArea(int x_i, int x_f, int y_i, int y_f) {
+
+        Key(int x_i, int x_f, int y_i, int y_f) {
             this.x_i = x_i;
             this.x_f = x_f;
             this.y_i = y_i;
@@ -36,7 +37,7 @@ class Piano {
         keys_count = big_keys * 2;
 
         key_pressed = new boolean[keys_count];
-        for (int i=0; i < key_pressed.length; ++i) key_pressed[i] = false;
+        for (int i = 0; i < key_pressed.length; ++i) key_pressed[i] = false;
     }
 
     public int get_keys_count() {
@@ -56,15 +57,15 @@ class Piano {
     }
 
     public int pos_to_key_idx(float pos_x, float pos_y) {
-        final int big_key_idx = 2*((int) pos_x / KEYS_WIDTH);
+        final int big_key_idx = 2 * ((int) pos_x / KEYS_WIDTH);
         if (pos_y > keys_flats_height) return big_key_idx;
 
         // Check if press is inside rect of flat key
-        KeyArea flat = get_area_for_flat_key(big_key_idx);
+        Key flat = get_area_for_flat_key(big_key_idx);
         if (flat.contains(pos_x, pos_y)) return big_key_idx + 1;
 
         if (big_key_idx > 0) {
-            KeyArea prev_flat = get_area_for_flat_key(big_key_idx - 2);
+            Key prev_flat = get_area_for_flat_key(big_key_idx - 2);
             if (prev_flat.contains(pos_x, pos_y)) return big_key_idx - 1;
         }
 
@@ -72,20 +73,56 @@ class Piano {
         return big_key_idx;
     }
 
-    public KeyArea get_area_for_key(int key_idx) {
-        int x_i = key_idx/2 * KEYS_WIDTH;
-        return new KeyArea(x_i,  x_i + KEYS_WIDTH, 0, keys_height);
+    public Key get_area_for_key(int key_idx) {
+        int x_i = key_idx / 2 * KEYS_WIDTH;
+        return new Key(x_i, x_i + KEYS_WIDTH, 0, keys_height);
     }
 
-    public KeyArea get_area_for_flat_key(int key_idx) {
-        final int octave_idx = (key_idx/2) % 7;
+    public Key get_area_for_flat_key(int key_idx) {
+        final int octave_idx = (key_idx / 2) % 7;
         if (octave_idx == 2 || octave_idx == 6) {
             // Keys without flat get a null-area
-            return new KeyArea(0, 0, 0, 0);
+            return new Key(0, 0, 0, 0);
         }
 
         final int offset = KEYS_WIDTH - (KEYS_FLAT_WIDTH / 2);
-        int x_i = (key_idx/2) * KEYS_WIDTH + offset;
-        return new KeyArea(x_i, x_i + KEYS_FLAT_WIDTH, 0, keys_flats_height);
+        int x_i = (key_idx / 2) * KEYS_WIDTH + offset;
+        return new Key(x_i, x_i + KEYS_FLAT_WIDTH, 0, keys_flats_height);
+    }
+
+    int get_null_sound_res() {
+        return R.raw.no_note;
+    }
+
+    Integer get_sound_res_for_key(int key_idx) {
+        Integer KEYS_TO_SOUND[] = {
+                R.raw.n01,
+                R.raw.n02,
+                R.raw.n03,
+                R.raw.n04,
+                R.raw.n05,
+                null,
+                R.raw.n06,
+                R.raw.n07,
+                R.raw.n08,
+                R.raw.n09,
+                R.raw.n10,
+                R.raw.n11,
+                R.raw.n12,
+                null,
+                R.raw.n13,
+                R.raw.n14,
+                R.raw.n15,
+                R.raw.n16,
+                R.raw.n17,
+                null,
+                R.raw.n18,
+                R.raw.n19,
+                R.raw.n20,
+        };
+
+        if (key_idx > KEYS_TO_SOUND.length-1 || key_idx < 0) return get_null_sound_res();
+        if (KEYS_TO_SOUND[key_idx] == null) return get_null_sound_res();
+        return KEYS_TO_SOUND[key_idx];
     }
 }
