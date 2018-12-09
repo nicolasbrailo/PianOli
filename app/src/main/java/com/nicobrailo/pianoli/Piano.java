@@ -1,5 +1,9 @@
 package com.nicobrailo.pianoli;
 
+import android.content.Context;
+import android.media.SoundPool;
+import android.util.Log;
+
 class Piano {
     class Key {
         int x_i, x_f, y_i, y_f;
@@ -27,7 +31,7 @@ class Piano {
     private final int keys_count;
     private boolean key_pressed[];
 
-    Piano(int screen_size_x, int screen_size_y) {
+    Piano(final Context context, int screen_size_x, int screen_size_y) {
         keys_height = screen_size_y;
         keys_flats_height = (int) (screen_size_y * KEYS_FLAT_HEIGHT_RATIO);
 
@@ -38,6 +42,8 @@ class Piano {
 
         key_pressed = new boolean[keys_count];
         for (int i = 0; i < key_pressed.length; ++i) key_pressed[i] = false;
+
+        initSounds(context);
     }
 
     public int get_keys_count() {
@@ -50,6 +56,7 @@ class Piano {
 
     public void on_key_down(int key_idx) {
         key_pressed[key_idx] = true;
+        play_sound(key_idx);
     }
 
     public void on_key_up(int key_idx) {
@@ -90,39 +97,54 @@ class Piano {
         return new Key(x_i, x_i + KEYS_FLAT_WIDTH, 0, keys_flats_height);
     }
 
-    int get_null_sound_res() {
-        return R.raw.no_note;
+
+
+    private SoundPool KeySound;
+    private int[]   KeySoundIdx;
+
+    private void initSounds(final Context context) {
+        if (KeySound != null) {
+            // TODO: Useful to build new soundset
+            KeySound.release();
+        }
+
+        KeySound = new SoundPool.Builder()
+                                    .setMaxStreams(5)   // Play max 5 concurrent sounds
+                                    .build();
+
+        KeySoundIdx = new int[24];
+        KeySoundIdx[ 0] = KeySound.load(context, R.raw.n01, 1);
+        KeySoundIdx[ 1] = KeySound.load(context, R.raw.n02, 1);
+        KeySoundIdx[ 2] = KeySound.load(context, R.raw.n03, 1);
+        KeySoundIdx[ 3] = KeySound.load(context, R.raw.n04, 1);
+        KeySoundIdx[ 4] = KeySound.load(context, R.raw.n05, 1);
+        KeySoundIdx[ 5] = KeySound.load(context, R.raw.no_note, 1);
+        KeySoundIdx[ 6] = KeySound.load(context, R.raw.n06, 1);
+        KeySoundIdx[ 7] = KeySound.load(context, R.raw.n07, 1);
+        KeySoundIdx[ 8] = KeySound.load(context, R.raw.n08, 1);
+        KeySoundIdx[ 9] = KeySound.load(context, R.raw.n09, 1);
+        KeySoundIdx[10] = KeySound.load(context, R.raw.n10, 1);
+        KeySoundIdx[11] = KeySound.load(context, R.raw.n11, 1);
+        KeySoundIdx[12] = KeySound.load(context, R.raw.n12, 1);
+        KeySoundIdx[13] = KeySound.load(context, R.raw.no_note, 1);
+        KeySoundIdx[14] = KeySound.load(context, R.raw.n13, 1);
+        KeySoundIdx[15] = KeySound.load(context, R.raw.n14, 1);
+        KeySoundIdx[16] = KeySound.load(context, R.raw.n15, 1);
+        KeySoundIdx[17] = KeySound.load(context, R.raw.n15, 1);
+        KeySoundIdx[18] = KeySound.load(context, R.raw.n16, 1);
+        KeySoundIdx[19] = KeySound.load(context, R.raw.n17, 1);
+        KeySoundIdx[20] = KeySound.load(context, R.raw.no_note, 1);
+        KeySoundIdx[21] = KeySound.load(context, R.raw.n18, 1);
+        KeySoundIdx[22] = KeySound.load(context, R.raw.n19, 1);
+        KeySoundIdx[23] = KeySound.load(context, R.raw.n20, 1);
     }
 
-    Integer get_sound_res_for_key(int key_idx) {
-        Integer KEYS_TO_SOUND[] = {
-                R.raw.n01,
-                R.raw.n02,
-                R.raw.n03,
-                R.raw.n04,
-                R.raw.n05,
-                null,
-                R.raw.n06,
-                R.raw.n07,
-                R.raw.n08,
-                R.raw.n09,
-                R.raw.n10,
-                R.raw.n11,
-                R.raw.n12,
-                null,
-                R.raw.n13,
-                R.raw.n14,
-                R.raw.n15,
-                R.raw.n16,
-                R.raw.n17,
-                null,
-                R.raw.n18,
-                R.raw.n19,
-                R.raw.n20,
-        };
+    private void play_sound(final int key_idx) {
+        if (key_idx < 0 || key_idx >= KeySoundIdx.length) {
+            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+            return;
+        }
 
-        if (key_idx > KEYS_TO_SOUND.length-1 || key_idx < 0) return get_null_sound_res();
-        if (KEYS_TO_SOUND[key_idx] == null) return get_null_sound_res();
-        return KEYS_TO_SOUND[key_idx];
+        KeySound.play(KeySoundIdx[key_idx], 1, 1, 1, 0, 1f);
     }
 }

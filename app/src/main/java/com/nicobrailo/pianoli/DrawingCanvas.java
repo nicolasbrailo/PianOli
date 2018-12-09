@@ -35,11 +35,6 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             {255,   0 ,  0},    // Red
     };
 
-    final MediaPlayer no_key_sound;
-    final MediaPlayer KEYS_TO_SOUND[];
-
-    final Context context;
-
     public DrawingCanvas(Context context, AttributeSet as, int defStyle) {
         this(context, as);
     }
@@ -52,7 +47,6 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
-        this.context = context;
 
         final Point screen_size = new Point();
         final AppCompatActivity ctx;
@@ -65,17 +59,7 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             Log.e("ASDASD", "XXXXXXXXXX");
         }
 
-        this.piano = new Piano(screen_size.x, screen_size.y);
-
-        no_key_sound = MediaPlayer.create(context, piano.get_null_sound_res());
-        KEYS_TO_SOUND = new MediaPlayer[piano.get_keys_count()];
-        for (int i=0; i < piano.get_keys_count(); i+=1) {
-            if (piano.get_sound_res_for_key(i) != null) {
-                KEYS_TO_SOUND[i] = MediaPlayer.create(context, piano.get_sound_res_for_key(i));
-            } else {
-                KEYS_TO_SOUND[i] = null;
-            }
-        }
+        this.piano = new Piano(context, screen_size.x, screen_size.y);
 
         Log.d("PianOli", "Display is " + screen_size.x + "x" + screen_size.y +
                                   ", there are " + piano.get_keys_count() + " keys");
@@ -144,8 +128,6 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
         Log.d("XXXXXXXXX", "Key " + key_idx + " is now DOWN");
         piano.on_key_down(key_idx);
         redraw();
-
-        play_sound(key_idx);
     }
 
     Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
@@ -218,27 +200,6 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
 
-    }
-
-    void play_sound(final int i) {
-        final MediaPlayer key_sound;
-        if (i > KEYS_TO_SOUND.length-1 || i < 0) {
-            Log.d("XXXXXXXXX", "This shouldn't happen: Sound out of range, key" + i);
-            key_sound = no_key_sound;
-        } else if (KEYS_TO_SOUND[i] == null) {
-            Log.d("XXXXXXXXX", "This shouldn't happen: non-existing flat keys should have no area. Key idx " + i);
-            key_sound = no_key_sound;
-            return;
-        } else {
-            Log.d("XXXXXXXXX", "Playing key idx " + i);
-            key_sound = KEYS_TO_SOUND[i];
-        }
-
-        if (key_sound.isPlaying()) {
-            // ?
-        }
-        key_sound.seekTo(0);
-        key_sound.start();
     }
 
 }
