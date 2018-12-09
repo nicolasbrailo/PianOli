@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -55,13 +54,13 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             Display display = ctx.getWindowManager().getDefaultDisplay();
             display.getSize(screen_size);
         } catch (ClassCastException ex) {
-            // TODO
-            Log.e("ASDASD", "XXXXXXXXXX");
+            Log.e("PianOli::DrawingCanvas", "Can't read screen size");
+            throw ex;
         }
 
         this.piano = new Piano(context, screen_size.x, screen_size.y);
 
-        Log.d("PianOli", "Display is " + screen_size.x + "x" + screen_size.y +
+        Log.d("PianOli::DrawingCanvas", "Display is " + screen_size.x + "x" + screen_size.y +
                                   ", there are " + piano.get_keys_count() + " keys");
     }
 
@@ -119,13 +118,13 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     void on_key_up(int key_idx) {
-        Log.d("XXXXXXXXX", "Key " + key_idx + " is now UP");
+        Log.d("PianOli::DrawingCanvas", "Key " + key_idx + " is now UP");
         piano.on_key_up(key_idx);
         redraw();
     }
 
     void on_key_down(int key_idx) {
-        Log.d("XXXXXXXXX", "Key " + key_idx + " is now DOWN");
+        Log.d("PianOli::DrawingCanvas", "Key " + key_idx + " is now DOWN");
         piano.on_key_down(key_idx);
         redraw();
     }
@@ -143,9 +142,8 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_DOWN:           // fallthrough
             case MotionEvent.ACTION_POINTER_DOWN: {
                 if (touch_pointer_to_keys.containsKey(ptr_id)) {
-                    // throw new Exception("");
-                    // XXX TODO
-                    Log.e("XXXXXXXXX", "Bad things happened");
+                    Log.e("PianOli::DrawingCanvas", "Touch-track error: Repeated touch-down event received");
+                    return super.onTouchEvent(event);
                 }
 
                 // Mark key down ptr_id
@@ -156,14 +154,13 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             }
             case MotionEvent.ACTION_MOVE: {
                 if (!touch_pointer_to_keys.containsKey(ptr_id)) {
-                    // throw new Exception("");
-                    // XXX TODO
-                    Log.e("XXXXXXXXX", "Bad things happened");
+                    Log.e("PianOli::DrawingCanvas", "Touch-track error: Missed touch-up event");
+                    return super.onTouchEvent(event);
                 }
 
                 // check if key changed
                 if (touch_pointer_to_keys.get(ptr_id) != key_idx) {
-                    Log.d("XXXXXXXXX", "Moved to another key");
+                    Log.d("PianOli::DrawingCanvas", "Moved to another key");
                     // Release key before storing new key_idx for new key down
                     on_key_up(touch_pointer_to_keys.get(ptr_id));
                     touch_pointer_to_keys.put(ptr_id, key_idx);
@@ -175,9 +172,8 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_POINTER_UP:     // fallthrough
             case MotionEvent.ACTION_UP: {
                 if (!touch_pointer_to_keys.containsKey(ptr_id)) {
-                    // throw new Exception("");
-                    // XXX TODO
-                    Log.e("XXXXXXXXX", "Bad things happened");
+                    Log.e("PianOli::DrawingCanvas", "Touch-track error: Repeated touch-up event received");
+                    return super.onTouchEvent(event);
                 }
 
                 touch_pointer_to_keys.remove(ptr_id);
