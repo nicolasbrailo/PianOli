@@ -1,11 +1,15 @@
 package com.nicobrailo.pianoli;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -18,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
+class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     final Piano piano;
 
@@ -34,15 +38,15 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
             {255,   0 ,  0},    // Red
     };
 
-    public DrawingCanvas(Context context, AttributeSet as, int defStyle) {
+    public PianoCanvas(Context context, AttributeSet as, int defStyle) {
         this(context, as);
     }
 
-    public DrawingCanvas(Context context, AttributeSet as) {
+    public PianoCanvas(Context context, AttributeSet as) {
         this(context);
     }
 
-    public DrawingCanvas(Context context) {
+    public PianoCanvas(Context context) {
         super(context);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
@@ -91,6 +95,11 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
                 draw_key(canvas, piano.get_area_for_flat_key(i), flat_key_paint);
             }
         }
+
+        Drawable icon = ContextCompat.getDrawable(getContext(), android.R.drawable.ic_menu_preferences);
+        draw_icon_on_key(canvas, icon, piano.get_area_for_flat_key(1), 70, 70);
+        draw_icon_on_key(canvas, icon, piano.get_area_for_flat_key(6), 70, 70);
+        draw_icon_on_key(canvas, icon, piano.get_area_for_flat_key(8), 70, 70);
     }
 
     void draw_key(final Canvas canvas, final Piano.Key rect, final Paint p) {
@@ -100,6 +109,21 @@ class DrawingCanvas extends SurfaceView implements SurfaceHolder.Callback {
         r.top = rect.y_i;
         r.bottom = rect.y_f;
         canvas.drawRect(r, p);
+    }
+
+    void draw_icon_on_key(final Canvas canvas, final Drawable icon, final Piano.Key key,
+                            final int icon_width, final int icon_height) {
+        int icon_x = ((key.x_f - key.x_i) / 2) + key.x_i;
+        int icon_y = 30;
+
+        Rect r = new Rect();
+        r.left = icon_x - (icon_width / 2);
+        r.right = icon_x + (icon_width / 2);
+        r.top = icon_y;
+        r.bottom = icon_y + icon_height;
+
+        icon.setBounds(r);
+        icon.draw(canvas);
     }
 
     @Override

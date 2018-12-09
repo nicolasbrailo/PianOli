@@ -8,7 +8,7 @@
     android:keepScreenOn="true"
     tools:context=".MainActivity">
 
-    <com.nicobrailo.pianoli.DrawingCanvas
+    <com.nicobrailo.pianoli.PianoCanvas
         android:id="@+id/foo"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
