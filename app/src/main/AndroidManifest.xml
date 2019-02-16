@@ -17,6 +17,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".AppConfigActivity">
+        </activity>
+
     </application>
 
 </manifest>

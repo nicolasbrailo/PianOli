@@ -1,5 +1,3 @@
 <resources>
     <string name="app_name">PianOli</string>
-    <string name="exit">Exit</string>
-    <string name="exit_taps">Exit %1$d</string>
 </resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btn_quit_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quit app"/>
+
+    <Button
+        android:id="@+id/btn_close_config"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close config"/>
+
+    <TextView
+        android:id="@+id/lbl_about"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Some info about this app..." />
+
+</LinearLayout>

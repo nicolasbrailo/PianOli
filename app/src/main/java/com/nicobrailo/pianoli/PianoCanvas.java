@@ -1,6 +1,5 @@
 package com.nicobrailo.pianoli;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,88 +15,13 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
 
 class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
-    static class AppConfigHandler {
-        private static final int CONFIG_TRIGGER_COUNT = 3;
-        static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 3, 7, 9, 11, 15));
-        Set<Integer> pressedConfigKeys = new HashSet<>();
-        Integer nextKeyPress;
-
-        public AppConfigHandler() {
-            nextKeyPress = getNextExpectedKey();
-        }
-
-        private Integer getNextExpectedKey() {
-            Set<Integer> nextKeyOptions = new HashSet<>(BLACK_KEYS);
-            nextKeyOptions.removeAll(pressedConfigKeys);
-            int next_key_i = (new Random()).nextInt(nextKeyOptions.size());
-
-            for (Integer nextKey : nextKeyOptions) {
-                next_key_i = next_key_i - 1;
-                if (next_key_i == 0) return nextKey;
-            }
-
-            Log.e("PianOliError", "No next config key possible");
-            return -1;
-        }
-
-        private void reset() {
-            pressedConfigKeys.clear();
-            nextKeyPress = getNextExpectedKey();
-        }
-
-        private void showConfigDialogue() {
-            Log.e("TRIGGER", "XXXXXXXXXXXXXXXXXXXXX");
-            Log.e("TRIGGER", "XXXXXXXXXXXXXXXXXXXXX");
-            Log.e("TRIGGER", "XXXXXXXXXXXXXXXXXXXXX");
-            Log.e("TRIGGER", "XXXXXXXXXXXXXXXXXXXXX");
-            Log.e("TRIGGER", "XXXXXXXXXXXXXXXXXXXXX");
-            Log.e("TRIGGER", "XXXXXXXXXXXXXXXXXXXXX");
-            Log.e("TRIGGER", "XXXXXXXXXXXXXXXXXXXXX");
-            Log.e("TRIGGER", "XXXXXXXXXXXXXXXXXXXXX");
-            Log.e("TRIGGER", "XXXXXXXXXXXXXXXXXXXXX");
-        }
-
-        public void onKeyPress(int key_idx) {
-            if (key_idx == nextKeyPress) {
-                pressedConfigKeys.add(key_idx);
-                if (pressedConfigKeys.size() == CONFIG_TRIGGER_COUNT) {
-                    reset();
-                    showConfigDialogue();
-                } else {
-                    nextKeyPress = getNextExpectedKey();
-                }
-            }
-        }
-
-        public void onKeyUp(int key_idx) {
-            if (pressedConfigKeys.contains(key_idx)) {
-                reset();
-            }
-        }
-
-        public void onPianoRedrawFinish(PianoCanvas piano, Canvas canvas, Context ctx) {
-            Drawable icon = ContextCompat.getDrawable(ctx, android.R.drawable.ic_menu_preferences);
-
-            for (Integer cfgKey : pressedConfigKeys) {
-                piano.draw_icon_on_black_key(canvas, icon, cfgKey, 70, 70);
-            }
-
-            piano.draw_icon_on_black_key(canvas, icon, nextKeyPress, 70, 70);
-        }
-    }
-
     final Piano piano;
-    final AppConfigHandler appConfigHandler = new AppConfigHandler();
+    final AppConfigTrigger appConfigHandler;
 
     // Change in color when pressing a key
     final int KEY_COLOR_PRESS_DELTA = 60;
@@ -137,6 +60,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         this.piano = new Piano(context, screen_size.x, screen_size.y);
+        this.appConfigHandler = new AppConfigTrigger(ctx);
 
         Log.d("PianOli::DrawingCanvas", "Display is " + screen_size.x + "x" + screen_size.y +
                                   ", there are " + piano.get_keys_count() + " keys");
@@ -211,7 +135,10 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void redraw(SurfaceHolder surfaceHolder) {
+        if (surfaceHolder == null) return;
         Canvas canvas = surfaceHolder.lockCanvas();
+        if (canvas == null) return;
+
         draw_all_keys(canvas);
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
