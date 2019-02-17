@@ -8,12 +8,14 @@
         android:id="@+id/btn_quit_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onClick_QuitApp"
         android:text="Quit app"/>
 
     <Button
         android:id="@+id/btn_close_config"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onClick_CloseConfig"
         android:text="Close config"/>
 
     <TextView

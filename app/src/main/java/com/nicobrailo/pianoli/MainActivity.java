@@ -53,10 +53,6 @@ public class MainActivity extends AppCompatActivity {
         startLockTask();
     }
 
-    void unlock_app() {
-        stopLockTask();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();

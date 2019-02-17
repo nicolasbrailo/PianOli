@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -45,6 +46,17 @@ class AppConfigTrigger {
     }
 
     private void showConfigDialogue() {
+        final MediaPlayer snd = MediaPlayer.create(activity, R.raw.alert);
+        snd.seekTo(0);
+        snd.setVolume(100, 100);
+        snd.start();
+        snd.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                snd.release();
+            }
+        });
+
         Intent cfg = new Intent(activity, AppConfigActivity.class);
         activity.startActivity(cfg);
     }
