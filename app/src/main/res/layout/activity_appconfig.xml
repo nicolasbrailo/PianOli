@@ -1,28 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_quit_app"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/lbl_about_title"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:onClick="onClick_QuitApp"
-        android:text="Quit app"/>
-
-    <Button
-        android:id="@+id/btn_close_config"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onClick_CloseConfig"
-        android:text="Close config"/>
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:text="@string/some_info_about_this_app_title" />
 
     <TextView
         android:id="@+id/lbl_about"
-        android:layout_width="0dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Some info about this app..." />
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:onClick="onClick_About"
+        android:text="@string/some_info_about_this_app" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btn_close_config"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick_CloseConfig"
+            android:text="@string/close_config" />
+
+        <Button
+            android:id="@+id/btn_quit_app"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick_QuitApp"
+            android:text="@string/quit_app" />
+    </LinearLayout>
 
 </LinearLayout>
