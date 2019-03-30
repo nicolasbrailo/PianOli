@@ -38,7 +38,7 @@ class Piano {
         // Round up for possible half-key display
         final int big_keys = 1 + (screen_size_x / KEYS_WIDTH);
         // Count flats too
-        keys_count = big_keys * 2;
+        keys_count = (big_keys * 2) + 1;
 
         key_pressed = new boolean[keys_count];
         for (int i = 0; i < key_pressed.length; ++i) key_pressed[i] = false;
@@ -51,15 +51,29 @@ class Piano {
     }
 
     public boolean is_key_pressed(int key_idx) {
+        if (key_idx < 0 || key_idx >= key_pressed.length) {
+            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+            return false;
+        }
+
         return key_pressed[key_idx];
     }
 
     public void on_key_down(int key_idx) {
+        if (key_idx < 0 || key_idx >= key_pressed.length) {
+        Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+        return;
+    }
         key_pressed[key_idx] = true;
         play_sound(key_idx);
     }
 
     public void on_key_up(int key_idx) {
+        if (key_idx < 0 || key_idx >= key_pressed.length) {
+            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+            return;
+        }
+
         key_pressed[key_idx] = false;
     }
 
