@@ -16,6 +16,7 @@ import java.util.Set;
 class AppConfigTrigger {
     public interface AppConfigCallback {
         void onConfigOpenRequested();
+        void onShowConfigTooltip();
     }
 
     private static final int CONFIG_TRIGGER_COUNT = 2;
@@ -23,12 +24,13 @@ class AppConfigTrigger {
     private final AppCompatActivity activity;
     private Set<Integer> pressedConfigKeys = new HashSet<>();
     private Integer nextKeyPress;
-    private AppConfigCallback cb;
+    private AppConfigCallback cb = null;
+    private boolean tooltip_shown = false;
+
 
     AppConfigTrigger(AppCompatActivity activity) {
         nextKeyPress = getNextExpectedKey();
         this.activity = activity;
-        this.cb = null;
     }
 
     void setConfigRequestCallback(AppConfigCallback cb) {
@@ -72,6 +74,11 @@ class AppConfigTrigger {
     }
 
     void onKeyPress(int key_idx) {
+        if (!tooltip_shown) {
+            tooltip_shown = true;
+            cb.onShowConfigTooltip();
+        }
+
         if (key_idx == nextKeyPress) {
             pressedConfigKeys.add(key_idx);
             if (pressedConfigKeys.size() == CONFIG_TRIGGER_COUNT) {

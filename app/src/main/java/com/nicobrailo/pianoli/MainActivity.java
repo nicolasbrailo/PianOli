@@ -1,25 +1,17 @@
 package com.nicobrailo.pianoli;
 
-import android.app.ActivityManager;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
-import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements AppConfigTrigger.AppConfigCallback {
 
@@ -41,14 +33,13 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } catch (Exception e) {}
 
-        try {
-            getSupportActionBar().hide();
-        } catch (Exception e) {}
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
 
         try {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } catch (Exception e) {}
 
+        @SuppressLint("InflateParams")
         final View view = getLayoutInflater().inflate(R.layout.activity_main, null);
         setContentView(view);
         ((PianoCanvas) view.findViewById(R.id.piano_canvas)).setConfigRequestCallback(this);
@@ -101,5 +92,12 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
     public void onConfigOpenRequested() {
         findViewById(R.id.config_layout).bringToFront();
         findViewById(R.id.config_layout).setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onShowConfigTooltip() {
+        final String msg = "Press and hold config icons on black keys to exit.";
+        Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+        toast.show();
     }
 }
