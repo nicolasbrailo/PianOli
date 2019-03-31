@@ -74,12 +74,12 @@ class AppConfigTrigger {
     }
 
     void onKeyPress(int key_idx) {
-        if (!tooltip_shown) {
-            tooltip_shown = true;
-            cb.onShowConfigTooltip();
-        }
-
         if (key_idx == nextKeyPress) {
+            if (!tooltip_shown) {
+                tooltip_shown = true;
+                cb.onShowConfigTooltip();
+            }
+
             pressedConfigKeys.add(key_idx);
             if (pressedConfigKeys.size() == CONFIG_TRIGGER_COUNT) {
                 reset();
