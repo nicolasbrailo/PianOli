@@ -46,11 +46,11 @@ class Piano {
         initSounds(context);
     }
 
-    public int get_keys_count() {
+    int get_keys_count() {
         return keys_count;
     }
 
-    public boolean is_key_pressed(int key_idx) {
+    boolean is_key_pressed(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
             Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
             return false;
@@ -59,7 +59,7 @@ class Piano {
         return key_pressed[key_idx];
     }
 
-    public void on_key_down(int key_idx) {
+    void on_key_down(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
         Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
         return;
@@ -68,7 +68,7 @@ class Piano {
         play_sound(key_idx);
     }
 
-    public void on_key_up(int key_idx) {
+    void on_key_up(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
             Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
             return;
@@ -77,7 +77,7 @@ class Piano {
         key_pressed[key_idx] = false;
     }
 
-    public int pos_to_key_idx(float pos_x, float pos_y) {
+    int pos_to_key_idx(float pos_x, float pos_y) {
         final int big_key_idx = 2 * ((int) pos_x / KEYS_WIDTH);
         if (pos_y > keys_flats_height) return big_key_idx;
 
@@ -94,12 +94,12 @@ class Piano {
         return big_key_idx;
     }
 
-    public Key get_area_for_key(int key_idx) {
+    Key get_area_for_key(int key_idx) {
         int x_i = key_idx / 2 * KEYS_WIDTH;
         return new Key(x_i, x_i + KEYS_WIDTH, 0, keys_height);
     }
 
-    public Key get_area_for_flat_key(int key_idx) {
+    Key get_area_for_flat_key(int key_idx) {
         final int octave_idx = (key_idx / 2) % 7;
         if (octave_idx == 2 || octave_idx == 6) {
             // Keys without flat get a null-area
