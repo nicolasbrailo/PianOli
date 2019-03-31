@@ -35,16 +35,12 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
             {255,   0 ,  0},    // Red
     };
 
-    public PianoCanvas(Context context, AttributeSet as, int defStyle) {
-        this(context, as);
-    }
-
     public PianoCanvas(Context context, AttributeSet as) {
-        this(context);
+        this(context, as, 0);
     }
 
-    public PianoCanvas(Context context) {
-        super(context);
+    public PianoCanvas(Context context, AttributeSet as, int defStyle) {
+        super(context, as, defStyle);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
 
@@ -64,6 +60,10 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
         Log.d("PianOli::DrawingCanvas", "Display is " + screen_size.x + "x" + screen_size.y +
                                   ", there are " + piano.get_keys_count() + " keys");
+    }
+
+    public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {
+        this.appConfigHandler.setConfigRequestCallback(cb);
     }
 
     void draw_all_keys(final Canvas canvas) {

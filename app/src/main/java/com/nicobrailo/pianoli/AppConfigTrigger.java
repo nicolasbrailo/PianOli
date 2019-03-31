@@ -1,7 +1,6 @@
 package com.nicobrailo.pianoli;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -15,15 +14,25 @@ import java.util.Random;
 import java.util.Set;
 
 class AppConfigTrigger {
-    private static final int CONFIG_TRIGGER_COUNT = 3;
+    public interface AppConfigCallback {
+        void onConfigOpenRequested();
+    }
+
+    private static final int CONFIG_TRIGGER_COUNT = 2;
     private static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 3, 7, 9, 11, 15));
     private final AppCompatActivity activity;
     private Set<Integer> pressedConfigKeys = new HashSet<>();
     private Integer nextKeyPress;
+    private AppConfigCallback cb;
 
     AppConfigTrigger(AppCompatActivity activity) {
         nextKeyPress = getNextExpectedKey();
         this.activity = activity;
+        this.cb = null;
+    }
+
+    void setConfigRequestCallback(AppConfigCallback cb) {
+        this.cb = cb;
     }
 
     private Integer getNextExpectedKey() {
@@ -57,8 +66,9 @@ class AppConfigTrigger {
             }
         });
 
-        Intent cfg = new Intent(activity, AppConfigActivity.class);
-        activity.startActivity(cfg);
+        if (cb != null) {
+            cb.onConfigOpenRequested();
+        }
     }
 
     void onKeyPress(int key_idx) {

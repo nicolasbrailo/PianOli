@@ -1,18 +1,29 @@
 package com.nicobrailo.pianoli;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AppConfigTrigger.AppConfigCallback {
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } catch (Exception e) {}
 
-        setContentView(R.layout.activity_main);
+        final View view = getLayoutInflater().inflate(R.layout.activity_main, null);
+        setContentView(view);
+        ((PianoCanvas) view.findViewById(R.id.piano_canvas)).setConfigRequestCallback(this);
 
         try {
             View decorView = getWindow().getDecorView();
@@ -63,5 +76,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         lock_app();
+    }
+    public void onClick_CloseConfig(View view) {
+        findViewById(R.id.piano_canvas).bringToFront();
+        findViewById(R.id.config_layout).setVisibility(View.GONE);
+    }
+
+    public void onClick_QuitApp(View view) {
+        stopLockTask();
+        this.startActivity(new Intent(this, MainActivity.class));
+        moveTaskToBack(true);
+    }
+
+    public void onClick_About(View view) {
+        final String url = Uri.parse(getString(R.string.app_url)).buildUpon().build().toString();
+        final Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+
+        stopLockTask();
+        startActivity(intent);
+    }
+
+    @Override
+    public void onConfigOpenRequested() {
+        findViewById(R.id.config_layout).bringToFront();
+        findViewById(R.id.config_layout).setVisibility(View.VISIBLE);
     }
 }
