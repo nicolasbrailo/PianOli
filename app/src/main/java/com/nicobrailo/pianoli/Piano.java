@@ -144,13 +144,13 @@ class Piano {
         KeySoundIdx[14] = KeySound.load(context, R.raw.n13, 1);
         KeySoundIdx[15] = KeySound.load(context, R.raw.n14, 1);
         KeySoundIdx[16] = KeySound.load(context, R.raw.n15, 1);
-        KeySoundIdx[17] = KeySound.load(context, R.raw.n15, 1);
-        KeySoundIdx[18] = KeySound.load(context, R.raw.n16, 1);
-        KeySoundIdx[19] = KeySound.load(context, R.raw.n17, 1);
+        KeySoundIdx[17] = KeySound.load(context, R.raw.n16, 1);
+        KeySoundIdx[18] = KeySound.load(context, R.raw.n17, 1);
+        KeySoundIdx[19] = KeySound.load(context, R.raw.n18, 1);
         KeySoundIdx[20] = KeySound.load(context, R.raw.no_note, 1);
-        KeySoundIdx[21] = KeySound.load(context, R.raw.n18, 1);
-        KeySoundIdx[22] = KeySound.load(context, R.raw.n19, 1);
-        KeySoundIdx[23] = KeySound.load(context, R.raw.n20, 1);
+        KeySoundIdx[21] = KeySound.load(context, R.raw.n19, 1);
+        KeySoundIdx[22] = KeySound.load(context, R.raw.n20, 1);
+        KeySoundIdx[23] = KeySound.load(context, R.raw.n21, 1);
     }
 
     private void play_sound(final int key_idx) {
