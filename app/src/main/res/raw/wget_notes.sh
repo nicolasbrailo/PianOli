@@ -25,5 +25,10 @@ wget -O n17.mp3 https://freesound.org/data/previews/39/39204_35187-lq.mp3
 wget -O n18.mp3 https://freesound.org/data/previews/39/39205_35187-lq.mp3
 wget -O n19.mp3 https://freesound.org/data/previews/39/39206_35187-lq.mp3
 wget -O n20.mp3 https://freesound.org/data/previews/39/39207_35187-lq.mp3
+wget -O n21.mp3 https://freesound.org/data/previews/39/39208_35187-lq.mp3
+wget -O n22.mp3 https://freesound.org/data/previews/39/39209_35187-lq.mp3
+wget -O n23.mp3 https://freesound.org/data/previews/39/39210_35187-lq.mp3
+wget -O n24.mp3 https://freesound.org/data/previews/39/39211_35187-lq.mp3
+wget -O n25.mp3 https://freesound.org/data/previews/39/39212_35187-lq.mp3
 
 
