@@ -39,8 +39,29 @@
             android:onClick="onClick_About"
             android:text="@string/some_info_about_this_app" />
 
+        <TextView
+            android:id="@+id/lbl_choose_sound_set"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:text="@string/sound_set" />
+
         <View
             android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <ListView
+            android:id="@+id/sound_set_list"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:choiceMode="singleChoice">
+        </ListView>
+
+        <View
+            android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />

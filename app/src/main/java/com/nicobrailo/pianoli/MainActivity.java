@@ -11,7 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements AppConfigTrigger.AppConfigCallback {
 
@@ -41,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
 
         @SuppressLint("InflateParams")
         final View view = getLayoutInflater().inflate(R.layout.activity_main, null);
+
+
         setContentView(view);
         ((PianoCanvas) view.findViewById(R.id.piano_canvas)).setConfigRequestCallback(this);
 
@@ -51,6 +58,14 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
         } catch (Exception e) {}
 
         lock_app();
+
+        // Add list of available sounds
+        final ListView listview = (ListView) view.findViewById(R.id.sound_set_list);
+        String[] values = new String[] { "Sound 1", "Sound 2", "Sound 3" };
+        final ArrayList<String> list = new ArrayList<>();
+        list.addAll(Arrays.asList(values));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list);
+        listview.setAdapter(adapter);
     }
 
     void lock_app() {
