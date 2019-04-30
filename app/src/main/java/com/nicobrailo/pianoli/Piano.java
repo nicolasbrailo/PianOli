@@ -121,7 +121,7 @@ class Piano {
     private SoundPool KeySound;
     private int[]   KeySoundIdx;
 
-    public void selectSoundset(final Context context, String soundSetName) {
+    void selectSoundset(final Context context, String soundSetName) {
 
         if (KeySound != null) {
             KeySound.release();

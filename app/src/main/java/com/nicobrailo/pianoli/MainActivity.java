@@ -36,19 +36,19 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
 
         try {
             this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        } catch (Exception e) {}
+        } catch (Exception e) { /* Ignore, the app can survive without fancy UI options */ }
 
         try {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                                  WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        } catch (Exception e) {}
+        } catch (Exception e) { /* Ignore, the app can survive without fancy UI options */ }
 
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
         try {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } catch (Exception e) {}
+        } catch (Exception e) { /* Ignore, the app can survive without fancy UI options */ }
 
         @SuppressLint("InflateParams")
         final View view = getLayoutInflater().inflate(R.layout.activity_main, null);
@@ -61,15 +61,13 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
             View decorView = getWindow().getDecorView();
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             decorView.setSystemUiVisibility(uiOptions);
-        } catch (Exception e) {
-            // Ignore, the app can survive without full UI
-        }
+        } catch (Exception e) { /* Ignore, the app can survive without fancy UI options */ }
 
         lock_app();
 
         // Show list of available sounds in config screen
         final ArrayList<String> available_sound_sets = getAvailableSoundsets();
-        final ListView sound_set_list_view = (ListView) view.findViewById(R.id.sound_set_list);
+        final ListView sound_set_list_view = view.findViewById(R.id.sound_set_list);
         // Carefully hand-crafted width, otherwise control width = screen width
         sound_set_list_view.getLayoutParams().width = 750;
 
