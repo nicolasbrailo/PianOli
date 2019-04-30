@@ -8,9 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -60,12 +62,22 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
         lock_app();
 
         // Add list of available sounds
-        final ListView listview = (ListView) view.findViewById(R.id.sound_set_list);
-        String[] values = new String[] { "Sound 1", "Sound 2", "Sound 3" };
-        final ArrayList<String> list = new ArrayList<>();
-        list.addAll(Arrays.asList(values));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list);
-        listview.setAdapter(adapter);
+        final ListView sound_set_list_view = (ListView) view.findViewById(R.id.sound_set_list);
+
+        // Carefully hand-crafted width, otherwise control width = screen width
+        sound_set_list_view.getLayoutParams().width = 750;
+
+        final ArrayList<String> available_sound_sets = new ArrayList<>(Arrays.asList("Sound 1", "Sound 2", "Sound 3"));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+                android.R.layout.simple_list_item_1, available_sound_sets);
+        sound_set_list_view.setAdapter(adapter);
+
+        sound_set_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                Log.e("XXXXXX", "Selected " + available_sound_sets.get(position));
+            }
+        });
     }
 
     void lock_app() {
