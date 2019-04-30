@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 final String selected_soundset = available_sound_sets.get(position);
-                Log.e("PianOli::Activity", "Selected " + selected_soundset);
+                Log.i("PianOli::Activity", "Selected " + selected_soundset);
                 piano_canvas.selectSoundset(getApplicationContext(), selected_soundset);
 
                 final String msg = "Sound set selected: " + selected_soundset;
