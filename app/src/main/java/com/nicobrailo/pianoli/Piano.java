@@ -8,6 +8,8 @@ import android.util.Log;
 import java.io.IOException;
 
 class Piano {
+    private static final String DEFAULT_SOUNDSET = "piano";
+
     class Key {
         int x_i, x_f, y_i, y_f;
 
@@ -46,7 +48,7 @@ class Piano {
         key_pressed = new boolean[keys_count];
         for (int i = 0; i < key_pressed.length; ++i) key_pressed[i] = false;
 
-        initSounds(context, "organ");
+        selectSoundset(context, DEFAULT_SOUNDSET);
     }
 
     int get_keys_count() {
@@ -119,9 +121,9 @@ class Piano {
     private SoundPool KeySound;
     private int[]   KeySoundIdx;
 
-    private void initSounds(final Context context, final String soundSetName) {
+    public void selectSoundset(final Context context, String soundSetName) {
+
         if (KeySound != null) {
-            // TODO: Useful to build new soundset
             KeySound.release();
         }
 

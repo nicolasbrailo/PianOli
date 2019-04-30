@@ -24,6 +24,8 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements AppConfigTrigger.AppConfigCallback {
 
+    private PianoCanvas piano_canvas = null;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +52,10 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
 
         @SuppressLint("InflateParams")
         final View view = getLayoutInflater().inflate(R.layout.activity_main, null);
-
-
         setContentView(view);
-        ((PianoCanvas) view.findViewById(R.id.piano_canvas)).setConfigRequestCallback(this);
+
+        piano_canvas = view.findViewById(R.id.piano_canvas);
+        piano_canvas.setConfigRequestCallback(this);
 
         try {
             View decorView = getWindow().getDecorView();
@@ -78,8 +80,13 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
         sound_set_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                Log.e("XXXXXX", "Selected " + available_sound_sets.get(position));
-                // TODO: Set sound set
+                final String selected_soundset = available_sound_sets.get(position);
+                Log.e("PianOli::Activity", "Selected " + selected_soundset);
+                piano_canvas.selectSoundset(getApplicationContext(), selected_soundset);
+
+                final String msg = "Sound set selected: " + selected_soundset;
+                Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+                toast.show();
             }
         });
     }
@@ -103,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
             Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
             toast.show();
 
-            Log.d("PianOli::Piano", "Sound assets not available: piano will have no sound!");
+            Log.d("PianOli::Activity", "Sound assets not available: piano will have no sound!");
         }
 
         return new ArrayList<>(Arrays.asList(lst));

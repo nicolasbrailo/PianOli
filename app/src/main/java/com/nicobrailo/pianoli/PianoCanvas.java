@@ -62,6 +62,10 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
                                   ", there are " + piano.get_keys_count() + " keys");
     }
 
+    public void selectSoundset(final Context context, final String selected_soundset) {
+        piano.selectSoundset(context, selected_soundset);
+    }
+
     public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {
         this.appConfigHandler.setConfigRequestCallback(cb);
     }
@@ -225,5 +229,4 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
 
     }
-
 }
