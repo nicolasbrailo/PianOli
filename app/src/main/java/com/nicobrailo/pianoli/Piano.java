@@ -46,7 +46,7 @@ class Piano {
         key_pressed = new boolean[keys_count];
         for (int i = 0; i < key_pressed.length; ++i) key_pressed[i] = false;
 
-        initSounds(context);
+        initSounds(context, "organ");
     }
 
     int get_keys_count() {
@@ -119,7 +119,7 @@ class Piano {
     private SoundPool KeySound;
     private int[]   KeySoundIdx;
 
-    private void initSounds(final Context context) {
+    private void initSounds(final Context context, final String soundSetName) {
         if (KeySound != null) {
             // TODO: Useful to build new soundset
             KeySound.release();
@@ -132,30 +132,30 @@ class Piano {
         KeySoundIdx = new int[24];
         AssetManager am = context.getAssets();
         try {
-            KeySoundIdx[ 0] = KeySound.load(am.openFd("piano/n01.mp3"), 1);
-            KeySoundIdx[ 1] = KeySound.load(am.openFd("piano/n02.mp3"), 1);
-            KeySoundIdx[ 2] = KeySound.load(am.openFd("piano/n03.mp3"), 1);
-            KeySoundIdx[ 3] = KeySound.load(am.openFd("piano/n04.mp3"), 1);
-            KeySoundIdx[ 4] = KeySound.load(am.openFd("piano/n05.mp3"), 1);
+            KeySoundIdx[ 0] = KeySound.load(am.openFd(soundSetName + "/n01.mp3"), 1);
+            KeySoundIdx[ 1] = KeySound.load(am.openFd(soundSetName + "/n02.mp3"), 1);
+            KeySoundIdx[ 2] = KeySound.load(am.openFd(soundSetName + "/n03.mp3"), 1);
+            KeySoundIdx[ 3] = KeySound.load(am.openFd(soundSetName + "/n04.mp3"), 1);
+            KeySoundIdx[ 4] = KeySound.load(am.openFd(soundSetName + "/n05.mp3"), 1);
             KeySoundIdx[ 5] = KeySound.load(context, R.raw.no_note, 1);
-            KeySoundIdx[ 6] = KeySound.load(am.openFd("piano/n06.mp3"), 1);
-            KeySoundIdx[ 7] = KeySound.load(am.openFd("piano/n07.mp3"), 1);
-            KeySoundIdx[ 8] = KeySound.load(am.openFd("piano/n08.mp3"), 1);
-            KeySoundIdx[ 9] = KeySound.load(am.openFd("piano/n09.mp3"), 1);
-            KeySoundIdx[10] = KeySound.load(am.openFd("piano/n10.mp3"), 1);
-            KeySoundIdx[11] = KeySound.load(am.openFd("piano/n11.mp3"), 1);
-            KeySoundIdx[12] = KeySound.load(am.openFd("piano/n12.mp3"), 1);
+            KeySoundIdx[ 6] = KeySound.load(am.openFd(soundSetName + "/n06.mp3"), 1);
+            KeySoundIdx[ 7] = KeySound.load(am.openFd(soundSetName + "/n07.mp3"), 1);
+            KeySoundIdx[ 8] = KeySound.load(am.openFd(soundSetName + "/n08.mp3"), 1);
+            KeySoundIdx[ 9] = KeySound.load(am.openFd(soundSetName + "/n09.mp3"), 1);
+            KeySoundIdx[10] = KeySound.load(am.openFd(soundSetName + "/n10.mp3"), 1);
+            KeySoundIdx[11] = KeySound.load(am.openFd(soundSetName + "/n11.mp3"), 1);
+            KeySoundIdx[12] = KeySound.load(am.openFd(soundSetName + "/n12.mp3"), 1);
             KeySoundIdx[13] = KeySound.load(context, R.raw.no_note, 1);
-            KeySoundIdx[14] = KeySound.load(am.openFd("piano/n13.mp3"), 1);
-            KeySoundIdx[15] = KeySound.load(am.openFd("piano/n14.mp3"), 1);
-            KeySoundIdx[16] = KeySound.load(am.openFd("piano/n15.mp3"), 1);
-            KeySoundIdx[17] = KeySound.load(am.openFd("piano/n16.mp3"), 1);
-            KeySoundIdx[18] = KeySound.load(am.openFd("piano/n17.mp3"), 1);
-            KeySoundIdx[19] = KeySound.load(am.openFd("piano/n18.mp3"), 1);
+            KeySoundIdx[14] = KeySound.load(am.openFd(soundSetName + "/n13.mp3"), 1);
+            KeySoundIdx[15] = KeySound.load(am.openFd(soundSetName + "/n14.mp3"), 1);
+            KeySoundIdx[16] = KeySound.load(am.openFd(soundSetName + "/n15.mp3"), 1);
+            KeySoundIdx[17] = KeySound.load(am.openFd(soundSetName + "/n16.mp3"), 1);
+            KeySoundIdx[18] = KeySound.load(am.openFd(soundSetName + "/n17.mp3"), 1);
+            KeySoundIdx[19] = KeySound.load(am.openFd(soundSetName + "/n18.mp3"), 1);
             KeySoundIdx[20] = KeySound.load(context, R.raw.no_note, 1);
-            KeySoundIdx[21] = KeySound.load(am.openFd("piano/n19.mp3"), 1);
-            KeySoundIdx[22] = KeySound.load(am.openFd("piano/n20.mp3"), 1);
-            KeySoundIdx[23] = KeySound.load(am.openFd("piano/n21.mp3"), 1);
+            KeySoundIdx[21] = KeySound.load(am.openFd(soundSetName + "/n19.mp3"), 1);
+            KeySoundIdx[22] = KeySound.load(am.openFd(soundSetName + "/n20.mp3"), 1);
+            KeySoundIdx[23] = KeySound.load(am.openFd(soundSetName + "/n21.mp3"), 1);
         } catch (IOException e) {
             Log.d("PianOli::Piano", "Failed to load sounds");
             e.printStackTrace();
