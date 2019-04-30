@@ -3,6 +3,7 @@ package com.nicobrailo.pianoli;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -57,17 +59,18 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
             View decorView = getWindow().getDecorView();
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             decorView.setSystemUiVisibility(uiOptions);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            // Ignore, the app can survive without full UI
+        }
 
         lock_app();
 
-        // Add list of available sounds
+        // Show list of available sounds in config screen
+        final ArrayList<String> available_sound_sets = getAvailableSoundsets();
         final ListView sound_set_list_view = (ListView) view.findViewById(R.id.sound_set_list);
-
         // Carefully hand-crafted width, otherwise control width = screen width
         sound_set_list_view.getLayoutParams().width = 750;
 
-        final ArrayList<String> available_sound_sets = new ArrayList<>(Arrays.asList("Sound 1", "Sound 2", "Sound 3"));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, available_sound_sets);
         sound_set_list_view.setAdapter(adapter);
@@ -76,8 +79,34 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 Log.e("XXXXXX", "Selected " + available_sound_sets.get(position));
+                // TODO: Set sound set
             }
         });
+    }
+
+    private ArrayList<String> getAvailableSoundsets() {
+        // Show list of available sounds in config screen
+        AssetManager am = getApplicationContext().getAssets();
+        String[] lst = null;
+        try {
+            lst = am.list("sounds");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (lst == null) {
+            lst = new String[0];
+        }
+
+        if (lst.length == 0) {
+            final String msg = "No sounds found, the keyboard won't work!";
+            Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+            toast.show();
+
+            Log.d("PianOli::Piano", "Sound assets not available: piano will have no sound!");
+        }
+
+        return new ArrayList<>(Arrays.asList(lst));
     }
 
     void lock_app() {
