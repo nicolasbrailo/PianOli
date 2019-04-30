@@ -1,10 +1,4 @@
 # notes from https://freesound.org/people/jobro/packs/2489/?page=1#sound
-# no_note from https://freesound.org/people/waveplay_old/sounds/221365/ 
-# alert from https://freesound.org/people/graham_makes/sounds/457518/
-
-wget -O alert.mp3 https://freesound.org/data/previews/457/457518_4256189-lq.mp3
-wget -O no_note.mp3 https://freesound.org/data/previews/221/221365_1676145-lq.mp3
-
 wget -O n01.mp3 https://freesound.org/data/previews/39/39187_35187-lq.mp3
 wget -O n02.mp3 https://freesound.org/data/previews/39/39188_35187-lq.mp3
 wget -O n03.mp3 https://freesound.org/data/previews/39/39189_35187-lq.mp3
@@ -30,5 +24,3 @@ wget -O n22.mp3 https://freesound.org/data/previews/39/39209_35187-lq.mp3
 wget -O n23.mp3 https://freesound.org/data/previews/39/39210_35187-lq.mp3
 wget -O n24.mp3 https://freesound.org/data/previews/39/39211_35187-lq.mp3
 wget -O n25.mp3 https://freesound.org/data/previews/39/39212_35187-lq.mp3
-
-

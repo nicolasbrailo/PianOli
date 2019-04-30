@@ -1,8 +1,11 @@
 package com.nicobrailo.pianoli;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.media.SoundPool;
 import android.util.Log;
+
+import java.io.IOException;
 
 class Piano {
     class Key {
@@ -127,30 +130,36 @@ class Piano {
                                     .build();
 
         KeySoundIdx = new int[24];
-        KeySoundIdx[ 0] = KeySound.load(context, R.raw.n01, 1);
-        KeySoundIdx[ 1] = KeySound.load(context, R.raw.n02, 1);
-        KeySoundIdx[ 2] = KeySound.load(context, R.raw.n03, 1);
-        KeySoundIdx[ 3] = KeySound.load(context, R.raw.n04, 1);
-        KeySoundIdx[ 4] = KeySound.load(context, R.raw.n05, 1);
-        KeySoundIdx[ 5] = KeySound.load(context, R.raw.no_note, 1);
-        KeySoundIdx[ 6] = KeySound.load(context, R.raw.n06, 1);
-        KeySoundIdx[ 7] = KeySound.load(context, R.raw.n07, 1);
-        KeySoundIdx[ 8] = KeySound.load(context, R.raw.n08, 1);
-        KeySoundIdx[ 9] = KeySound.load(context, R.raw.n09, 1);
-        KeySoundIdx[10] = KeySound.load(context, R.raw.n10, 1);
-        KeySoundIdx[11] = KeySound.load(context, R.raw.n11, 1);
-        KeySoundIdx[12] = KeySound.load(context, R.raw.n12, 1);
-        KeySoundIdx[13] = KeySound.load(context, R.raw.no_note, 1);
-        KeySoundIdx[14] = KeySound.load(context, R.raw.n13, 1);
-        KeySoundIdx[15] = KeySound.load(context, R.raw.n14, 1);
-        KeySoundIdx[16] = KeySound.load(context, R.raw.n15, 1);
-        KeySoundIdx[17] = KeySound.load(context, R.raw.n16, 1);
-        KeySoundIdx[18] = KeySound.load(context, R.raw.n17, 1);
-        KeySoundIdx[19] = KeySound.load(context, R.raw.n18, 1);
-        KeySoundIdx[20] = KeySound.load(context, R.raw.no_note, 1);
-        KeySoundIdx[21] = KeySound.load(context, R.raw.n19, 1);
-        KeySoundIdx[22] = KeySound.load(context, R.raw.n20, 1);
-        KeySoundIdx[23] = KeySound.load(context, R.raw.n21, 1);
+        AssetManager am = context.getAssets();
+        try {
+            KeySoundIdx[ 0] = KeySound.load(am.openFd("piano/n01.mp3"), 1);
+            KeySoundIdx[ 1] = KeySound.load(am.openFd("piano/n02.mp3"), 1);
+            KeySoundIdx[ 2] = KeySound.load(am.openFd("piano/n03.mp3"), 1);
+            KeySoundIdx[ 3] = KeySound.load(am.openFd("piano/n04.mp3"), 1);
+            KeySoundIdx[ 4] = KeySound.load(am.openFd("piano/n05.mp3"), 1);
+            KeySoundIdx[ 5] = KeySound.load(context, R.raw.no_note, 1);
+            KeySoundIdx[ 6] = KeySound.load(am.openFd("piano/n06.mp3"), 1);
+            KeySoundIdx[ 7] = KeySound.load(am.openFd("piano/n07.mp3"), 1);
+            KeySoundIdx[ 8] = KeySound.load(am.openFd("piano/n08.mp3"), 1);
+            KeySoundIdx[ 9] = KeySound.load(am.openFd("piano/n09.mp3"), 1);
+            KeySoundIdx[10] = KeySound.load(am.openFd("piano/n10.mp3"), 1);
+            KeySoundIdx[11] = KeySound.load(am.openFd("piano/n11.mp3"), 1);
+            KeySoundIdx[12] = KeySound.load(am.openFd("piano/n12.mp3"), 1);
+            KeySoundIdx[13] = KeySound.load(context, R.raw.no_note, 1);
+            KeySoundIdx[14] = KeySound.load(am.openFd("piano/n13.mp3"), 1);
+            KeySoundIdx[15] = KeySound.load(am.openFd("piano/n14.mp3"), 1);
+            KeySoundIdx[16] = KeySound.load(am.openFd("piano/n15.mp3"), 1);
+            KeySoundIdx[17] = KeySound.load(am.openFd("piano/n16.mp3"), 1);
+            KeySoundIdx[18] = KeySound.load(am.openFd("piano/n17.mp3"), 1);
+            KeySoundIdx[19] = KeySound.load(am.openFd("piano/n18.mp3"), 1);
+            KeySoundIdx[20] = KeySound.load(context, R.raw.no_note, 1);
+            KeySoundIdx[21] = KeySound.load(am.openFd("piano/n19.mp3"), 1);
+            KeySoundIdx[22] = KeySound.load(am.openFd("piano/n20.mp3"), 1);
+            KeySoundIdx[23] = KeySound.load(am.openFd("piano/n21.mp3"), 1);
+        } catch (IOException e) {
+            Log.d("PianOli::Piano", "Failed to load sounds");
+            e.printStackTrace();
+        }
     }
 
     private void play_sound(final int key_idx) {
