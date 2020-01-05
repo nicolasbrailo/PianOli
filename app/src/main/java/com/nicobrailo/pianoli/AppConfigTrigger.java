@@ -14,11 +14,6 @@ import java.util.Random;
 import java.util.Set;
 
 class AppConfigTrigger {
-    public interface AppConfigCallback {
-        void onConfigOpenRequested();
-        void onShowConfigTooltip();
-    }
-
     private static final int CONFIG_TRIGGER_COUNT = 2;
     private static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 3, 7, 9, 11, 15));
     private final AppCompatActivity activity;
@@ -26,7 +21,6 @@ class AppConfigTrigger {
     private Integer nextKeyPress;
     private AppConfigCallback cb = null;
     private boolean tooltip_shown = false;
-
 
     AppConfigTrigger(AppCompatActivity activity) {
         nextKeyPress = getNextExpectedKey();
@@ -104,5 +98,11 @@ class AppConfigTrigger {
         }
 
         piano.draw_icon_on_black_key(canvas, icon, nextKeyPress, 70, 70);
+    }
+
+    public interface AppConfigCallback {
+        void onConfigOpenRequested();
+
+        void onShowConfigTooltip();
     }
 }

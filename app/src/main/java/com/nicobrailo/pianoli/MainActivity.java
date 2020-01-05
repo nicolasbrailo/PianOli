@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
 
         try {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } catch (Exception e) { /* Ignore, the app can survive without fancy UI options */ }
 
@@ -50,8 +50,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } catch (Exception e) { /* Ignore, the app can survive without fancy UI options */ }
 
-        @SuppressLint("InflateParams")
-        final View view = getLayoutInflater().inflate(R.layout.activity_main, null);
+        @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.activity_main, null);
         setContentView(view);
 
         piano_canvas = view.findViewById(R.id.piano_canvas);
@@ -129,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
         super.onRestart();
         lock_app();
     }
+
     public void onClick_CloseConfig(View view) {
         findViewById(R.id.piano_canvas).bringToFront();
         findViewById(R.id.config_layout).setVisibility(View.GONE);

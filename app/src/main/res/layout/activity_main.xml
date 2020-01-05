@@ -1,50 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
+    android:orientation="horizontal"
     tools:context=".MainActivity">
 
     <com.nicobrailo.pianoli.PianoCanvas
         android:id="@+id/piano_canvas"
-        android:visibility="visible"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:visibility="visible" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/config_layout"
-        android:background="@android:color/white"
-        android:visibility="gone"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical">
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/lbl_about_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_margin="10dp"
+            android:padding="10dp"
             android:text="@string/some_info_about_this_app_title" />
 
         <TextView
             android:id="@+id/lbl_about"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_margin="10dp"
             android:onClick="onClick_About"
+            android:padding="10dp"
             android:text="@string/some_info_about_this_app" />
 
         <TextView
             android:id="@+id/lbl_choose_sound_set"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_margin="10dp"
+            android:padding="10dp"
             android:text="@string/sound_set" />
 
         <View
@@ -57,8 +56,7 @@
             android:id="@+id/sound_set_list"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:choiceMode="singleChoice">
-        </ListView>
+            android:choiceMode="singleChoice"></ListView>
 
         <View
             android:id="@+id/divider2"

@@ -26,14 +26,15 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     // Change in color when pressing a key
     final int KEY_COLOR_PRESS_DELTA = 60;
     final int[][] KEY_COLORS = new int[][]{
-            {148,   0, 211},    // Violet
-            {75,    0, 130},    // Indigo
-            {0,     0, 255},    // Blue
-            {0,   255,   0},    // Green
-            {255, 255,   0},    // Yellow
-            {255, 127,   0},    // Orange
-            {255,   0 ,  0},    // Red
+            {148, 0, 211},    // Violet
+            {75, 0, 130},    // Indigo
+            {0, 0, 255},    // Blue
+            {0, 255, 0},    // Green
+            {255, 255, 0},    // Yellow
+            {255, 127, 0},    // Orange
+            {255, 0, 0},    // Red
     };
+    Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
 
     public PianoCanvas(Context context, AttributeSet as) {
         this(context, as, 0);
@@ -59,7 +60,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         this.appConfigHandler = new AppConfigTrigger(ctx);
 
         Log.d("PianOli::DrawingCanvas", "Display is " + screen_size.x + "x" + screen_size.y +
-                                  ", there are " + piano.get_keys_count() + " keys");
+                ", there are " + piano.get_keys_count() + " keys");
     }
 
     public void selectSoundset(final Context context, final String selected_soundset) {
@@ -71,15 +72,16 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     void draw_all_keys(final Canvas canvas) {
-        /* Reset canvas */ {
+        /* Reset canvas */
+        {
             Paint p = new Paint();
             p.setColor(Color.BLACK);
             canvas.drawPaint(p);
         }
 
-        for (int i=0; i < piano.get_keys_count(); i+=2) {
+        for (int i = 0; i < piano.get_keys_count(); i += 2) {
             // Draw big key
-            final int col_idx = (i/2) % KEY_COLORS.length;
+            final int col_idx = (i / 2) % KEY_COLORS.length;
             Paint big_key_paint = new Paint();
             final int d = piano.is_key_pressed(i) ? KEY_COLOR_PRESS_DELTA : 0;
             big_key_paint.setARGB(255, Math.max(KEY_COLORS[col_idx][0] - d, 0),
@@ -89,10 +91,10 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         // Small keys drawn after big keys to ensure z-index
-        for (int i=1; i < piano.get_keys_count(); i+=2) {
+        for (int i = 1; i < piano.get_keys_count(); i += 2) {
             // Draw small key
             Paint flat_key_paint = new Paint();
-            flat_key_paint.setColor(piano.is_key_pressed(i)? Color.GRAY : Color.BLACK);
+            flat_key_paint.setColor(piano.is_key_pressed(i) ? Color.GRAY : Color.BLACK);
             if (piano.get_area_for_flat_key(i) != null) {
                 draw_key(canvas, piano.get_area_for_flat_key(i), flat_key_paint);
             }
@@ -114,7 +116,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
      * Draw something on a black key. Undefined if key_idx isn't black.
      */
     void draw_icon_on_black_key(final Canvas canvas, final Drawable icon, Integer key_idx,
-                            final int icon_width, final int icon_height) {
+                                final int icon_width, final int icon_height) {
         final Piano.Key key = piano.get_area_for_flat_key(key_idx);
         int icon_x = ((key.x_f - key.x_i) / 2) + key.x_i;
         int icon_y = 30;
@@ -161,14 +163,13 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         redraw();
     }
 
-    Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         final int ptr_id = event.getPointerId(event.getActionIndex());
         // final int ptr_idx = event.findPointerIndex(ptr_id);
         // ptr_pos = event.getX(ptr_id), event.getY(ptr_id)
         final int key_idx = piano.pos_to_key_idx(event.getX(event.getActionIndex()),
-                                                 event.getY(event.getActionIndex()));
+                event.getY(event.getActionIndex()));
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:           // fallthrough
