@@ -55,12 +55,7 @@ class AppConfigTrigger {
         snd.seekTo(0);
         snd.setVolume(100, 100);
         snd.start();
-        snd.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                snd.release();
-            }
-        });
+        snd.setOnCompletionListener(mediaPlayer -> snd.release());
 
         if (cb != null) {
             cb.onConfigOpenRequested();

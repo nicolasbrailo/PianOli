@@ -15,7 +15,7 @@ class Piano {
     private final int keys_height;
     private final int keys_flats_height;
     private final int keys_count;
-    private boolean key_pressed[];
+    private boolean[] key_pressed;
     private SoundPool KeySound;
     private int[] KeySoundIdx;
 

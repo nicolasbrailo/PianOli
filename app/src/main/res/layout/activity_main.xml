@@ -13,7 +13,7 @@
         android:layout_height="fill_parent"
         android:visibility="visible" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/config_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -56,7 +56,7 @@
             android:id="@+id/sound_set_list"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:choiceMode="singleChoice"></ListView>
+            android:choiceMode="singleChoice" />
 
         <View
             android:id="@+id/divider2"

@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -70,21 +69,18 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
         // Carefully hand-crafted width, otherwise control width = screen width
         sound_set_list_view.getLayoutParams().width = 750;
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, available_sound_sets);
         sound_set_list_view.setAdapter(adapter);
 
-        sound_set_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                final String selected_soundset = available_sound_sets.get(position);
-                Log.i("PianOli::Activity", "Selected " + selected_soundset);
-                piano_canvas.selectSoundset(getApplicationContext(), selected_soundset);
+        sound_set_list_view.setOnItemClickListener((parent, view1, position, id) -> {
+            final String selected_soundset = available_sound_sets.get(position);
+            Log.i("PianOli::Activity", "Selected " + selected_soundset);
+            piano_canvas.selectSoundset(getApplicationContext(), selected_soundset);
 
-                final String msg = "Sound set selected: " + selected_soundset;
-                Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
-                toast.show();
-            }
+            final String msg = "Sound set selected: " + selected_soundset;
+            Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+            toast.show();
         });
     }
 
