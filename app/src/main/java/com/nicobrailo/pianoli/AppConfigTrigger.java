@@ -4,9 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -14,11 +15,6 @@ import java.util.Random;
 import java.util.Set;
 
 class AppConfigTrigger {
-    public interface AppConfigCallback {
-        void onConfigOpenRequested();
-        void onShowConfigTooltip();
-    }
-
     private static final int CONFIG_TRIGGER_COUNT = 2;
     private static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 3, 7, 9, 11, 15));
     private final AppCompatActivity activity;
@@ -26,7 +22,6 @@ class AppConfigTrigger {
     private Integer nextKeyPress;
     private AppConfigCallback cb = null;
     private boolean tooltip_shown = false;
-
 
     AppConfigTrigger(AppCompatActivity activity) {
         nextKeyPress = getNextExpectedKey();
@@ -61,12 +56,7 @@ class AppConfigTrigger {
         snd.seekTo(0);
         snd.setVolume(100, 100);
         snd.start();
-        snd.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                snd.release();
-            }
-        });
+        snd.setOnCompletionListener(mediaPlayer -> snd.release());
 
         if (cb != null) {
             cb.onConfigOpenRequested();
@@ -104,5 +94,11 @@ class AppConfigTrigger {
         }
 
         piano.draw_icon_on_black_key(canvas, icon, nextKeyPress, 70, 70);
+    }
+
+    public interface AppConfigCallback {
+        void onConfigOpenRequested();
+
+        void onShowConfigTooltip();
     }
 }

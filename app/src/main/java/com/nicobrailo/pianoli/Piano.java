@@ -9,32 +9,15 @@ import java.io.IOException;
 
 class Piano {
     private static final String DEFAULT_SOUNDSET = "piano";
-
-    class Key {
-        int x_i, x_f, y_i, y_f;
-
-        Key(int x_i, int x_f, int y_i, int y_f) {
-            this.x_i = x_i;
-            this.x_f = x_f;
-            this.y_i = y_i;
-            this.y_f = y_f;
-        }
-
-        boolean contains(float pos_x, float pos_y) {
-            return (pos_x > x_i && pos_x < x_f) &&
-                    (pos_y > y_i && pos_y < y_f);
-        }
-    }
-
     private static final double KEYS_FLAT_HEIGHT_RATIO = 0.55;
     private static final int KEYS_WIDTH = 220;
     private static final int KEYS_FLAT_WIDTH = 130;
-
     private final int keys_height;
     private final int keys_flats_height;
-
     private final int keys_count;
-    private boolean key_pressed[];
+    private boolean[] key_pressed;
+    private SoundPool KeySound;
+    private int[] KeySoundIdx;
 
     Piano(final Context context, int screen_size_x, int screen_size_y) {
         keys_height = screen_size_y;
@@ -66,9 +49,9 @@ class Piano {
 
     void on_key_down(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
-        Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
-        return;
-    }
+            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+            return;
+        }
         key_pressed[key_idx] = true;
         play_sound(key_idx);
     }
@@ -116,11 +99,6 @@ class Piano {
         return new Key(x_i, x_i + KEYS_FLAT_WIDTH, 0, keys_flats_height);
     }
 
-
-
-    private SoundPool KeySound;
-    private int[]   KeySoundIdx;
-
     void selectSoundset(final Context context, String soundSetName) {
 
         if (KeySound != null) {
@@ -128,22 +106,22 @@ class Piano {
         }
 
         KeySound = new SoundPool.Builder()
-                                    .setMaxStreams(5)   // Play max 5 concurrent sounds
-                                    .build();
+                .setMaxStreams(5)   // Play max 5 concurrent sounds
+                .build();
 
         KeySoundIdx = new int[24];
         final AssetManager am = context.getAssets();
         try {
-            KeySoundIdx[ 0] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n01.mp3"), 1);
-            KeySoundIdx[ 1] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n02.mp3"), 1);
-            KeySoundIdx[ 2] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n03.mp3"), 1);
-            KeySoundIdx[ 3] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n04.mp3"), 1);
-            KeySoundIdx[ 4] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n05.mp3"), 1);
-            KeySoundIdx[ 5] = KeySound.load(context, R.raw.no_note, 1);
-            KeySoundIdx[ 6] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n06.mp3"), 1);
-            KeySoundIdx[ 7] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n07.mp3"), 1);
-            KeySoundIdx[ 8] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n08.mp3"), 1);
-            KeySoundIdx[ 9] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n09.mp3"), 1);
+            KeySoundIdx[0] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n01.mp3"), 1);
+            KeySoundIdx[1] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n02.mp3"), 1);
+            KeySoundIdx[2] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n03.mp3"), 1);
+            KeySoundIdx[3] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n04.mp3"), 1);
+            KeySoundIdx[4] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n05.mp3"), 1);
+            KeySoundIdx[5] = KeySound.load(context, R.raw.no_note, 1);
+            KeySoundIdx[6] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n06.mp3"), 1);
+            KeySoundIdx[7] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n07.mp3"), 1);
+            KeySoundIdx[8] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n08.mp3"), 1);
+            KeySoundIdx[9] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n09.mp3"), 1);
             KeySoundIdx[10] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n10.mp3"), 1);
             KeySoundIdx[11] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n11.mp3"), 1);
             KeySoundIdx[12] = KeySound.load(am.openFd("sounds/" + soundSetName + "/n12.mp3"), 1);
@@ -171,5 +149,21 @@ class Piano {
         }
 
         KeySound.play(KeySoundIdx[key_idx], 1, 1, 1, 0, 1f);
+    }
+
+    class Key {
+        int x_i, x_f, y_i, y_f;
+
+        Key(int x_i, int x_f, int y_i, int y_f) {
+            this.x_i = x_i;
+            this.x_f = x_f;
+            this.y_i = y_i;
+            this.y_f = y_f;
+        }
+
+        boolean contains(float pos_x, float pos_y) {
+            return (pos_x > x_i && pos_x < x_f) &&
+                    (pos_y > y_i && pos_y < y_f);
+        }
     }
 }
