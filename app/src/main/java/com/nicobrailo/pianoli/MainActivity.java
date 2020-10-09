@@ -154,8 +154,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
 
     @Override
     public void onShowConfigTooltip() {
-        final String msg = "Press and hold config icons on black keys to exit.";
-        Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(getApplicationContext(), R.string.config_tooltip, Toast.LENGTH_LONG);
         toast.show();
     }
 }
