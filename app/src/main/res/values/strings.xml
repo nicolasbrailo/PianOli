@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">PianOli</string>
     <string name="app_url">https://github.com/nicolasbrailo/PianOli</string>
-    <string name="close_config">Close config</string>
     <string name="quit_app">Quit app</string>
+    <string name="settings">Settings</string>
     <string name="some_info_about_this_app_title"><b><big><big>PianOli is open-source!</big></big></b></string>
     <string name="some_info_about_this_app">
         <b><big>If you have suggestions, feature requests or bug reports please

@@ -8,7 +8,7 @@ import android.util.Log;
 import java.io.IOException;
 
 class Piano {
-    private static final String DEFAULT_SOUNDSET = "piano";
+    public static final String DEFAULT_SOUNDSET = "piano";
     private static final double KEYS_FLAT_HEIGHT_RATIO = 0.55;
     private static final int KEYS_WIDTH = 220;
     private static final int KEYS_FLAT_WIDTH = 130;
@@ -18,6 +18,8 @@ class Piano {
     private boolean[] key_pressed;
     private SoundPool KeySound;
     private int[] KeySoundIdx;
+
+    private String current_soundset = null;
 
     Piano(final Context context, int screen_size_x, int screen_size_y) {
         keys_height = screen_size_y;
@@ -31,7 +33,7 @@ class Piano {
         key_pressed = new boolean[keys_count];
         for (int i = 0; i < key_pressed.length; ++i) key_pressed[i] = false;
 
-        selectSoundset(context, DEFAULT_SOUNDSET);
+        selectSoundset(context, Preferences.selectedSoundSet(context));
     }
 
     int get_keys_count() {
@@ -100,6 +102,13 @@ class Piano {
     }
 
     void selectSoundset(final Context context, String soundSetName) {
+
+        if (soundSetName.equals(current_soundset)) {
+            // No need to do anything, we have already loaded the relevant sounds.
+            return;
+        }
+
+        current_soundset = soundSetName;
 
         if (KeySound != null) {
             KeySound.release();
