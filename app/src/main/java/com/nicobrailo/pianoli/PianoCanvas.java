@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -15,11 +16,14 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.ColorUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
+
+    private static final int BORDER_WIDTH = 24;
 
     final Piano piano;
     final AppConfigTrigger appConfigHandler;
@@ -95,7 +99,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         for (int i = 1; i < piano.get_keys_count(); i += 2) {
             // Draw small key
             Paint flat_key_paint = new Paint();
-            flat_key_paint.setColor(piano.is_key_pressed(i) ? Color.GRAY : Color.BLACK);
+            flat_key_paint.setColor(piano.is_key_pressed(i) ? Color.GRAY : 0xFF333333);
             if (piano.get_area_for_flat_key(i) != null) {
                 draw_key(canvas, piano.get_area_for_flat_key(i), flat_key_paint);
             }
@@ -105,12 +109,75 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     void draw_key(final Canvas canvas, final Piano.Key rect, final Paint p) {
+        // Draw the main (solid) background of the key.
+
         Rect r = new Rect();
         r.left = rect.x_i;
         r.right = rect.x_f;
         r.top = rect.y_i;
         r.bottom = rect.y_f;
         canvas.drawRect(r, p);
+
+        // Now draw the bevels around the edge of each key.
+        // Just the left, bottom, and right. The top of the key doesn't have a bevel.
+
+        // Adjust this colour brighter or darker for the bevel.
+        int base = p.getColor();
+
+        // Left bevel
+        // +---+
+        // |   |
+        // |   |
+        // |   |
+        // |   |
+        // |   *
+        // | *
+        // *
+
+        Path left = new Path();
+        left.moveTo(r.left, r.top);
+        left.lineTo(r.left, r.bottom);
+        left.lineTo(r.left + BORDER_WIDTH, r.bottom - BORDER_WIDTH);
+        left.lineTo(r.left + BORDER_WIDTH, r.top);
+        left.lineTo(r.left, r.top);
+
+        p.setColor(ColorUtils.blendARGB(base, Color.BLACK, 0.3f));
+        canvas.drawPath(left, p);
+
+        // Right bevel
+        // +---+
+        // |   |
+        // |   |
+        // |   |
+        // |   |
+        // *   |
+        //   * |
+        //     *
+
+        Path right = new Path();
+        right.moveTo(r.right, r.top);
+        right.lineTo(r.right, r.bottom);
+        right.lineTo(r.right - BORDER_WIDTH, r.bottom - BORDER_WIDTH);
+        right.lineTo(r.right - BORDER_WIDTH, r.top);
+        right.lineTo(r.right, r.top);
+
+        p.setColor(ColorUtils.blendARGB(base, Color.WHITE, 0.2f));
+        canvas.drawPath(right, p);
+
+        //         Bottom bevel
+        //          *---------*
+        //       *                *
+        //    *----------------------+
+
+        Path bottom = new Path();
+        bottom.moveTo(r.left, r.bottom);
+        bottom.lineTo(r.right, r.bottom);
+        bottom.lineTo(r.right - BORDER_WIDTH, r.bottom - BORDER_WIDTH);
+        bottom.lineTo(r.left + BORDER_WIDTH, r.bottom - BORDER_WIDTH);
+        bottom.lineTo(r.left, r.bottom);
+
+        p.setColor(ColorUtils.blendARGB(base, Color.BLACK, 0.1f));
+        canvas.drawPath(bottom, p);
     }
 
     /**
