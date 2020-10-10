@@ -104,7 +104,7 @@ class Piano {
         }
 
         KeySound = new SoundPool.Builder()
-                .setMaxStreams(5)   // Play max 5 concurrent sounds
+                .setMaxStreams(7)   // Play max N concurrent sounds
                 .build();
 
         KeySoundIdx = new int[24];
