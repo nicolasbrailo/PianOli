@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -196,6 +197,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         r.bottom = icon_y + icon_height;
 
         icon.setBounds(r);
+        icon.setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
         icon.draw(canvas);
     }
 

@@ -87,7 +87,7 @@ class AppConfigTrigger {
     }
 
     void onPianoRedrawFinish(PianoCanvas piano, Canvas canvas, Context ctx) {
-        Drawable icon = ContextCompat.getDrawable(ctx, android.R.drawable.ic_menu_preferences);
+        Drawable icon = ContextCompat.getDrawable(ctx, R.drawable.ic_settings);
 
         for (Integer cfgKey : pressedConfigKeys) {
             piano.draw_icon_on_black_key(canvas, icon, cfgKey, 70, 70);
