@@ -13,12 +13,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.TypedArrayUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ConfigActivity extends AppCompatActivity {
+
+    private static final String SOUNDSET_DIR_PREFIX = "soundset_";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class ConfigActivity extends AppCompatActivity {
         sound_set_list_view.setItemChecked(selected_index, true);
 
         sound_set_list_view.setOnItemClickListener((parent, view1, position, id) -> {
-            final String selected_soundset = available_sound_sets.get(position);
+            final String selected_soundset = SOUNDSET_DIR_PREFIX + available_sound_sets.get(position);
             Log.i("PianOli::Activity", "Selected " + selected_soundset);
             Preferences.setSelectedSoundSet(this, selected_soundset);
         });
@@ -82,7 +85,15 @@ public class ConfigActivity extends AppCompatActivity {
             lst = new String[0];
         }
 
-        if (lst.length == 0) {
+        ArrayList<String> filtList = new ArrayList<>();
+        for (final String s : lst) {
+            if (s.startsWith(SOUNDSET_DIR_PREFIX)) {
+                // User display should be the asset name without the prefix
+                filtList.add(s.substring(SOUNDSET_DIR_PREFIX.length()));
+            }
+        }
+
+        if (filtList.size() == 0) {
             final String msg = "No sounds found, the keyboard won't work!";
             Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
             toast.show();
@@ -90,7 +101,7 @@ public class ConfigActivity extends AppCompatActivity {
             Log.d("PianOli::Activity", "Sound assets not available: piano will have no sound!");
         }
 
-        return new ArrayList<>(Arrays.asList(lst));
+        return filtList;
     }
 
     public void onClick_About(View view) {
