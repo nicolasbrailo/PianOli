@@ -16,7 +16,7 @@ class Piano {
     private final int keys_flats_height;
     private final int keys_count;
     private boolean[] key_pressed;
-    private SoundPool KeySound;
+    private static SoundPool KeySound = null;
     private int[] KeySoundIdx;
 
     Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset) {
