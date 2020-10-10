@@ -1,6 +1,5 @@
 package com.nicobrailo.pianoli;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -15,6 +14,8 @@ import java.util.Random;
 import java.util.Set;
 
 class AppConfigTrigger {
+    private static final int CONFIG_ICON_SIZE = 70;
+    private static final int CONFIG_ICON_SIZE_PRESSED = 50;
     private static final int CONFIG_TRIGGER_COUNT = 2;
     private static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 3, 7, 9, 11, 15));
     private final AppCompatActivity activity;
@@ -22,10 +23,15 @@ class AppConfigTrigger {
     private Integer nextKeyPress;
     private AppConfigCallback cb = null;
     private boolean tooltip_shown = false;
+    private final Drawable icon;
 
     AppConfigTrigger(AppCompatActivity activity) {
         nextKeyPress = getNextExpectedKey();
         this.activity = activity;
+        this.icon = ContextCompat.getDrawable(activity, R.drawable.ic_settings);
+        if (this.icon == null) {
+            Log.wtf("PianOliError", "Config icon doesn't exist");
+        }
     }
 
     void setConfigRequestCallback(AppConfigCallback cb) {
@@ -86,14 +92,14 @@ class AppConfigTrigger {
         }
     }
 
-    void onPianoRedrawFinish(PianoCanvas piano, Canvas canvas, Context ctx) {
-        Drawable icon = ContextCompat.getDrawable(ctx, R.drawable.ic_settings);
-
+    void onPianoRedrawFinish(PianoCanvas piano, Canvas canvas) {
         for (Integer cfgKey : pressedConfigKeys) {
-            piano.draw_icon_on_black_key(canvas, icon, cfgKey, 70, 70);
+            piano.draw_icon_on_black_key(canvas, icon, cfgKey,
+                    CONFIG_ICON_SIZE_PRESSED, CONFIG_ICON_SIZE_PRESSED);
         }
 
-        piano.draw_icon_on_black_key(canvas, icon, nextKeyPress, 70, 70);
+        piano.draw_icon_on_black_key(canvas, icon, nextKeyPress,
+                    CONFIG_ICON_SIZE, CONFIG_ICON_SIZE);
     }
 
     public interface AppConfigCallback {

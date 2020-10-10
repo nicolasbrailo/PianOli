@@ -26,8 +26,9 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final int BORDER_WIDTH = 24;
 
-    final Piano piano;
+    Piano piano;
     final AppConfigTrigger appConfigHandler;
+    final int screen_size_y, screen_size_x;
 
     // Change in color when pressing a key
     final int KEY_COLOR_PRESS_DELTA = 60;
@@ -62,7 +63,10 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
             throw ex;
         }
 
-        this.piano = new Piano(context, screen_size.x, screen_size.y);
+        screen_size_x = screen_size.x;
+        screen_size_y = screen_size.y;
+        final String soundset = Preferences.selectedSoundSet(context);
+        this.piano = new Piano(context, screen_size_x, screen_size_y, soundset);
         this.appConfigHandler = new AppConfigTrigger(ctx);
 
         Log.d("PianOli::DrawingCanvas", "Display is " + screen_size.x + "x" + screen_size.y +
@@ -70,7 +74,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void selectSoundset(final Context context, final String selected_soundset) {
-        piano.selectSoundset(context, selected_soundset);
+        this.piano = new Piano(context, screen_size_x, screen_size_y, selected_soundset);
     }
 
     public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {
@@ -106,7 +110,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
-        appConfigHandler.onPianoRedrawFinish(this, canvas, getContext());
+        appConfigHandler.onPianoRedrawFinish(this, canvas);
     }
 
     void draw_key(final Canvas canvas, final Piano.Key rect, final Paint p) {
@@ -234,6 +238,12 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
+    public boolean performClick() {
+        return super.performClick();
+        // Override this method to make linter happy
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         final int ptr_id = event.getPointerId(event.getActionIndex());
         // final int ptr_idx = event.findPointerIndex(ptr_id);
@@ -242,6 +252,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
                 event.getY(event.getActionIndex()));
 
         switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_BUTTON_PRESS:   // fallthrough
+                performClick();
             case MotionEvent.ACTION_DOWN:           // fallthrough
             case MotionEvent.ACTION_POINTER_DOWN: {
                 if (touch_pointer_to_keys.containsKey(ptr_id)) {

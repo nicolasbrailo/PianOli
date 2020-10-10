@@ -6,9 +6,9 @@ import android.media.SoundPool;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 class Piano {
-    public static final String DEFAULT_SOUNDSET = "piano";
     private static final double KEYS_FLAT_HEIGHT_RATIO = 0.55;
     private static final int KEYS_WIDTH = 220;
     private static final int KEYS_FLAT_WIDTH = 130;
@@ -19,9 +19,7 @@ class Piano {
     private SoundPool KeySound;
     private int[] KeySoundIdx;
 
-    private String current_soundset = null;
-
-    Piano(final Context context, int screen_size_x, int screen_size_y) {
+    Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset) {
         keys_height = screen_size_y;
         keys_flats_height = (int) (screen_size_y * KEYS_FLAT_HEIGHT_RATIO);
 
@@ -31,9 +29,8 @@ class Piano {
         keys_count = (big_keys * 2) + 1;
 
         key_pressed = new boolean[keys_count];
-        for (int i = 0; i < key_pressed.length; ++i) key_pressed[i] = false;
-
-        selectSoundset(context, Preferences.selectedSoundSet(context));
+        Arrays.fill(key_pressed, false);
+        selectSoundset(context, soundset);
     }
 
     int get_keys_count() {
@@ -102,14 +99,6 @@ class Piano {
     }
 
     void selectSoundset(final Context context, String soundSetName) {
-
-        if (soundSetName.equals(current_soundset)) {
-            // No need to do anything, we have already loaded the relevant sounds.
-            return;
-        }
-
-        current_soundset = soundSetName;
-
         if (KeySound != null) {
             KeySound.release();
         }
@@ -160,7 +149,7 @@ class Piano {
         KeySound.play(KeySoundIdx[key_idx], 1, 1, 1, 0, 1f);
     }
 
-    class Key {
+    static class Key {
         int x_i, x_f, y_i, y_f;
 
         Key(int x_i, int x_f, int y_i, int y_f) {
