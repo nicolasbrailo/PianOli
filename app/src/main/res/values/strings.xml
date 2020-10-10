@@ -10,4 +10,5 @@
         </big></b>
     </string>
     <string name="sound_set">Sound set</string>
+    <string name="config_tooltip">Hold the first gear icon, then press the second for options.</string>
 </resources>
