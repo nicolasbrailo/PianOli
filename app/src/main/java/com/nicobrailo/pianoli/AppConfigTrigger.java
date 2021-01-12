@@ -14,8 +14,8 @@ import java.util.Random;
 import java.util.Set;
 
 class AppConfigTrigger {
-    private static final int CONFIG_ICON_SIZE = 70;
-    private static final int CONFIG_ICON_SIZE_PRESSED = 50;
+    private static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO = 0.5f;
+    private static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO_PRESSED = 0.4f;
     private static final int CONFIG_TRIGGER_COUNT = 2;
     private static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 3, 7, 9, 11, 15));
     private final AppCompatActivity activity;
@@ -93,13 +93,13 @@ class AppConfigTrigger {
     }
 
     void onPianoRedrawFinish(PianoCanvas piano, Canvas canvas) {
+        int pressedSize = (int) (piano.piano.get_keys_flat_width() * CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO_PRESSED);
         for (Integer cfgKey : pressedConfigKeys) {
-            piano.draw_icon_on_black_key(canvas, icon, cfgKey,
-                    CONFIG_ICON_SIZE_PRESSED, CONFIG_ICON_SIZE_PRESSED);
+            piano.draw_icon_on_black_key(canvas, icon, cfgKey, pressedSize, pressedSize);
         }
 
-        piano.draw_icon_on_black_key(canvas, icon, nextKeyPress,
-                    CONFIG_ICON_SIZE, CONFIG_ICON_SIZE);
+        int normalSize = (int) (piano.piano.get_keys_flat_width() * CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO);
+        piano.draw_icon_on_black_key(canvas, icon, nextKeyPress, normalSize, normalSize);
     }
 
     public interface AppConfigCallback {
