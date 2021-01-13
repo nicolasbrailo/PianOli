@@ -24,7 +24,9 @@ import java.util.Map;
 
 class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
-    private static final int BORDER_WIDTH = 24;
+    private static final float BEVEL_RATIO = 0.1f;
+
+    private final float bevelWidth;
 
     Piano piano;
     final AppConfigTrigger appConfigHandler;
@@ -67,6 +69,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         screen_size_y = screen_size.y;
         final String soundset = Preferences.selectedSoundSet(context);
         this.piano = new Piano(context, screen_size_x, screen_size_y, soundset);
+        this.bevelWidth = this.piano.get_keys_width() * BEVEL_RATIO;
         this.appConfigHandler = new AppConfigTrigger(ctx);
 
         Log.d("PianOli::DrawingCanvas", "Display is " + screen_size.x + "x" + screen_size.y +
@@ -142,8 +145,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         Path left = new Path();
         left.moveTo(r.left, r.top);
         left.lineTo(r.left, r.bottom);
-        left.lineTo(r.left + BORDER_WIDTH, r.bottom - BORDER_WIDTH);
-        left.lineTo(r.left + BORDER_WIDTH, r.top);
+        left.lineTo(r.left + bevelWidth, r.bottom - bevelWidth);
+        left.lineTo(r.left + bevelWidth, r.top);
         left.lineTo(r.left, r.top);
 
         p.setColor(ColorUtils.blendARGB(base, Color.BLACK, 0.3f));
@@ -162,8 +165,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         Path right = new Path();
         right.moveTo(r.right, r.top);
         right.lineTo(r.right, r.bottom);
-        right.lineTo(r.right - BORDER_WIDTH, r.bottom - BORDER_WIDTH);
-        right.lineTo(r.right - BORDER_WIDTH, r.top);
+        right.lineTo(r.right - bevelWidth, r.bottom - bevelWidth);
+        right.lineTo(r.right - bevelWidth, r.top);
         right.lineTo(r.right, r.top);
 
         p.setColor(ColorUtils.blendARGB(base, Color.WHITE, 0.2f));
@@ -177,8 +180,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         Path bottom = new Path();
         bottom.moveTo(r.left, r.bottom);
         bottom.lineTo(r.right, r.bottom);
-        bottom.lineTo(r.right - BORDER_WIDTH, r.bottom - BORDER_WIDTH);
-        bottom.lineTo(r.left + BORDER_WIDTH, r.bottom - BORDER_WIDTH);
+        bottom.lineTo(r.right - bevelWidth, r.bottom - bevelWidth);
+        bottom.lineTo(r.left + bevelWidth, r.bottom - bevelWidth);
         bottom.lineTo(r.left, r.bottom);
 
         p.setColor(ColorUtils.blendARGB(base, Color.BLACK, 0.1f));
@@ -192,7 +195,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
                                 final int icon_width, final int icon_height) {
         final Piano.Key key = piano.get_area_for_flat_key(key_idx);
         int icon_x = ((key.x_f - key.x_i) / 2) + key.x_i;
-        int icon_y = 30;
+        int icon_y = icon_height;
 
         Rect r = new Rect();
         r.left = icon_x - (icon_width / 2);

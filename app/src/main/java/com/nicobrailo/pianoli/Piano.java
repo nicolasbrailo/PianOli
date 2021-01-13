@@ -10,8 +10,15 @@ import java.util.Arrays;
 
 class Piano {
     private static final double KEYS_FLAT_HEIGHT_RATIO = 0.55;
-    private static final int KEYS_WIDTH = 220;
-    private static final int KEYS_FLAT_WIDTH = 130;
+
+    /**
+     * Width of a flat key in relation to a regular key.
+     */
+    private static final double KEYS_FLAT_WIDTH_RATIO = 0.6;
+
+    private static final int MIN_NUMBER_OF_KEYS = 7;
+    private final int keys_width;
+    private final int keys_flat_width;
     private final int keys_height;
     private final int keys_flats_height;
     private final int keys_count;
@@ -23,14 +30,25 @@ class Piano {
         keys_height = screen_size_y;
         keys_flats_height = (int) (screen_size_y * KEYS_FLAT_HEIGHT_RATIO);
 
+        keys_width = Math.min(screen_size_x / MIN_NUMBER_OF_KEYS, 220);
+        keys_flat_width = (int) (keys_width * KEYS_FLAT_WIDTH_RATIO);
+
         // Round up for possible half-key display
-        final int big_keys = 1 + (screen_size_x / KEYS_WIDTH);
+        final int big_keys = 1 + (screen_size_x / keys_width);
         // Count flats too
         keys_count = (big_keys * 2) + 1;
 
         key_pressed = new boolean[keys_count];
         Arrays.fill(key_pressed, false);
         selectSoundset(context, soundset);
+    }
+
+    int get_keys_flat_width() {
+        return keys_flat_width;
+    }
+
+    int get_keys_width() {
+        return keys_width;
     }
 
     int get_keys_count() {
@@ -65,7 +83,7 @@ class Piano {
     }
 
     int pos_to_key_idx(float pos_x, float pos_y) {
-        final int big_key_idx = 2 * ((int) pos_x / KEYS_WIDTH);
+        final int big_key_idx = 2 * ((int) pos_x / keys_width);
         if (pos_y > keys_flats_height) return big_key_idx;
 
         // Check if press is inside rect of flat key
@@ -82,8 +100,8 @@ class Piano {
     }
 
     Key get_area_for_key(int key_idx) {
-        int x_i = key_idx / 2 * KEYS_WIDTH;
-        return new Key(x_i, x_i + KEYS_WIDTH, 0, keys_height);
+        int x_i = key_idx / 2 * keys_width;
+        return new Key(x_i, x_i + keys_width, 0, keys_height);
     }
 
     Key get_area_for_flat_key(int key_idx) {
@@ -93,9 +111,9 @@ class Piano {
             return new Key(0, 0, 0, 0);
         }
 
-        final int offset = KEYS_WIDTH - (KEYS_FLAT_WIDTH / 2);
-        int x_i = (key_idx / 2) * KEYS_WIDTH + offset;
-        return new Key(x_i, x_i + KEYS_FLAT_WIDTH, 0, keys_flats_height);
+        final int offset = keys_width - (keys_flat_width / 2);
+        int x_i = (key_idx / 2) * keys_width + offset;
+        return new Key(x_i, x_i + keys_flat_width, 0, keys_flats_height);
     }
 
     void selectSoundset(final Context context, String soundSetName) {
