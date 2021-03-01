@@ -9,3 +9,6 @@ and Android's top menu won't be available.
 
 This ensures a baby can't accidentally close the game, preventing any
 actions on the device you may not want.
+
+Grown ups can unlock the app by touching the settings icon with one
+finger, then holding the second setting icon with another finger.
