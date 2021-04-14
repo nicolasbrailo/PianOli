@@ -1,0 +1,1 @@
+Make keys more fun for little fingers to press (colored keys go brighter rather than darker when pressed).
