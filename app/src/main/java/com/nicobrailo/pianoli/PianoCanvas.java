@@ -32,17 +32,30 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     final AppConfigTrigger appConfigHandler;
     final int screen_size_y, screen_size_x;
 
-    // Change in color when pressing a key
-    final int KEY_COLOR_PRESS_DELTA = 60;
-    final int[][] KEY_COLORS = new int[][]{
-            {148, 0, 211},    // Violet
-            {75, 0, 130},    // Indigo
-            {0, 0, 255},    // Blue
-            {0, 255, 0},    // Green
-            {255, 255, 0},    // Yellow
-            {255, 127, 0},    // Orange
-            {255, 0, 0},    // Red
+    final int[] KEY_COLORS = new int[]{
+            Color.rgb(148, 0, 211),    // Violet
+            Color.rgb(75, 0, 130),    // Indigo
+            Color.rgb(0, 0, 255),    // Blue
+            Color.rgb(0, 255, 0),    // Green
+            Color.rgb(255, 255, 0),    // Yellow
+            Color.rgb(255, 127, 0),    // Orange
+            Color.rgb(255, 0, 0),    // Red
     };
+
+    /**
+     * Note that green and yellow have higher lightness than other colours, so adding just a little white doesn't have
+     * the desired effect. That is why they have a larger proportion of white added in.
+     */
+    final int[] PRESSED_KEY_COLORS = new int[]{
+            ColorUtils.blendARGB(KEY_COLORS[0], Color.WHITE, 0.5f),    // Violet
+            ColorUtils.blendARGB(KEY_COLORS[1], Color.WHITE, 0.5f),    // Indigo
+            ColorUtils.blendARGB(KEY_COLORS[2], Color.WHITE, 0.5f),    // Blue
+            ColorUtils.blendARGB(KEY_COLORS[3], Color.WHITE, 0.7f),    // Green
+            ColorUtils.blendARGB(KEY_COLORS[4], Color.WHITE, 0.8f),    // Yellow
+            ColorUtils.blendARGB(KEY_COLORS[5], Color.WHITE, 0.6f),    // Orange
+            ColorUtils.blendARGB(KEY_COLORS[6], Color.WHITE, 0.5f),    // Red
+    };
+
     Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
 
     public PianoCanvas(Context context, AttributeSet as) {
@@ -96,10 +109,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
             // Draw big key
             final int col_idx = (i / 2) % KEY_COLORS.length;
             Paint big_key_paint = new Paint();
-            final int d = piano.is_key_pressed(i) ? KEY_COLOR_PRESS_DELTA : 0;
-            big_key_paint.setARGB(255, Math.max(KEY_COLORS[col_idx][0] - d, 0),
-                    Math.max(KEY_COLORS[col_idx][1] - d, 0),
-                    Math.max(KEY_COLORS[col_idx][2] - d, 0));
+            big_key_paint.setColor(piano.is_key_pressed(i) ? PRESSED_KEY_COLORS[col_idx] : KEY_COLORS[col_idx]);
             draw_key(canvas, piano.get_area_for_key(i), big_key_paint);
         }
 
