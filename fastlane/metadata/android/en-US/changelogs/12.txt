@@ -1,0 +1,1 @@
+Fix issue where no sound is played on first install, requiring users to visit the settings screen (thanks to yamatt for reporting).
