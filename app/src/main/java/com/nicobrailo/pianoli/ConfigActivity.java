@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 public class ConfigActivity extends AppCompatActivity {
 
-    private static final String SOUNDSET_DIR_PREFIX = "soundset_";
+    public static final String SOUNDSET_DIR_PREFIX = "soundset_";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class ConfigActivity extends AppCompatActivity {
         sound_set_list_view.setItemChecked(selected_index, true);
 
         sound_set_list_view.setOnItemClickListener((parent, view1, position, id) -> {
-            final String selected_soundset = SOUNDSET_DIR_PREFIX + available_sound_sets.get(position);
+            final String selected_soundset = available_sound_sets.get(position);
             Log.i("PianOli::Activity", "Selected " + selected_soundset);
             Preferences.setSelectedSoundSet(this, selected_soundset);
         });
