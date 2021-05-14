@@ -5,9 +5,13 @@ import android.preference.PreferenceManager;
 
 public class Preferences {
 
-    private static final String DEFAULT_SOUNDSET = "piano";
+    private static final String DEFAULT_SOUNDSET = "soundset_piano";
     private final static String PREF_SELECTED_SOUND_SET = "selectedSoundSet";
 
+    /**
+     * The sound set is the name of the folder in assets/sounds/soundset_[NAME]
+     * (note that the soundset_ prefix is stripped from the directory name before being recorded here).
+     */
     public static String selectedSoundSet(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_SELECTED_SOUND_SET, DEFAULT_SOUNDSET);
     }
