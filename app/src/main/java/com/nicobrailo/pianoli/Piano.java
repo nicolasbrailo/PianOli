@@ -6,7 +6,9 @@ import android.media.SoundPool;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 class Piano {
     private static final double KEYS_FLAT_HEIGHT_RATIO = 0.55;
@@ -25,8 +27,10 @@ class Piano {
     private boolean[] key_pressed;
     private static SoundPool KeySound = null;
     private int[] KeySoundIdx;
+    private List<Integer> melody = null;
+    private int melody_idx;
 
-    Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset) {
+    Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset, final List<Integer> melody) {
         keys_height = screen_size_y;
         keys_flats_height = (int) (screen_size_y * KEYS_FLAT_HEIGHT_RATIO);
 
@@ -41,6 +45,9 @@ class Piano {
         key_pressed = new boolean[keys_count];
         Arrays.fill(key_pressed, false);
         selectSoundset(context, soundset);
+
+        this.melody = melody;
+        this.melody_idx = 0;
     }
 
     int get_keys_flat_width() {
@@ -167,10 +174,17 @@ class Piano {
         }
     }
 
-    private void play_sound(final int key_idx) {
+    private void play_sound(int key_idx) {
         if (key_idx < 0 || key_idx >= KeySoundIdx.length) {
             Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
             return;
+        }
+
+        if (this.melody != null) {
+            key_idx = this.melody.get(this.melody_idx++);
+            if (this.melody_idx >= this.melody.size()) {
+                this.melody_idx = 0;
+            }
         }
 
         KeySound.play(KeySoundIdx[key_idx], 1, 1, 1, 0, 1f);

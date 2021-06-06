@@ -19,6 +19,8 @@ import android.view.SurfaceView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +83,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         screen_size_x = screen_size.x;
         screen_size_y = screen_size.y;
         final String soundset = Preferences.selectedSoundSet(context);
-        this.piano = new Piano(context, screen_size_x, screen_size_y, soundset);
+        this.piano = new Piano(context, screen_size_x, screen_size_y, soundset, null);
         this.bevelWidth = this.piano.get_keys_width() * BEVEL_RATIO;
         this.appConfigHandler = new AppConfigTrigger(ctx);
 
@@ -90,7 +92,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void selectSoundset(final Context context, final String selected_soundset) {
-        this.piano = new Piano(context, screen_size_x, screen_size_y, selected_soundset);
+        this.piano = new Piano(context, screen_size_x, screen_size_y, selected_soundset,
+                Arrays.asList(0, 2, 4, 0, 4, 0, 4));
     }
 
     public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {
