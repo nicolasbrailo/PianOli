@@ -1,0 +1,1 @@
+Partial fix for #27: some keys had a wrong mapping and a few sound assets weren't mapped at all.
