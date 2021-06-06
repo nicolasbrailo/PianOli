@@ -125,7 +125,7 @@ class Piano {
                 .setMaxStreams(7)   // Play max N concurrent sounds
                 .build();
 
-        KeySoundIdx = new int[24];
+        KeySoundIdx = new int[28];
         final AssetManager am = context.getAssets();
         try {
             KeySoundIdx[0] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n01.mp3"), 1);
@@ -142,16 +142,21 @@ class Piano {
             KeySoundIdx[11] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n11.mp3"), 1);
             KeySoundIdx[12] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n12.mp3"), 1);
             KeySoundIdx[13] = KeySound.load(context, R.raw.no_note, 1);
+
             KeySoundIdx[14] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n13.mp3"), 1);
             KeySoundIdx[15] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n14.mp3"), 1);
             KeySoundIdx[16] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n15.mp3"), 1);
             KeySoundIdx[17] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n16.mp3"), 1);
             KeySoundIdx[18] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n17.mp3"), 1);
-            KeySoundIdx[19] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n18.mp3"), 1);
-            KeySoundIdx[20] = KeySound.load(context, R.raw.no_note, 1);
+            KeySoundIdx[19] = KeySound.load(context, R.raw.no_note, 1);
+            KeySoundIdx[20] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n18.mp3"), 1);
             KeySoundIdx[21] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n19.mp3"), 1);
             KeySoundIdx[22] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n20.mp3"), 1);
             KeySoundIdx[23] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n21.mp3"), 1);
+            KeySoundIdx[24] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n22.mp3"), 1);
+            KeySoundIdx[25] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n23.mp3"), 1);
+            KeySoundIdx[26] = KeySound.load(am.openFd("sounds/" + ConfigActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n24.mp3"), 1);
+            KeySoundIdx[27] = KeySound.load(context, R.raw.no_note, 1);
         } catch (IOException e) {
             Log.d("PianOli::Piano", "Failed to load sounds");
             e.printStackTrace();
