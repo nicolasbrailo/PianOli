@@ -53,8 +53,12 @@ class AppConfigTrigger {
     }
 
     private void reset() {
-        nextKeyPress = getNextExpectedKey();
-        pressedConfigKeys.clear();
+        // Only do an actual reset if there was some state to reset, otherwise this will select a
+        // new NextExpectedKey and move the icon around whenever the user presses a key
+        if (pressedConfigKeys.size() > 0) {
+            nextKeyPress = getNextExpectedKey();
+            pressedConfigKeys.clear();
+        }
     }
 
     private void showConfigDialogue() {
@@ -88,6 +92,8 @@ class AppConfigTrigger {
 
     void onKeyUp(int key_idx) {
         if (pressedConfigKeys.contains(key_idx)) {
+            reset();
+        } else {
             reset();
         }
     }
