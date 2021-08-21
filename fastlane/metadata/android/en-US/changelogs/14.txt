@@ -1,0 +1,2 @@
+- Bugfix: when screen state gets out of sync, the app now resets instead of freezing
+- Config view should only be triggered if only the config keys are pressed
