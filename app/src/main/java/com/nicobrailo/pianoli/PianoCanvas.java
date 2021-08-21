@@ -250,6 +250,14 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         redraw();
     }
 
+    void resetPianoState() {
+        // Something has gone wrong with the piano or canvas state, and our state is out of sync
+        // with the real state of the world (eg somehow we missed a touch down or up event).
+        // Try to reset the state and hope the app survives.
+        touch_pointer_to_keys.clear();;
+        piano.resetState();
+    }
+
     @Override
     public boolean performClick() {
         return super.performClick();
@@ -271,6 +279,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_POINTER_DOWN: {
                 if (touch_pointer_to_keys.containsKey(ptr_id)) {
                     Log.e("PianOli::DrawingCanvas", "Touch-track error: Repeated touch-down event received");
+                    resetPianoState();
                     return super.onTouchEvent(event);
                 }
 
@@ -283,6 +292,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_MOVE: {
                 if (!touch_pointer_to_keys.containsKey(ptr_id)) {
                     Log.e("PianOli::DrawingCanvas", "Touch-track error: Missed touch-up event");
+                    resetPianoState();
                     return super.onTouchEvent(event);
                 }
 
@@ -301,6 +311,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_UP: {
                 if (!touch_pointer_to_keys.containsKey(ptr_id)) {
                     Log.e("PianOli::DrawingCanvas", "Touch-track error: Repeated touch-up event received");
+                    resetPianoState();
                     return super.onTouchEvent(event);
                 }
 

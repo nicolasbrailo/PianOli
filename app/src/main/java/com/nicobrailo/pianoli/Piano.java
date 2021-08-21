@@ -55,6 +55,10 @@ class Piano {
         return keys_count;
     }
 
+    void resetState() {
+        Arrays.fill(key_pressed, false);
+    }
+    
     boolean is_key_pressed(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
             Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
