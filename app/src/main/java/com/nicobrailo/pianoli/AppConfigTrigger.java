@@ -57,8 +57,9 @@ class AppConfigTrigger {
         // new NextExpectedKey and move the icon around whenever the user presses a key
         if (pressedConfigKeys.size() > 0) {
             nextKeyPress = getNextExpectedKey();
-            pressedConfigKeys.clear();
         }
+
+        pressedConfigKeys.clear();
     }
 
     private void showConfigDialogue() {
@@ -87,15 +88,13 @@ class AppConfigTrigger {
             } else {
                 nextKeyPress = getNextExpectedKey();
             }
+        } else { 
+            reset();
         }
     }
 
     void onKeyUp(int key_idx) {
-        if (pressedConfigKeys.contains(key_idx)) {
-            reset();
-        } else {
-            reset();
-        }
+        reset();
     }
 
     void onPianoRedrawFinish(PianoCanvas piano, Canvas canvas) {
