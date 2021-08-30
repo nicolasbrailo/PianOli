@@ -1,0 +1,8 @@
+Tem um bebê curioso sobre tablets e telefones atraentes? Transforme seu aparelho através deste aplicativo em um jogo de bebê
+e, o mais importante, evite que o bebê faça algumas mudanças indesejadas com toques aleatórios.
+
+Este App mostrará um pequeno piano que o bebê pode usar para explorar sons. Ao mesmo tempo, ele bloqueará quaisquer tentativas de sair do App. Os botões de Voltar, Início e Apps Recentes serão bloqueados, e o menu de ajustes rápidos do Android não estará disponível.
+
+Isto garante que o bebê não possa fechar o jogo acidentalmente, impedindo qualquer ação no aparelho que você não gostaria que acontecesse.
+
+Adultos podem desbloquear o App segurando com um dedo o Ícone de Opções na tecla de piano e em seguida tocando no segundo Ícone com outro dedo.
