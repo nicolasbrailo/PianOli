@@ -12,6 +12,8 @@
 bin/
 gen/
 out/
+app/release/
+app/releaseGooglePlay/
 
 # Gradle files
 .gradle/
@@ -57,3 +59,4 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+
