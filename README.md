@@ -14,6 +14,11 @@ Grown ups can unlock the app by touching the settings icon with one finger, then
 
 Contributions to design & sound packs would be especially welcome. (Can anyone recommend sound packs with an open source license?) The project only has piano sounds and I'd love some more variety. Also, it's ugly as hell. I'd love to make it a bit nicer but my design skills are limited to command line interfaces. Contributions will be appreciated!
 
-[<img src="https://f-droid.org/badge/get-it-on.png"
+[
+<img src="https://f-droid.org/badge/get-it-on.png"
      alt="Get it on F-Droid"
-     height="90">](https://f-droid.org/packages/com.nicobrailo.pianoli/)
+     height="90px">](https://f-droid.org/packages/com.nicobrailo.pianoli/) [
+<img src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'
+     alt='Get it on Google Play'
+     height='90px'/>](https://play.google.com/store/apps/details?id=com.nicobrailo.pianoli.gplay)
+
