@@ -17,7 +17,7 @@ class AppConfigTrigger {
     private static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO = 0.5f;
     private static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO_PRESSED = 0.4f;
     private static final int CONFIG_TRIGGER_COUNT = 2;
-    private static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 5, 7, 11, 13));
+    private static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 3, 7, 9, 11, 15));
     private final AppCompatActivity activity;
     private Set<Integer> pressedConfigKeys = new HashSet<>();
     private Integer nextKeyPress;
@@ -88,7 +88,7 @@ class AppConfigTrigger {
             } else {
                 nextKeyPress = getNextExpectedKey();
             }
-        } else {
+        } else { 
             reset();
         }
     }
