@@ -4,11 +4,7 @@
     <string name="quit_app">Quit app</string>
     <string name="settings">Settings</string>
     <string name="some_info_about_this_app_title"><b><big><big>PianOli is open-source!</big></big></b></string>
-    <string name="some_info_about_this_app">
-        <b><big>If you have suggestions, feature requests or bug reports please
-            <a href="https://github.com/nicolasbrailo/PianOli">visit the project\'s website</a>.
-        </big></b>
-    </string>
+    <string name="some_info_about_this_app">If you have suggestions, feature requests or bug reports please <a href="https://github.com/nicolasbrailo/PianOli">visit the project\'s website</a>.</string>
     <string name="sound_set">Sound set</string>
     <string name="config_tooltip">Hold the first gear icon, then press the second for options.</string>
 </resources>
