@@ -7,4 +7,9 @@
     <string name="some_info_about_this_app">If you have suggestions, feature requests or bug reports please <a href="https://github.com/nicolasbrailo/PianOli">visit the project\'s website</a>.</string>
     <string name="sound_set">Sound set</string>
     <string name="config_tooltip">Hold the first gear icon, then press the second for options.</string>
+    <string name="soundset_guitar">Guitar</string>
+    <string name="soundset_musicbox">Music Box</string>
+    <string name="soundset_piano">Piano</string>
+    <string name="soundset_sine">Sine Wave</string>
+    <string name="soundset_vibraphone">Vibraphone</string>
 </resources>

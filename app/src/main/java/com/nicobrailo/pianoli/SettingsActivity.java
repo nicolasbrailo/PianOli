@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import kotlin.jvm.internal.PropertyReference0Impl;
+
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String SOUNDSET_DIR_PREFIX = "soundset_";
@@ -100,17 +102,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
 
-        private String[] soundsetEntries;
-        private String[] soundsetEntryValues;
+        private List<String> availableSoundsets;
 
         public SettingsFragment(List<String> availableSoundsets) {
-            this.soundsetEntryValues = availableSoundsets.toArray(new String[] {});
-            this.soundsetEntries = new String[availableSoundsets.size()];
-            this.soundsetEntryValues = new String[availableSoundsets.size()];
-            for (int i = 0; i < availableSoundsets.size(); i ++) {
-                this.soundsetEntryValues[i] = availableSoundsets.get(i);
-                this.soundsetEntries[i] = availableSoundsets.get(i);
-            }
+            this.availableSoundsets = availableSoundsets;
         }
 
         @Override
@@ -119,6 +114,16 @@ public class SettingsActivity extends AppCompatActivity {
 
             ListPreference soundsets = findPreference("selectedSoundSet");
             if (soundsets != null) {
+                String[] soundsetEntries = new String[availableSoundsets.size()];
+                String[] soundsetEntryValues = new String[availableSoundsets.size()];
+                for (int i = 0; i < availableSoundsets.size(); i ++) {
+                    soundsetEntryValues[i] = availableSoundsets.get(i);
+
+                    String name = SOUNDSET_DIR_PREFIX + availableSoundsets.get(i);
+                    int stringId = getResources().getIdentifier(name, "string", requireContext().getPackageName());
+                    soundsetEntries[i] = stringId > 0 ? getString(stringId) : availableSoundsets.get(i);
+                }
+
                 soundsets.setEntries(soundsetEntries);
                 soundsets.setEntryValues(soundsetEntryValues);
             }
