@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
         // child accidentally getting to the settings screen.
         unlock_app();
 
-        startActivityForResult(new Intent(this, ConfigActivity.class), REQUEST_CONFIG);
+        startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CONFIG);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
 
 
         if (requestCode == REQUEST_CONFIG) {
-            if (resultCode == ConfigActivity.RESULT_QUIT) {
+            if (resultCode == SettingsActivity.RESULT_QUIT) {
                 quitApp();
             }
 

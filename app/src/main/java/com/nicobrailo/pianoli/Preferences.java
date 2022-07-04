@@ -29,8 +29,8 @@ public class Preferences {
         // This will not play any sound, so lets take the liberty of updating the preference to the correct
         // format for them. This can be removed in the future if we like after most people will have migrated
         // to the newer version.
-        if (soundsetName.startsWith(ConfigActivity.SOUNDSET_DIR_PREFIX)) {
-            String updatedSoundsetName = soundsetName.substring(ConfigActivity.SOUNDSET_DIR_PREFIX.length());
+        if (soundsetName.startsWith(SettingsActivity.SOUNDSET_DIR_PREFIX)) {
+            String updatedSoundsetName = soundsetName.substring(SettingsActivity.SOUNDSET_DIR_PREFIX.length());
             Log.i(TAG, "Migrating from existing soundset \"" + soundsetName + "\" to new format: \"" + updatedSoundsetName + "\"");
             setSelectedSoundSet(context, updatedSoundsetName);
             return updatedSoundsetName;

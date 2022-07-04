@@ -1,0 +1,14 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.nicobrailo.pianoli.AboutPreference />
+
+    <PreferenceCategory app:title="Preferences" app:iconSpaceReserved="false">
+        <ListPreference
+            app:defaultValue="piano"
+            app:key="selectedSoundSet"
+            app:title="@string/sound_set"
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

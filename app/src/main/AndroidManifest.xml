@@ -24,13 +24,13 @@
         </activity>
 
         <activity
-            android:name=".ConfigActivity"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="landscape"
-            android:configChanges="orientation|keyboardHidden">
-
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".MainActivity" />
-
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
 
     </application>
