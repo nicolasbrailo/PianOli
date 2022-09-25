@@ -1,0 +1,4 @@
+- Added UK translation
+- Added ES translation
+- Possibly fixed reported crash on settings view
+
