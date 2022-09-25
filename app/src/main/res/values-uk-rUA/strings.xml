@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PianOli</string>
+    <string name="quit_app">Закрити застосунок</string>
+    <string name="settings">Параметри</string>
+    <string name="some_info_about_this_app_title"><b><big><big>PianOli — вільний застосунок!</big></big></b></string>
+    <string name="some_info_about_this_app">Надсилайте пропозиції, прохання й звіти про вади на <a href="https://github.com/nicolasbrailo/PianOli">вебсайт проєкту</a>.</string>
+    <string name="sound_set">Набір звуків</string>
+    <string name="config_tooltip">Затисніть одне коліща й торкніть інше, щоб відкрити параметри.</string>
+    <string name="soundset_guitar">Гітара</string>
+    <string name="soundset_musicbox">Музична скринька</string>
+    <string name="soundset_piano">Фортепіано</string>
+    <string name="soundset_sine">Синусоїда</string>
+    <string name="soundset_vibraphone">Вібрафон</string>
+</resources>
