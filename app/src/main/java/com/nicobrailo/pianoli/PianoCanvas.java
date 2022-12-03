@@ -267,8 +267,6 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int ptr_id = event.getPointerId(event.getActionIndex());
-        // final int ptr_idx = event.findPointerIndex(ptr_id);
-        // ptr_pos = event.getX(ptr_id), event.getY(ptr_id)
         int key_idx = piano.pos_to_key_idx(
                 event.getX(event.getActionIndex()),
                 event.getY(event.getActionIndex()));
