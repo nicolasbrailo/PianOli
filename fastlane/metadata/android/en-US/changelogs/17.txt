@@ -1,0 +1,2 @@
+- Correctly handle multi-finger move (https://github.com/nicolasbrailo/PianOli/pull/44)
+- Corrects keyboard start sound (https://github.com/nicolasbrailo/PianOli/pull/39)
