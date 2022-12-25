@@ -266,10 +266,9 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        final int ptr_id = event.getPointerId(event.getActionIndex());
-        // final int ptr_idx = event.findPointerIndex(ptr_id);
-        // ptr_pos = event.getX(ptr_id), event.getY(ptr_id)
-        final int key_idx = piano.pos_to_key_idx(event.getX(event.getActionIndex()),
+        int ptr_id = event.getPointerId(event.getActionIndex());
+        int key_idx = piano.pos_to_key_idx(
+                event.getX(event.getActionIndex()),
                 event.getY(event.getActionIndex()));
 
         switch (event.getActionMasked()) {
@@ -290,19 +289,27 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
                 return true;
             }
             case MotionEvent.ACTION_MOVE: {
-                if (!touch_pointer_to_keys.containsKey(ptr_id)) {
-                    Log.e("PianOli::DrawingCanvas", "Touch-track error: Missed touch-up event");
-                    resetPianoState();
-                    return super.onTouchEvent(event);
-                }
+                // action_move is special, there is no *single* `getActionIndex`,
+                // as *multiple* pointers could have moved, so we must check *each* pointer.
+                // https://developer.android.com/develop/ui/views/touch-and-input/gestures/multi
+                for (int size = event.getPointerCount(), i = 0; i < size; i++) {
+                    ptr_id = event.getPointerId(i);  // cf precalc'd ptr_id above switch
+                    key_idx = piano.pos_to_key_idx(
+                            event.getX(i),
+                            event.getY(i));
 
-                // check if key changed
-                if (touch_pointer_to_keys.get(ptr_id) != key_idx) {
-                    Log.d("PianOli::DrawingCanvas", "Moved to another key");
-                    // Release key before storing new key_idx for new key down
-                    on_key_up(touch_pointer_to_keys.get(ptr_id));
-                    touch_pointer_to_keys.put(ptr_id, key_idx);
-                    on_key_down(key_idx);
+                    if (!touch_pointer_to_keys.containsKey(ptr_id)) {
+                        Log.e("PianOli::DrawingCanvas", "Touch-track error: Missed touch-up event");
+                        resetPianoState();
+                        return super.onTouchEvent(event);                    }
+                    // check if key changed
+                    if (touch_pointer_to_keys.get(ptr_id) != key_idx) {
+                        Log.d("PianOli::DrawingCanvas", "Moved to another key");
+                        // Release key before storing new key_idx for new key down
+                        on_key_up(touch_pointer_to_keys.get(ptr_id));
+                        touch_pointer_to_keys.put(ptr_id, key_idx);
+                        on_key_down(key_idx);
+                    }
                 }
 
                 return true;
