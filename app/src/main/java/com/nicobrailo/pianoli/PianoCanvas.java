@@ -301,7 +301,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
                     if (!touch_pointer_to_keys.containsKey(ptr_id)) {
                         Log.e("PianOli::DrawingCanvas", "Touch-track error: Missed touch-up event");
                         resetPianoState();
-                        return super.onTouchEvent(event);                    }
+                        return super.onTouchEvent(event);
+                    }
                     // check if key changed
                     if (touch_pointer_to_keys.get(ptr_id) != key_idx) {
                         Log.d("PianOli::DrawingCanvas", "Moved to another key");
