@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">PianOli</string>
+    <string name="app_url" translatable="false">https://github.com/nicolasbrailo/PianOli</string>
+    <string name="quit_app">Έξοδος</string>
+    <string name="settings">Ρυθμίσεις</string>
+    <string name="some_info_about_this_app_title"><b><big><big>Το PianOli είναι ανοικτού κώδικα!</big></big></b></string>
+    <string name="some_info_about_this_app">Εάν έχετε προτάσεις, αιτήματα για λειτουργίες ή αναφορές σφαλμάτων, παρακαλούμε <a href="https://github.com/nicolasbrailo/PianOli">επισκεφθείτε τον ιστότοπο του έργου</a>.</string>
+    <string name="sound_set">Ρύθμιση ήχου</string>
+    <string name="config_tooltip">Κρατήστε πατημένο το πρώτο εικονίδιο με το γρανάζι και μετά πατήστε το δεύτερο για επιλογές.</string>
+    <string name="soundset_guitar">Κιθάρα</string>
+    <string name="soundset_musicbox">Μουσικό κουτί</string>
+    <string name="soundset_piano">Πιάνο</string>
+    <string name="soundset_sine">Ημιτονοειδή κύματα</string>
+    <string name="soundset_vibraphone">Βιμπράφωνο</string>
+</resources>
