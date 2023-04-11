@@ -28,9 +28,8 @@ class Piano {
     private static SoundPool KeySound = null;
     private int[] KeySoundIdx;
     private Melody melody = null;
-    private int melody_idx;
 
-    Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset, final Melody melody) {
+    Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset) {
         keys_height = screen_size_y;
         keys_flats_height = (int) (screen_size_y * KEYS_FLAT_HEIGHT_RATIO);
 
@@ -46,8 +45,10 @@ class Piano {
         Arrays.fill(key_pressed, false);
         selectSoundset(context, soundset);
 
-        this.melody = melody;
-        this.melody_idx = 0;
+        if (Preferences.areMelodiesEnabled(context)) {
+            this.melody = new MultipleSongsMelody(Preferences.selectedMelodies(context));
+            this.melody.reset();
+        }
     }
 
     int get_keys_flat_width() {

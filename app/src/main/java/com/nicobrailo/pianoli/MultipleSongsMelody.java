@@ -1,25 +1,34 @@
 package com.nicobrailo.pianoli;
 
+import androidx.annotation.NonNull;
+
+import java.util.List;
+
 /**
  * Cycles through a collection of {@link SingleSongMelody}'s. Each time a melody is completed, the
  * next is started. When the final melody is finished, it will return to the first note of the
  * first melody again.
  */
-public class AllSongsMelody implements Melody {
+public class MultipleSongsMelody implements Melody {
 
-    public static final Melody[] songs = new Melody[] {
-            SingleSongMelody.twinkle_twinkle_little_star,
-            SingleSongMelody.insy_winsy_spider,
-            SingleSongMelody.im_a_little_teapot,
-    };
+    private final List<Melody> songs;
+
+    public MultipleSongsMelody(@NonNull List<Melody> songs) {
+        this.songs = songs;
+    }
 
     private int song_idx = 0;
 
     @Override
     public void reset() {
-        songs[song_idx].reset();
+        songs.get(song_idx).reset();
         song_idx = 0;
-        songs[0].reset();
+        songs.get(0).reset();
+    }
+
+    @Override
+    public String id() {
+        return "all_songs";
     }
 
     /**
@@ -28,13 +37,13 @@ public class AllSongsMelody implements Melody {
      */
     @Override
     public String nextNote() {
-        if (!songs[song_idx].hasNextNote()) {
-            songs[song_idx].reset();
-            song_idx = (song_idx + 1) % songs.length;
-            songs[song_idx].reset();
+        if (!songs.get(song_idx).hasNextNote()) {
+            songs.get(song_idx).reset();
+            song_idx = (song_idx + 1) % songs.size();
+            songs.get(song_idx).reset();
         }
 
-        return songs[song_idx].nextNote();
+        return songs.get(song_idx).nextNote();
 
     }
 
@@ -43,6 +52,6 @@ public class AllSongsMelody implements Melody {
         // If we are not on the last song, then there is definitely more notes to be played before
         // we should be reset(). If we are on the last song, then just ask that song if it has any
         // notes left.
-        return song_idx < songs.length - 1 || songs[song_idx].hasNextNote();
+        return song_idx < songs.size() - 1 || songs.get(song_idx).hasNextNote();
     }
 }

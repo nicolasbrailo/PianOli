@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 public class SingleSongMelody implements Melody {
 
     public static final SingleSongMelody im_a_little_teapot = SingleSongMelody.fromString(
+            "im_a_little_teapot",
             "C D E F G C2 " +
             // I’m a little teapot
 
@@ -32,6 +33,7 @@ public class SingleSongMelody implements Melody {
     );
 
     public static final SingleSongMelody twinkle_twinkle_little_star = SingleSongMelody.fromString(
+            "twinkle_twinkle_little_star",
             "C C G G A A G " +
             // Twinkle, twinkle, little star
 
@@ -52,6 +54,7 @@ public class SingleSongMelody implements Melody {
     );
 
     public static final SingleSongMelody insy_winsy_spider = SingleSongMelody.fromString(
+            "insy_winsy_spider",
             "G1 C2 C2 C2 D2 E2 E2 " +
             // "Insy-winsy spider...
 
@@ -77,9 +80,10 @@ public class SingleSongMelody implements Melody {
             // ... climbed up the spout again.
     );
 
-    public static final SingleSongMelody[] all = new SingleSongMelody[] {
+    public static final Melody[] all = new Melody[] {
             twinkle_twinkle_little_star,
-            insy_winsy_spider
+            insy_winsy_spider,
+            im_a_little_teapot,
     };
 
     /**
@@ -91,7 +95,7 @@ public class SingleSongMelody implements Melody {
      * Notes in the first octave can leave off the octave designation and it will be automatically
      * appended (i.e. "C" will become "C1"). This makes it simpler to write songs that fall within a single octave.
      */
-    static SingleSongMelody fromString(String melody) {
+    static SingleSongMelody fromString(String id, String melody) {
         String[] notes = melody.trim().toUpperCase(Locale.ENGLISH).split("\\s+");
 
         for (int i = 0; i < notes.length; i ++) {
@@ -99,13 +103,15 @@ public class SingleSongMelody implements Melody {
                 notes[i] = notes[i] + "1";
             }
         }
-        return new SingleSongMelody(notes);
+        return new SingleSongMelody(id, notes);
     }
 
     private int melody_idx = 0;
+    private final String id;
     private final String[] notes;
 
-    SingleSongMelody(String[] notes) {
+    SingleSongMelody(String id, String[] notes) {
+        this.id = id;
         this.notes = notes;
     }
 
@@ -122,6 +128,11 @@ public class SingleSongMelody implements Melody {
     @Override
     public void reset() {
         melody_idx = 0;
+    }
+
+    @Override
+    public String id() {
+        return id;
     }
 
     @Override

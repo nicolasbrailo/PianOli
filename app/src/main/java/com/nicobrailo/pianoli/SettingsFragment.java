@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
+import androidx.preference.MultiSelectListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import java.io.IOException;
@@ -28,12 +29,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedzInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
         loadSounds();
+        loadMelodies();
     }
 
     public void onAttach (@NonNull Context context) {
         super.onAttach(context);
         this.availableSoundsets = getAvailableSoundsets(context);
-        loadSounds();
     }
 
     private ArrayList<String> getAvailableSoundsets(Context context) {
@@ -68,6 +69,39 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         return filtList;
     }
 
+    void loadMelodies() {
+        MultiSelectListPreference melodies = findPreference("selectedMelodies");
+        if (melodies != null) {
+
+            boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean("enableMelodies", false);
+            melodies.setEnabled(enabled);
+
+            findPreference("enableMelodies").setOnPreferenceChangeListener((preference, newValue) -> {
+                melodies.setEnabled((Boolean)newValue);
+                return true;
+            });
+
+            String[] melodyEntries = new String[SingleSongMelody.all.length];
+            String[] melodyEntryValues = new String[SingleSongMelody.all.length];
+
+            // Ideally we'd also call setDefaultValue() here too and pass a Set<String>
+            // containing each melody. However, the system invokes the "persist default valeus"
+            // before we get here, and thus it never gets respected. Instead that is hardcoded
+            // in a string-array and referenced directly in root_preferences.xml.
+
+            for (int i = 0; i < SingleSongMelody.all.length; i ++) {
+                Melody melody = SingleSongMelody.all[i];
+                melodyEntryValues[i] = melody.id();
+
+                int stringId = getResources().getIdentifier("melody_" + melody.id(), "string", requireContext().getPackageName());
+                melodyEntries[i] = stringId > 0 ? getString(stringId) : melody.id();
+            }
+
+            melodies.setEntries(melodyEntries);
+            melodies.setEntryValues(melodyEntryValues);
+        }
+    }
+
     void loadSounds() {
         ListPreference soundsets = findPreference("selectedSoundSet");
         if (soundsets != null) {
@@ -85,4 +119,5 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             soundsets.setEntryValues(soundsetEntryValues);
         }
     }
+
 }

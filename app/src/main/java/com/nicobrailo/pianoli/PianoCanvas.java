@@ -81,7 +81,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         screen_size_x = screen_size.x;
         screen_size_y = screen_size.y;
         final String soundset = Preferences.selectedSoundSet(context);
-        this.piano = new Piano(context, screen_size_x, screen_size_y, soundset, null);
+        this.piano = new Piano(context, screen_size_x, screen_size_y, soundset);
         this.bevelWidth = this.piano.get_keys_width() * BEVEL_RATIO;
         this.appConfigHandler = new AppConfigTrigger(ctx);
 
@@ -90,9 +90,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void selectSoundset(final Context context, final String selected_soundset) {
-        this.piano = new Piano(context, screen_size_x, screen_size_y, selected_soundset,
-                    new AllSongsMelody()
-        );
+        this.piano = new Piano(context, screen_size_x, screen_size_y, selected_soundset);
     }
 
     public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {

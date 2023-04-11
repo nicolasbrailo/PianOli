@@ -4,11 +4,45 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class Preferences {
 
     private static final String TAG = "Preferences";
     private static final String DEFAULT_SOUNDSET = "piano";
     private final static String PREF_SELECTED_SOUND_SET = "selectedSoundSet";
+    private final static String PREF_SELECTED_MELODIES = "selectedMelodies";
+    private final static String PREF_ENABLE_MELODIES = "enableMelodies";
+
+    /**
+     * If none are selected, then we play all melodies.
+     * This is counter intuitive from a user perspective ("Why is it playing all the
+     * melodies when I deselected them all!"), however it is probably more counter intuitive
+     * than the alternative which is "Why did it not play any melodies when I selected
+     * 'enable melodies'?").
+     */
+    public static List<Melody> selectedMelodies(Context context) {
+        final String[] defaultMelodies = context.getResources().getStringArray(R.array.default_selected_melodies);
+        Set<String> defaultMelodiesSet = new HashSet<>();
+        Collections.addAll(defaultMelodiesSet, defaultMelodies);
+        final Set<String> selectedMelodies = PreferenceManager.getDefaultSharedPreferences(context).getStringSet(PREF_SELECTED_MELODIES, defaultMelodiesSet);
+
+        final ArrayList<Melody> melodies = new ArrayList<>(selectedMelodies.size());
+        for (Melody melody : SingleSongMelody.all) {
+            if (selectedMelodies.isEmpty() || selectedMelodies.contains(melody.id())) {
+                melodies.add(melody);
+            }
+        }
+        return melodies;
+    }
+
+    public static boolean areMelodiesEnabled(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_MELODIES, false);
+    }
 
     /**
      * The sound set is the name of the folder in assets/sounds/soundset_[NAME]

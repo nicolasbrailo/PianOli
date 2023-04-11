@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ideally we'd dynamically set this to be all available melodies, but
+         it seems that for some reason it tries to populate the default values
+         prior to us dynamically calling setDefaultValues(), meaning that it
+         always gets set to null (no selected melodies). By hard coding it, we
+         can reference it in the root_preferences XML file and thus it will correctly
+         be read the first time the system tries to set the default preferences. -->
+    <string-array name="default_selected_melodies">
+        <item>twinkle_twinkle_little_star</item>
+        <item>im_a_little_teapot</item>
+        <item>insy_winsy_spider</item>
+    </string-array>
+</resources>

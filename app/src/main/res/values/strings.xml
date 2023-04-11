@@ -12,4 +12,11 @@
     <string name="soundset_piano">Piano</string>
     <string name="soundset_sine">Sine Wave</string>
     <string name="soundset_vibraphone">Vibraphone</string>
+    <string name="melody_twinkle_twinkle_little_star">Twinkle, Twinkle, Little Star</string>
+    <string name="melody_im_a_little_teapot">I\'m a Little Teapot</string>
+    <string name="melody_insy_winsy_spider">Insy Winsy Spider</string>
+    <string name="pref_enable_melodies_summary">Touching a key plays the next note in a melody</string>
+    <string name="pref_enable_melodies">Auto play melodies</string>
+    <string name="pref_selected_melodies">Available melodies</string>
+    <string name="pref_selected_melodies_summary">List of melodies to cycle through</string>
 </resources>

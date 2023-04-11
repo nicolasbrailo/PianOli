@@ -43,4 +43,12 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.android.support:design:28.0.0'
     implementation 'androidx.preference:preference:1.2.0'
+    implementation "androidx.annotation:annotation:1.6.0"
+}
+
+// Not sure why this started happening all of a sudden, but the buidl was failing
+// doe to an error similar to this StackOverflow post:
+// https://stackoverflow.com/questions/75274720/a-failure-occurred-while-executing-appcheckdebugduplicateclasses/75315276#75315276
+configurations.implementation {
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
 }

@@ -9,6 +9,19 @@
             app:title="@string/sound_set"
             app:useSimpleSummaryProvider="true"
             app:iconSpaceReserved="false" />
+        <SwitchPreference
+            app:defaultValue="false"
+            app:key="enableMelodies"
+            app:title="@string/pref_enable_melodies"
+            app:summary="@string/pref_enable_melodies_summary"
+            app:iconSpaceReserved="false" />
+        <MultiSelectListPreference
+            app:defaultValue="@array/default_selected_melodies"
+            app:iconSpaceReserved="false"
+            app:key="selectedMelodies"
+            app:title="@string/pref_selected_melodies"
+            app:summary="@string/pref_selected_melodies_summary"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
 </PreferenceScreen>
