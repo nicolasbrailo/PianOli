@@ -1,14 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.nicobrailo.pianoli"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 19
         versionName "1.19"
     }
+
 
     buildTypes {
         release {
@@ -28,20 +29,26 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    lintOptions {
-        disable 'GoogleAppIndexingWarning'
+    packagingOptions {
+        jniLibs {
+            excludes += ['META-INF/*']
+        }
+        resources {
+            excludes += ['META-INF/*']
+        }
     }
 
-    packagingOptions {
-        exclude 'META-INF/*'
+    namespace 'com.nicobrailo.pianoli'
+
+    lint {
+        disable 'MissingTranslation', 'GoogleAppIndexingWarning'
     }
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.android.support:design:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.preference:preference:1.2.0'
     implementation "androidx.annotation:annotation:1.6.0"
 }
