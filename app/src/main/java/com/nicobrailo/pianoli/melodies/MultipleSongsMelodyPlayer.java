@@ -1,20 +1,24 @@
-package com.nicobrailo.pianoli;
+package com.nicobrailo.pianoli.melodies;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Cycles through a collection of {@link SingleSongMelody}'s. Each time a melody is completed, the
+ * Cycles through a collection of {@link SingleSongMelodyPlayer}'s. Each time a melody is completed, the
  * next is started. When the final melody is finished, it will return to the first note of the
  * first melody again.
  */
-public class MultipleSongsMelody implements Melody {
+public class MultipleSongsMelodyPlayer implements MelodyPlayer {
 
-    private final List<Melody> songs;
+    private final List<MelodyPlayer> songs;
 
-    public MultipleSongsMelody(@NonNull List<Melody> songs) {
-        this.songs = songs;
+    public MultipleSongsMelodyPlayer(@NonNull List<Melody> songs) {
+        this.songs = new ArrayList<>(songs.size());
+        for (Melody melody : songs) {
+            this.songs.add(new SingleSongMelodyPlayer(melody));
+        }
     }
 
     private int song_idx = 0;
@@ -26,13 +30,8 @@ public class MultipleSongsMelody implements Melody {
         songs.get(0).reset();
     }
 
-    @Override
-    public String id() {
-        return "all_songs";
-    }
-
     /**
-     * Cycle through all available {@link SingleSongMelody} songs, and when the last note of the
+     * Cycle through all available {@link SingleSongMelodyPlayer} songs, and when the last note of the
      * last melody is hit, go back to the first again.
      */
     @Override

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.nicobrailo.pianoli.melodies.Melody;
+import com.nicobrailo.pianoli.melodies.SingleSongMelodyPlayer;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,8 +35,8 @@ public class Preferences {
         final Set<String> selectedMelodies = PreferenceManager.getDefaultSharedPreferences(context).getStringSet(PREF_SELECTED_MELODIES, defaultMelodiesSet);
 
         final ArrayList<Melody> melodies = new ArrayList<>(selectedMelodies.size());
-        for (Melody melody : SingleSongMelody.all) {
-            if (selectedMelodies.isEmpty() || selectedMelodies.contains(melody.id())) {
+        for (Melody melody : Melody.all) {
+            if (selectedMelodies.isEmpty() || selectedMelodies.contains(melody.getId())) {
                 melodies.add(melody);
             }
         }

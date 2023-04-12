@@ -5,6 +5,10 @@ import android.content.res.AssetManager;
 import android.media.SoundPool;
 import android.util.Log;
 
+import com.nicobrailo.pianoli.melodies.Melody;
+import com.nicobrailo.pianoli.melodies.MelodyPlayer;
+import com.nicobrailo.pianoli.melodies.MultipleSongsMelodyPlayer;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,10 +28,10 @@ class Piano {
     private final int keys_height;
     private final int keys_flats_height;
     private final int keys_count;
-    private boolean[] key_pressed;
+    private final boolean[] key_pressed;
     private static SoundPool KeySound = null;
     private int[] KeySoundIdx;
-    private Melody melody = null;
+    private MelodyPlayer melody = null;
 
     Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset) {
         keys_height = screen_size_y;
@@ -46,7 +50,7 @@ class Piano {
         selectSoundset(context, soundset);
 
         if (Preferences.areMelodiesEnabled(context)) {
-            this.melody = new MultipleSongsMelody(Preferences.selectedMelodies(context));
+            this.melody = new MultipleSongsMelodyPlayer(Preferences.selectedMelodies(context));
             this.melody.reset();
         }
     }
@@ -128,7 +132,7 @@ class Piano {
         return new Key(x_i, x_i + keys_flat_width, 0, keys_flats_height);
     }
 
-    private static Map<String, Integer> note_to_key_idx = new HashMap<>();
+    private static final Map<String, Integer> note_to_key_idx = new HashMap<>();
 
     static {
         note_to_key_idx.put("C1", 0);

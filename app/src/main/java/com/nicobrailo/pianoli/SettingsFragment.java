@@ -1,6 +1,7 @@
 package com.nicobrailo.pianoli;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.nicobrailo.pianoli.melodies.Melody;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,20 +84,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             });
 
-            String[] melodyEntries = new String[SingleSongMelody.all.length];
-            String[] melodyEntryValues = new String[SingleSongMelody.all.length];
+            String[] melodyEntries = new String[Melody.all.length];
+            String[] melodyEntryValues = new String[Melody.all.length];
 
             // Ideally we'd also call setDefaultValue() here too and pass a Set<String>
             // containing each melody. However, the system invokes the "persist default valeus"
             // before we get here, and thus it never gets respected. Instead that is hardcoded
             // in a string-array and referenced directly in root_preferences.xml.
 
-            for (int i = 0; i < SingleSongMelody.all.length; i ++) {
-                Melody melody = SingleSongMelody.all[i];
-                melodyEntryValues[i] = melody.id();
+            for (int i = 0; i < Melody.all.length; i ++) {
+                Melody melody = Melody.all[i];
+                melodyEntryValues[i] = melody.getId();
 
-                int stringId = getResources().getIdentifier("melody_" + melody.id(), "string", requireContext().getPackageName());
-                melodyEntries[i] = stringId > 0 ? getString(stringId) : melody.id();
+                @SuppressLint("DiscouragedApi")
+                int stringId = getResources().getIdentifier("melody_" + melody.getId(), "string", requireContext().getPackageName());
+                melodyEntries[i] = stringId > 0 ? getString(stringId) : melody.getId();
             }
 
             melodies.setEntries(melodyEntries);
@@ -111,6 +115,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 soundsetEntryValues[i] = availableSoundsets.get(i);
 
                 String name = SettingsActivity.SOUNDSET_DIR_PREFIX + availableSoundsets.get(i);
+
+                @SuppressLint("DiscouragedApi")
                 int stringId = getResources().getIdentifier(name, "string", requireContext().getPackageName());
                 soundsetEntries[i] = stringId > 0 ? getString(stringId) : availableSoundsets.get(i);
             }
