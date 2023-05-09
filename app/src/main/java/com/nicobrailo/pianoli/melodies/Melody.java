@@ -4,6 +4,57 @@ import java.util.Locale;
 
 public class Melody {
 
+    public static final Melody waltzing_matilda = fromString(
+            "waltzing_matilda",
+            "A A A A G G " +
+                    // Once a jolly swagman`
+
+                    "F A F D E F " +
+                    // camped by a billabong
+
+                    "C F A C2 C2 C2 " +
+                    // under the shade of a
+
+                    "C2 C2 C2 C2 " +
+                    // coolibah tree
+
+                    "F G A A A G G " +
+                    // And he sang as he watched and
+
+                    "F G A F D E F " +
+                    // waited till his Billy boiled
+
+                    "C F A C2 Bb A  " +
+                    // You'll come a waltzing ma-
+
+                    "G G G F " +
+                    // -tilda with me.
+
+                    "C2 C2 C2 C2 A " +
+                    // Waltzing Matilda,
+
+                    "F2 F2 E2 D2 C2 " +
+                    // Waltzing Matilda,
+
+                    "C2 C2 C2 D2 C2 C2 " +
+                    // You'll come a waltzing Mat-
+
+                    "C2 Bb A G F G " +
+                    // -tilda with me, And he
+
+                    "A A A G G " +
+                    // Sang as he watched and
+
+                    "F G A F D E F " +
+                    // waited till his Billy boiled,
+
+                    "C F A C2 Bb A " +
+                    // You'll come a waltzing Ma-
+
+                    "G G G F"
+            // -tilda with me.
+    );
+
     public static final Melody im_a_little_teapot = fromString(
             "im_a_little_teapot",
             "C D E F G C2 " +
@@ -79,24 +130,26 @@ public class Melody {
             // ... climbed up the spout again.
     );
 
-    public static final Melody[] all = new Melody[] {
+    public static final Melody[] all = new Melody[]{
             twinkle_twinkle_little_star,
             insy_winsy_spider,
             im_a_little_teapot,
+            waltzing_matilda
     };
+
     /**
      * A somewhat-robust string to melody parser.
-     * Allows melodies to be specified as a string of notes, where the notes are: "A", "B1", "C#1", "G2", etc.
-     *
+     * Allows melodies to be specified as a string of notes, where the notes are: "A", "B1", "C#1", "Bb1", "G2", etc.
+     * <p>
      * Notes are separated by whitespace.
-     *
+     * <p>
      * Notes in the first octave can leave off the octave designation and it will be automatically
      * appended (i.e. "C" will become "C1"). This makes it simpler to write songs that fall within a single octave.
      */
     static Melody fromString(String id, String plainTextNotes) {
-        String[] notes = plainTextNotes.trim().toUpperCase(Locale.ENGLISH).split("\\s+");
+        String[] notes = plainTextNotes.trim().split("\\s+");
 
-        for (int i = 0; i < notes.length; i ++) {
+        for (int i = 0; i < notes.length; i++) {
             if (!notes[i].matches(".*\\d$")) {
                 notes[i] = notes[i] + "1";
             }

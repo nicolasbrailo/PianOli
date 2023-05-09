@@ -10,5 +10,9 @@
         <item>twinkle_twinkle_little_star</item>
         <item>im_a_little_teapot</item>
         <item>insy_winsy_spider</item>
+
+        <!-- Intentionally leave out waltzing matilda, because it is a lot longer
+             and may not be as common as some of the other nursery rhymes. It is
+             there to show what it sounds like to have longer melodies available. -->
     </string-array>
 </resources>
