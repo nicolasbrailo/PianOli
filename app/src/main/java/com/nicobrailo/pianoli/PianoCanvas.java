@@ -33,27 +33,27 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     final int screen_size_y, screen_size_x;
 
     final int[] KEY_COLORS = new int[]{
-            Color.rgb(148, 0, 211),    // Violet
-            Color.rgb(75, 0, 130),    // Indigo
-            Color.rgb(0, 0, 255),    // Blue
-            Color.rgb(0, 255, 0),    // Green
-            Color.rgb(255, 255, 0),    // Yellow
-            Color.rgb(255, 127, 0),    // Orange
-            Color.rgb(255, 0, 0),    // Red
+            Color.rgb(220, 0, 0),     // Red 
+            Color.rgb(255, 135, 0),   // Orange
+            Color.rgb(255, 255, 0),   // Yellow
+            Color.rgb(80, 220, 20),   // Light Green
+            Color.rgb(0, 150, 150),   // Dark Green
+            Color.rgb(95, 70, 165),   // Purple
+            Color.rgb(213, 43, 149),  // Pink
     };
 
     /**
-     * Note that green and yellow have higher lightness than other colours, so adding just a little white doesn't have
+     * Note that light green, orange and yellow have higher lightness than other colours, so adding just a little white doesn't have
      * the desired effect. That is why they have a larger proportion of white added in.
      */
     final int[] PRESSED_KEY_COLORS = new int[]{
-            ColorUtils.blendARGB(KEY_COLORS[0], Color.WHITE, 0.5f),    // Violet
-            ColorUtils.blendARGB(KEY_COLORS[1], Color.WHITE, 0.5f),    // Indigo
-            ColorUtils.blendARGB(KEY_COLORS[2], Color.WHITE, 0.5f),    // Blue
-            ColorUtils.blendARGB(KEY_COLORS[3], Color.WHITE, 0.7f),    // Green
-            ColorUtils.blendARGB(KEY_COLORS[4], Color.WHITE, 0.8f),    // Yellow
-            ColorUtils.blendARGB(KEY_COLORS[5], Color.WHITE, 0.6f),    // Orange
-            ColorUtils.blendARGB(KEY_COLORS[6], Color.WHITE, 0.5f),    // Red
+            ColorUtils.blendARGB(KEY_COLORS[0], Color.WHITE, 0.5f),    // Red
+            ColorUtils.blendARGB(KEY_COLORS[1], Color.WHITE, 0.6f),    // Orange
+            ColorUtils.blendARGB(KEY_COLORS[2], Color.WHITE, 0.75f),   // Yellow
+            ColorUtils.blendARGB(KEY_COLORS[3], Color.WHITE, 0.6f),    // Light Green
+            ColorUtils.blendARGB(KEY_COLORS[4], Color.WHITE, 0.5f),    // Dark Green
+            ColorUtils.blendARGB(KEY_COLORS[5], Color.WHITE, 0.5f),    // Purple
+            ColorUtils.blendARGB(KEY_COLORS[6], Color.WHITE, 0.5f),    // Pink
     };
 
     Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
