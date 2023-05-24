@@ -6,8 +6,8 @@ android {
         applicationId "com.nicobrailo.pianoli"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 19
-        versionName "1.19"
+        versionCode 20
+        versionName "1.20"
     }
 
 
