@@ -1,0 +1,2 @@
+* New setting to auto-play melodies as little fingers mash the keys.
+* Use Boomwhacker colours, with the advantage that there already exist music books for children with this convention which makes it possible for small children to play the right keys without knowing to read a musical score (thanks to @pitlochry).
