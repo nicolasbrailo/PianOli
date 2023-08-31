@@ -9,6 +9,14 @@
             app:title="@string/sound_set"
             app:useSimpleSummaryProvider="true"
             app:iconSpaceReserved="false" />
+        <ListPreference
+            app:defaultValue="boomwhacker"
+            app:key="theme"
+            app:title="@string/theme"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_entryValues"
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false" />
         <SwitchPreference
             app:defaultValue="false"
             app:key="enableMelodies"

@@ -20,4 +20,7 @@
     <string name="pref_enable_melodies">Auto play melodies</string>
     <string name="pref_selected_melodies">Available melodies</string>
     <string name="pref_selected_melodies_summary">List of melodies to cycle through</string>
+    <string name="theme">Theme</string>
+    <string name="theme_black_and_white">Black and White</string>
+    <string name="theme_boomwhacker">Boomwhacker</string>
 </resources>

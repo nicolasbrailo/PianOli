@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
 
@@ -32,29 +33,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     final AppConfigTrigger appConfigHandler;
     final int screen_size_y, screen_size_x;
 
-    final int[] KEY_COLORS = new int[]{
-            Color.rgb(220, 0, 0),     // Red 
-            Color.rgb(255, 135, 0),   // Orange
-            Color.rgb(255, 255, 0),   // Yellow
-            Color.rgb(80, 220, 20),   // Light Green
-            Color.rgb(0, 150, 150),   // Dark Green
-            Color.rgb(95, 70, 165),   // Purple
-            Color.rgb(213, 43, 149),  // Pink
-    };
-
-    /**
-     * Note that light green, orange and yellow have higher lightness than other colours, so adding just a little white doesn't have
-     * the desired effect. That is why they have a larger proportion of white added in.
-     */
-    final int[] PRESSED_KEY_COLORS = new int[]{
-            ColorUtils.blendARGB(KEY_COLORS[0], Color.WHITE, 0.5f),    // Red
-            ColorUtils.blendARGB(KEY_COLORS[1], Color.WHITE, 0.6f),    // Orange
-            ColorUtils.blendARGB(KEY_COLORS[2], Color.WHITE, 0.75f),   // Yellow
-            ColorUtils.blendARGB(KEY_COLORS[3], Color.WHITE, 0.6f),    // Light Green
-            ColorUtils.blendARGB(KEY_COLORS[4], Color.WHITE, 0.5f),    // Dark Green
-            ColorUtils.blendARGB(KEY_COLORS[5], Color.WHITE, 0.5f),    // Purple
-            ColorUtils.blendARGB(KEY_COLORS[6], Color.WHITE, 0.5f),    // Pink
-    };
+    final Theme theme;
 
     Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
 
@@ -66,6 +45,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         super(context, as, defStyle);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
+
+        theme = Theme.fromPreferences(context);
 
         final Point screen_size = new Point();
         final AppCompatActivity ctx;
@@ -107,9 +88,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
         for (int i = 0; i < piano.get_keys_count(); i += 2) {
             // Draw big key
-            final int col_idx = (i / 2) % KEY_COLORS.length;
             Paint big_key_paint = new Paint();
-            big_key_paint.setColor(piano.is_key_pressed(i) ? PRESSED_KEY_COLORS[col_idx] : KEY_COLORS[col_idx]);
+            big_key_paint.setColor(theme.getColorForKey(i, piano.is_key_pressed(i)));
             draw_key(canvas, piano.get_area_for_key(i), big_key_paint);
         }
 
@@ -219,7 +199,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         redraw(surfaceHolder);
     }
 
@@ -254,7 +234,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         // Something has gone wrong with the piano or canvas state, and our state is out of sync
         // with the real state of the world (eg somehow we missed a touch down or up event).
         // Try to reset the state and hope the app survives.
-        touch_pointer_to_keys.clear();;
+        touch_pointer_to_keys.clear();
         piano.resetState();
     }
 
@@ -336,12 +316,12 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
 
     @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
 
     }
 }
