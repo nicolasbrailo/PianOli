@@ -20,6 +20,8 @@ public class Preferences {
     private final static String PREF_SELECTED_SOUND_SET = "selectedSoundSet";
     private final static String PREF_SELECTED_MELODIES = "selectedMelodies";
     private final static String PREF_ENABLE_MELODIES = "enableMelodies";
+    private static final String DEFAULT_THEME = "boomwhacker";
+    private final static String PREF_THEME = "theme";
 
     /**
      * If none are selected, then we play all melodies.
@@ -41,6 +43,10 @@ public class Preferences {
             }
         }
         return melodies;
+    }
+
+    public static String selectedTheme(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_THEME, DEFAULT_THEME);
     }
 
     public static boolean areMelodiesEnabled(Context context) {
