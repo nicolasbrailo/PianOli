@@ -4,23 +4,38 @@
     <string name="app_url" translatable="false">https://github.com/nicolasbrailo/PianOli</string>
     <string name="quit_app">Quit app</string>
     <string name="settings">Settings</string>
+
+    <!-- splash text at top of settings screen -->
     <string name="some_info_about_this_app_title"><b><big><big>PianOli is open-source!</big></big></b></string>
     <string name="some_info_about_this_app">If you have suggestions, feature requests or bug reports please <a href="https://github.com/nicolasbrailo/PianOli">visit the project\'s website</a>.</string>
-    <string name="sound_set">Sound set</string>
+
+    <!-- Explains to the adult user how to bypass our baby-protection and enter the settings screen -->
     <string name="config_tooltip">Hold the first gear icon, then press the second for options.</string>
+
+    <!-- Sound set selection and instrument names -->
+    <string name="sound_set">Sound set</string>
     <string name="soundset_guitar">Guitar</string>
     <string name="soundset_musicbox">Music Box</string>
     <string name="soundset_piano">Piano</string>
     <string name="soundset_sine">Sine Wave</string>
     <string name="soundset_vibraphone">Vibraphone</string>
+
+    <!-- Song player settings -->
+    <string name="pref_enable_melodies">Auto play melodies</string>
+    <string name="pref_enable_melodies_summary">Touching a key plays the next note in a melody, rather than the key\'s
+        actual note.
+    </string>
+    <string name="pref_selected_melodies">Available melodies</string>
+    <string name="pref_selected_melodies_summary">List of melodies to cycle through</string>
+
+    <!-- Song catalog; translatable since quite a few tunes are known under different names,
+            and with different lyrics, around the world -->
     <string name="melody_twinkle_twinkle_little_star">Twinkle, Twinkle, Little Star</string>
     <string name="melody_im_a_little_teapot">I\'m a Little Teapot</string>
     <string name="melody_insy_winsy_spider">Insy Winsy Spider</string>
     <string name="melody_waltzing_matilda">Waltzing Matilda</string>
-    <string name="pref_enable_melodies_summary">Touching a key plays the next note in a melody</string>
-    <string name="pref_enable_melodies">Auto play melodies</string>
-    <string name="pref_selected_melodies">Available melodies</string>
-    <string name="pref_selected_melodies_summary">List of melodies to cycle through</string>
+
+    <!-- keyboard colour themes -->
     <string name="theme">Theme</string>
     <string name="theme_black_and_white">Black and White</string>
     <string name="theme_boomwhacker" translatable="false">Boomwhacker</string>
