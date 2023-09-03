@@ -2,13 +2,10 @@
 <resources>
     <string name="quit_app">Salir</string>
     <string name="settings">Opciones</string>
-    <string name="some_info_about_this_app_title"><b><big><big>PianOli is open-source!</big></big></b></string>
-    <string name="some_info_about_this_app"><b><big><big>PianOli is open-source!</big></big></b></string>
     <string name="sound_set">Sonido</string>
     <string name="config_tooltip">Mantener el icono de opciones, luego presione el segundo icono para ver el menu.</string>
     <string name="soundset_piano">Piano</string>
-    <string name="soundset_sine">Sine Wave</string>
-    <string name="soundset_vibraphone">Vibraphone</string>
+    <string name="soundset_vibraphone">Vibráfono</string>
     <string name="soundset_guitar">Guitarra</string>
     <string name="soundset_musicbox">Caja musical</string>
 </resources>

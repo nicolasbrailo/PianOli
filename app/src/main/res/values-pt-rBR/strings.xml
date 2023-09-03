@@ -10,8 +10,6 @@
     <string name="sound_set">Tipo de som</string>
     <string name="config_tooltip">Segure a tecla com Ícone de Opções, após isso toque no segundo Ícone para entrar.</string>
     <string name="soundset_piano">Piano</string>
-    <string name="soundset_sine">Sine Wave</string>
-    <string name="soundset_vibraphone">Vibraphone</string>
+    <string name="soundset_vibraphone">Vibrafone</string>
     <string name="soundset_guitar">Guitarra</string>
-    <string name="soundset_musicbox">Music Box</string>
 </resources>
