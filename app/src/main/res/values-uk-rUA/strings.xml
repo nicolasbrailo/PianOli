@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PianOli</string>
     <string name="quit_app">Закрити застосунок</string>
     <string name="settings">Параметри</string>
     <string name="some_info_about_this_app_title"><b><big><big>PianOli — вільний застосунок!</big></big></b></string>

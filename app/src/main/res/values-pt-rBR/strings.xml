@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">PianOli</string>
     <string name="quit_app">Sair do App</string>
     <string name="settings">Opções</string>
     <string name="some_info_about_this_app_title"><b><big><big>PianOli é de software livre!</big></big></b></string>

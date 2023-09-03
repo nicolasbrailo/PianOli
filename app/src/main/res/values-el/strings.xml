@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">PianOli</string>
-    <string name="app_url" translatable="false">https://github.com/nicolasbrailo/PianOli</string>
     <string name="quit_app">Έξοδος</string>
     <string name="settings">Ρυθμίσεις</string>
     <string name="some_info_about_this_app_title"><b><big><big>Το PianOli είναι ανοικτού κώδικα!</big></big></b></string>
