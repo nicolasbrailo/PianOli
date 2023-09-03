@@ -13,7 +13,7 @@
     <string name="config_tooltip">Hold the first gear icon, then press the second for options.</string>
 
     <!-- Sound set selection and instrument names -->
-    <string name="sound_set">Sound set</string>
+    <string name="soundset">Sound set</string>
     <string name="soundset_guitar">Guitar</string>
     <string name="soundset_musicbox">Music Box</string>
     <string name="soundset_piano">Piano</string>

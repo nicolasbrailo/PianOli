@@ -2,8 +2,10 @@
 <resources>
     <string name="quit_app">Salir</string>
     <string name="settings">Opciones</string>
-    <string name="sound_set">Sonido</string>
     <string name="config_tooltip">Mantener el icono de opciones, luego presione el segundo icono para ver el menu.</string>
+
+    <!-- Sound set selection and instrument names -->
+    <string name="soundset">Sonido</string>
     <string name="soundset_piano">Piano</string>
     <string name="soundset_vibraphone">Vibráfono</string>
     <string name="soundset_guitar">Guitarra</string>
