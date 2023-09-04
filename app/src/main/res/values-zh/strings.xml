@@ -1,12 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PianOli</string>
-    <string name="app_url" translatable="false">https://github.com/nicolasbrailo/PianOli</string>
     <string name="quit_app">退出游戏</string>
     <string name="settings">设置</string>
     <string name="some_info_about_this_app_title"><b><big><big>PianOli是开源项目!</big></big></b></string>
     <string name="some_info_about_this_app">如果您有各种建议,功能需求或报告Bug,请访问我们的<a href="https://github.com/nicolasbrailo/PianOli">官网</a>。</string>
-    <string name="sound_set">声音设置</string>
     <string name="config_tooltip">按住第一个齿轮图标，然后按第二个齿轮图标。</string>
+
+    <!-- Sound set selection and instrument names -->
+    <string name="soundset">声音设置</string>
     <string name="soundset_guitar">吉他</string>
     <string name="soundset_musicbox">音乐盒</string>
     <string name="soundset_piano">钢琴</string>

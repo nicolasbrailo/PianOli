@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PianOli</string>
     <string name="quit_app">Sair do App</string>
     <string name="settings">Opções</string>
     <string name="some_info_about_this_app_title"><b><big><big>PianOli é de software livre!</big></big></b></string>
@@ -8,11 +8,11 @@
             <a href="https://github.com/nicolasbrailo/PianOli">visite o site do projeto</a>.
         </big></b>
     </string>
-    <string name="sound_set">Tipo de som</string>
     <string name="config_tooltip">Segure a tecla com Ícone de Opções, após isso toque no segundo Ícone para entrar.</string>
+
+    <!-- Sound set selection and instrument names -->
+    <string name="soundset">Tipo de som</string>
     <string name="soundset_piano">Piano</string>
-    <string name="soundset_sine">Sine Wave</string>
-    <string name="soundset_vibraphone">Vibraphone</string>
+    <string name="soundset_vibraphone">Vibrafone</string>
     <string name="soundset_guitar">Guitarra</string>
-    <string name="soundset_musicbox">Music Box</string>
 </resources>
