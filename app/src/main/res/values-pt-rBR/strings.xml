@@ -12,6 +12,7 @@
 
     <!-- Sound set selection and instrument names -->
     <string name="soundset">Tipo de som</string>
+    <string name="soundset_musicbox">Caixa de música</string>
     <string name="soundset_piano">Piano</string>
     <string name="soundset_vibraphone">Vibrafone</string>
     <string name="soundset_guitar">Guitarra</string>
