@@ -1,0 +1,14 @@
+Ist Ihr Baby begierig auf Tablets oder Handys? Dann nutzen Sie diese App als
+Babyspiel und, wichtiger noch, um zu verhindern, dass unkoordinierte
+Babyberührungen unerwünschte Aktionen auslösen.
+
+Diese App zeigt einen kleines Piano mit dem das Baby Klänge erkunden kann.
+Außerdem blockiert es einfache Versuche, die App zu schließen.
+Die Zuruck-, Home- und App-Übersicht-Knöpfe sind gesperrt
+und Androids Schnell-Menü (ziehen von oben) ist nicht verfügbar.
+
+Das stellt sicher, dass ein Baby nicht versehentlich das Spiel schließt
+und anderswo im Gerät unerwünschte Aktionen auslöst.
+
+Erwachsene können die App entsperren, indem sie das Einstellungen-Symbol halten,
+und mit einem zweiten Finger das erscheinende Zweitsymbol antippen.

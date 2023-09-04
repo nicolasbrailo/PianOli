@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quit_app">Schließen</string>
+    <string name="settings">Einstellungen</string>
+
+    <!-- splash text at top of settings screen -->
+    <string name="some_info_about_this_app_title"><b><big><big>PianOli ist quell-offene Software!</big></big></b></string>
+    <string name="some_info_about_this_app">bei Vorschlägen, Wünschen oder Problemmeldungen <a
+            href="https://github.com/nicolasbrailo/PianOli">besuch unsere Webseite</a>.
+    </string>
+
+    <string name="config_tooltip">halte das erste Zahnrad gedrückt, tippe dann auf das zweite für Einstellungen.</string>
+
+    <!-- Sound set selection and instrument names -->
+    <string name="soundset">Klang</string>
+    <string name="soundset_guitar">Gitarre</string>
+    <string name="soundset_musicbox">Spieluhr</string>
+    <string name="soundset_piano">Piano</string>
+    <string name="soundset_sine">Sinuswelle</string>
+    <string name="soundset_vibraphone">Vibraphon</string>
+
+    <!-- Song player settings -->
+    <string name="pref_enable_melodies">Liederautomat</string>
+    <string name="pref_enable_melodies_summary">Tastenberührung spielt den nächsten Ton eines Liedes statt des
+        eigentlichen Tastentons.</string>
+    <string name="pref_selected_melodies">verfügbare Lieder</string>
+    <string name="pref_selected_melodies_summary">Lieder hinter einander gespielt</string>
+
+    <!-- keyboard colour themes -->
+    <string name="theme">Tastenfarben</string>
+    <string name="theme_black_and_white">schwarz-weiß</string>
+</resources>
