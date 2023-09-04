@@ -36,7 +36,7 @@
     <string name="melody_waltzing_matilda">Waltzing Matilda</string>
 
     <!-- keyboard colour themes -->
-    <string name="theme">Theme</string>
+    <string name="theme">Key Colours</string>
     <string name="theme_black_and_white">Black and White</string>
     <string name="theme_boomwhacker" translatable="false">Boomwhacker</string>
     <string name="theme_pastel">Pastel</string>
