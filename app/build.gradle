@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'de.mannodermaus.android-junit5'
 
 android {
     compileSdkVersion 33
@@ -51,6 +52,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.preference:preference:1.2.0'
     implementation "androidx.annotation:annotation:1.6.0"
+
+    testImplementation "org.junit.jupiter:junit-jupiter:5.9.2"
 }
 
 // Not sure why this started happening all of a sudden, but the buidl was failing
