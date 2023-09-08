@@ -29,7 +29,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    public void onCreatePreferences(Bundle savedzInstanceState, String rootKey) {
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
         loadSounds();
         loadMelodies();
@@ -61,7 +61,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         }
 
-        if (filtList.size() == 0) {
+        if (filtList.isEmpty()) {
             final String msg = "No sounds found, the keyboard won't work!";
             Toast toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
             toast.show();
@@ -88,8 +88,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             String[] melodyEntryValues = new String[Melody.all.length];
 
             // Ideally we'd also call setDefaultValue() here too and pass a Set<String>
-            // containing each melody. However, the system invokes the "persist default valeus"
-            // before we get here, and thus it never gets respected. Instead that is hardcoded
+            // containing each melody. However, the system invokes the "persist default values"
+            // before we get here, and thus it never gets respected. Instead, that is hardcoded
             // in a string-array and referenced directly in root_preferences.xml.
 
             for (int i = 0; i < Melody.all.length; i ++) {
