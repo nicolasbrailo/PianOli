@@ -15,6 +15,12 @@ public class Theme {
             case "black_and_white":
                 return BLACK_AND_WHITE;
 
+            case "pastel":
+                return PASTEL;
+
+            case "rainbow":
+                return RAINBOW;
+
             default:
                 return BOOMWHACKER;
         }
@@ -34,6 +40,31 @@ public class Theme {
                     KeyColour.createLighterWhenPressed(Color.rgb(0, 150, 150), 0.5f),   // Dark Green
                     KeyColour.createLighterWhenPressed(Color.rgb(95, 70, 165), 0.5f),   // Purple
                     KeyColour.createLighterWhenPressed(Color.rgb(213, 43, 149), 0.5f),  // Pink
+            }
+    );
+
+    private static final Theme PASTEL = new Theme(
+            new KeyColour[] {
+                    KeyColour.createLighterWhenPressed(0xffbbcfc4, 0.5f),  // pistache
+                    KeyColour.createLighterWhenPressed(0xffb0a99c, 0.5f),  // beige
+                    KeyColour.createLighterWhenPressed(0xffffd9a6, 0.5f),  // sand
+                    KeyColour.createLighterWhenPressed(0xffce9043, 0.5f),  // dun
+                    KeyColour.createLighterWhenPressed(0xfff6c1ce, 0.5f),  // lightpink
+                    KeyColour.createLighterWhenPressed(0xffe3777e, 0.5f),  // darkpink
+                    KeyColour.createLighterWhenPressed(0xffa65560, 0.5f),  // plum
+            }
+    );
+
+    private static final Theme RAINBOW = new Theme(
+            new KeyColour[] {
+                    KeyColour.createLighterWhenPressed(0xff001caf, 0.5f), // darkblue
+                    KeyColour.createLighterWhenPressed(0xff0099ff, 0.5f), // lightblue
+                    KeyColour.createLighterWhenPressed(0xff63c624, 0.5f), // darkgreen
+                    KeyColour.createLighterWhenPressed(0xffbde53d, 0.5f), // lightgreen
+                    KeyColour.createLighterWhenPressed(0xfffcc000, 0.5f), // yellow
+                    KeyColour.createLighterWhenPressed(0xffff810a, 0.5f), // lightorange
+                    KeyColour.createLighterWhenPressed(0xffff7416, 0.5f), // darkorange
+                    KeyColour.createLighterWhenPressed(0xffd51016, 0.5f), // red
             }
     );
 
