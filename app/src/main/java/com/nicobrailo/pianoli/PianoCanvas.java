@@ -232,7 +232,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     void resetPianoState() {
         // Something has gone wrong with the piano or canvas state, and our state is out of sync
-        // with the real state of the world (eg somehow we missed a touch down or up event).
+        // with the real state of the world (e.g. somehow we missed a touch down or up event).
         // Try to reset the state and hope the app survives.
         touch_pointer_to_keys.clear();
         piano.resetState();
@@ -273,7 +273,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
                 // as *multiple* pointers could have moved, so we must check *each* pointer.
                 // https://developer.android.com/develop/ui/views/touch-and-input/gestures/multi
                 for (int size = event.getPointerCount(), i = 0; i < size; i++) {
-                    ptr_id = event.getPointerId(i);  // cf precalc'd ptr_id above switch
+                    ptr_id = event.getPointerId(i);  // cf precalculated ptr_id above switch
                     key_idx = piano.pos_to_key_idx(
                             event.getX(i),
                             event.getY(i));

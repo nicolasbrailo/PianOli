@@ -5,7 +5,6 @@ import android.content.res.AssetManager;
 import android.media.SoundPool;
 import android.util.Log;
 
-import com.nicobrailo.pianoli.melodies.Melody;
 import com.nicobrailo.pianoli.melodies.MelodyPlayer;
 import com.nicobrailo.pianoli.melodies.MultipleSongsMelodyPlayer;
 
@@ -190,8 +189,8 @@ class Piano {
         if (key_idx == null) {
             Log.w("PianOli::Piano", "Could not find a key corresponding to the note \"" + note + "\".");
 
-            // 5 is designated as the special sound T.raw.no_note, so the app wont crash, but it wont
-            // play a noise either.
+            // 5 is designated as the special sound T.raw.no_note, so the app won't crash,
+            // but it won't play a noise either.
             return 5;
         }
 

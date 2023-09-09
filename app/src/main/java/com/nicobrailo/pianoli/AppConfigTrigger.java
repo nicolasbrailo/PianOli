@@ -19,7 +19,7 @@ class AppConfigTrigger {
     private static final int CONFIG_TRIGGER_COUNT = 2;
     private static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 3, 7, 9, 11, 15));
     private final AppCompatActivity activity;
-    private Set<Integer> pressedConfigKeys = new HashSet<>();
+    private final Set<Integer> pressedConfigKeys = new HashSet<>();
     private Integer nextKeyPress;
     private AppConfigCallback cb = null;
     private boolean tooltip_shown = false;
@@ -55,7 +55,7 @@ class AppConfigTrigger {
     private void reset() {
         // Only do an actual reset if there was some state to reset, otherwise this will select a
         // new NextExpectedKey and move the icon around whenever the user presses a key
-        if (pressedConfigKeys.size() > 0) {
+        if (!pressedConfigKeys.isEmpty()) {
             nextKeyPress = getNextExpectedKey();
         }
 
@@ -88,7 +88,7 @@ class AppConfigTrigger {
             } else {
                 nextKeyPress = getNextExpectedKey();
             }
-        } else { 
+        } else {
             reset();
         }
     }
