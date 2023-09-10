@@ -2,6 +2,7 @@ package com.nicobrailo.pianoli.melodies;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.nicobrailo.pianoli.melodies.NoteMapper.get_key_idx_from_note;
@@ -23,5 +24,20 @@ class NoteMapperTest {
     public void fancySynonyms(String note) {
         assertEquals(1, get_key_idx_from_note(note),
                 "all synonyms for the same note should work, including fancy symbols");
+    }
+
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "fooooooo"})
+    public void noNoteFallback(String notANote) {
+        assertEquals(5, get_key_idx_from_note(notANote),
+                "non-existing notes should fall back to the not-a-note special value");
+    }
+
+    @Test
+    public void nullSafe() {
+        assertEquals(5, get_key_idx_from_note(null),
+                "Notemapper should gracefully handle null");
     }
 }
