@@ -12,23 +12,43 @@ import com.nicobrailo.pianoli.melodies.NoteMapper;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * Backing model / state of our virtual piano keyboard.
+ *
+ * <p>
+ * Handles geometry, coordinate conversion and current state.
+ * </p>
+ *
+ * @see PianoCanvas
+ */
 class Piano {
+    /** Height of a flat key in relation to screen size. */
     private static final double KEYS_FLAT_HEIGHT_RATIO = 0.55;
 
-    /**
-     * Width of a flat key in relation to a regular key.
-     */
+    /** Width of a flat key in relation to a regular key. */
     private static final double KEYS_FLAT_WIDTH_RATIO = 0.6;
 
+    /**
+     * Floor limit, if screensize dictates less than this amount of keys, start shrinking key width,
+     * so we always display at least an octave.
+     */
     private static final int MIN_NUMBER_OF_KEYS = 7;
+
+
     private final int keys_width;
     private final int keys_flat_width;
     private final int keys_height;
     private final int keys_flats_height;
     private final int keys_count;
+
+    /** state tracker: which keys are <em>currently</em> pressed */
     private final boolean[] key_pressed;
+    /** handle to our android-provided sound mixer, that mixes multiple simultaneous tones */
     private static SoundPool KeySound = null;
+    /** Resource handles to the mp3 samples of our currently active soundset, one for each note */
     private int[] KeySoundIdx;
+
+    /** For song-auto-player, the state-tracker of where we are in our (selection of) melodie(s). */
     private MelodyPlayer melody = null;
 
     Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset) {
