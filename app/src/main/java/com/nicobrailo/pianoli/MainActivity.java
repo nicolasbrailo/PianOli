@@ -55,7 +55,12 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
     }
 
     void lock_app() {
-        startLockTask();
+        try {
+            startLockTask();
+        } catch (Exception e) {
+            Toast toast = Toast.makeText(getApplicationContext(), "Failed to lock the screen, this app can be closed normally", Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     void unlock_app() {
