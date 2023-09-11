@@ -39,4 +39,6 @@
     <string name="theme">Theme</string>
     <string name="theme_black_and_white">Black and White</string>
     <string name="theme_boomwhacker" translatable="false">Boomwhacker</string>
+    <string name="theme_pastel">Pastel</string>
+    <string name="theme_rainbow">Rainbow</string>
 </resources>

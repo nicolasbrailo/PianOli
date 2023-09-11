@@ -17,12 +17,16 @@
     </string-array>
 
     <string-array name="theme_entryValues">
-        <item>boomwhacker</item>
+        <item>rainbow</item>
+        <item>pastel</item>
         <item>black_and_white</item>
+        <item>boomwhacker</item>
     </string-array>
 
     <string-array name="theme_entries">
-        <item>@string/theme_boomwhacker</item>
+        <item>@string/theme_rainbow</item>
+        <item>@string/theme_pastel</item>
         <item>@string/theme_black_and_white</item>
+        <item>@string/theme_boomwhacker</item>
     </string-array>
 </resources>

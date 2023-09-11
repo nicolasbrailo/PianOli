@@ -1,0 +1,2 @@
+* New translation: Dutch.
+* Two additional themes: Rainbow + Pastel (based on research into xylophones available in toy shops).
