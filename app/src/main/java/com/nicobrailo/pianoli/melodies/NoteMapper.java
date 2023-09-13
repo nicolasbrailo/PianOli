@@ -14,8 +14,13 @@ public class NoteMapper {
     public static final int NO_NOTE = 5;
 
     public static int get_key_idx_from_note(String note) {
-        if (note == null) {
+        if (note == null || note.isEmpty()) {
             return NO_NOTE;
+        }
+
+        char lastChar = note.charAt(note.length() - 1);
+        if (!Character.isDigit(lastChar)) {
+            note = note+"1";
         }
 
         switch (note) {

@@ -40,4 +40,18 @@ class NoteMapperTest {
         assertEquals(5, get_key_idx_from_note(null),
                 "Notemapper should gracefully handle null");
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "C",                //  0, first note of octave
+            "C#", "Db", "D♭",   //  1
+            "A",                // 10
+            "A#", "Bb","B♭",    // 11
+            "B"                 // 12, last note of octave
+    })
+    public void firstOctaveAutoCompletion(String shortNote) {
+        String fullNote = shortNote + "1";
+        assertEquals(get_key_idx_from_note(fullNote), get_key_idx_from_note(shortNote),
+                "NoteMapper should autocomplete ommited first octave");
+    }
 }
