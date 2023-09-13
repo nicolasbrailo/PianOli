@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.nicobrailo.pianoli.melodies.MelodyPlayer;
 import com.nicobrailo.pianoli.melodies.MultipleSongsMelodyPlayer;
-import com.nicobrailo.pianoli.melodies.NoteMapper;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -208,8 +207,7 @@ class Piano {
                 this.melody.reset();
             }
 
-            String note = this.melody.nextNote();
-            key_idx = NoteMapper.get_key_idx_from_note(note);
+            key_idx = this.melody.nextNote();
         }
 
         KeySound.play(KeySoundIdx[key_idx], 1, 1, 1, 0, 1f);

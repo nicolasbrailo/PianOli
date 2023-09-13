@@ -19,12 +19,12 @@ class MelodyTest {
 
     @ParameterizedTest(name = "[{index}] {0}") // name: avoid default note-array in testname, only songId
     @MethodSource("enumerateAllMelodies")
-    public void allSongsParsable(String songId, String[] notes) {
+    public void allSongsParsable(String songId, int[] notes) {
             int noteIndex = 0;
-            for (String note: notes) {
-                assertNotEquals(NoteMapper.NO_NOTE, NoteMapper.get_key_idx_from_note(note),
-                        String.format("Can't parse song %s, note '%s' at note position %d not recognised",
-                                songId, note, noteIndex));
+            for (int note: notes) {
+                assertNotEquals(NoteMapper.NO_NOTE, note,
+                        String.format("Can't parse song %s, note at position %d not recognised",
+                                songId, noteIndex));
                 noteIndex++;
         }
     }

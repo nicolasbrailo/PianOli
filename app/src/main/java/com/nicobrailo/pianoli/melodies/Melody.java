@@ -1,7 +1,5 @@
 package com.nicobrailo.pianoli.melodies;
 
-import java.util.Locale;
-
 public class Melody {
 
     public static final Melody waltzing_matilda = fromString(
@@ -148,19 +146,20 @@ public class Melody {
      */
     static Melody fromString(String id, String plainTextNotes) {
         String[] notes = plainTextNotes.trim().split("\\s+");
+        int[] parsedNotes = new int[notes.length];
 
+        // Stream would be nicer, but we deliberately target ancient APIs,
+        // so our game works on old phones (which people are more likely to give to small children)
         for (int i = 0; i < notes.length; i++) {
-            if (!notes[i].matches(".*\\d$")) {
-                notes[i] = notes[i] + "1";
-            }
+            parsedNotes[i] = NoteMapper.get_key_idx_from_note(notes[i]);
         }
-        return new Melody(id, notes);
+        return new Melody(id, parsedNotes);
     }
 
     private final String id;
-    private final String[] notes;
+    private final int[] notes;
 
-    public Melody(String id, String[] notes) {
+    public Melody(String id, int[] notes) {
         this.id = id;
         this.notes = notes;
     }
@@ -169,7 +168,7 @@ public class Melody {
         return id;
     }
 
-    public String[] getNotes() {
+    public int[] getNotes() {
         return notes;
     }
 }

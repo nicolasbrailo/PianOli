@@ -1,7 +1,7 @@
 package com.nicobrailo.pianoli.melodies;
 
 public interface MelodyPlayer {
-    String nextNote();
+    int nextNote();
     boolean hasNextNote();
     void reset();
 }
