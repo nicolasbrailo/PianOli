@@ -10,6 +10,7 @@ import com.nicobrailo.pianoli.melodies.MultipleSongsMelodyPlayer;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * Backing model / state of our virtual piano keyboard.
@@ -161,39 +162,48 @@ class Piano {
         KeySoundIdx = new int[28];
         final AssetManager am = context.getAssets();
         try {
-            KeySoundIdx[0] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n01.mp3"), 1);
-            KeySoundIdx[1] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n02.mp3"), 1);
-            KeySoundIdx[2] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n03.mp3"), 1);
-            KeySoundIdx[3] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n04.mp3"), 1);
-            KeySoundIdx[4] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n05.mp3"), 1);
-            KeySoundIdx[5] = KeySound.load(context, R.raw.no_note, 1);
-            KeySoundIdx[6] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n06.mp3"), 1);
-            KeySoundIdx[7] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n07.mp3"), 1);
-            KeySoundIdx[8] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n08.mp3"), 1);
-            KeySoundIdx[9] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n09.mp3"), 1);
-            KeySoundIdx[10] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n10.mp3"), 1);
-            KeySoundIdx[11] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n11.mp3"), 1);
-            KeySoundIdx[12] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n12.mp3"), 1);
-            KeySoundIdx[13] = KeySound.load(context, R.raw.no_note, 1);
+            int loadedNoNote = KeySound.load(context, R.raw.no_note, 1);
 
-            KeySoundIdx[14] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n13.mp3"), 1);
-            KeySoundIdx[15] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n14.mp3"), 1);
-            KeySoundIdx[16] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n15.mp3"), 1);
-            KeySoundIdx[17] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n16.mp3"), 1);
-            KeySoundIdx[18] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n17.mp3"), 1);
-            KeySoundIdx[19] = KeySound.load(context, R.raw.no_note, 1);
-            KeySoundIdx[20] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n18.mp3"), 1);
-            KeySoundIdx[21] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n19.mp3"), 1);
-            KeySoundIdx[22] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n20.mp3"), 1);
-            KeySoundIdx[23] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n21.mp3"), 1);
-            KeySoundIdx[24] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n22.mp3"), 1);
-            KeySoundIdx[25] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n23.mp3"), 1);
-            KeySoundIdx[26] = KeySound.load(am.openFd("sounds/" + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/n24.mp3"), 1);
-            KeySoundIdx[27] = KeySound.load(context, R.raw.no_note, 1);
+            KeySoundIdx[0]  = loadNoteFd(am, soundSetName, 1);
+            KeySoundIdx[1]  = loadNoteFd(am, soundSetName, 2);
+            KeySoundIdx[2]  = loadNoteFd(am, soundSetName, 3);
+            KeySoundIdx[3]  = loadNoteFd(am, soundSetName, 4);
+            KeySoundIdx[4]  = loadNoteFd(am, soundSetName, 5);
+            KeySoundIdx[5]  = loadedNoNote;
+            KeySoundIdx[6]  = loadNoteFd(am, soundSetName, 6);
+            KeySoundIdx[7]  = loadNoteFd(am, soundSetName, 7);
+            KeySoundIdx[8]  = loadNoteFd(am, soundSetName, 8);
+            KeySoundIdx[9]  = loadNoteFd(am, soundSetName, 9);
+            KeySoundIdx[10] = loadNoteFd(am, soundSetName, 10);
+            KeySoundIdx[11] = loadNoteFd(am, soundSetName, 11);
+            KeySoundIdx[12] = loadNoteFd(am, soundSetName, 12);
+            KeySoundIdx[13] = loadedNoNote;
+
+            KeySoundIdx[14] = loadNoteFd(am, soundSetName, 13);
+            KeySoundIdx[15] = loadNoteFd(am, soundSetName, 14);
+            KeySoundIdx[16] = loadNoteFd(am, soundSetName, 15);
+            KeySoundIdx[17] = loadNoteFd(am, soundSetName, 16);
+            KeySoundIdx[18] = loadNoteFd(am, soundSetName, 17);
+            KeySoundIdx[19] = loadedNoNote;
+            KeySoundIdx[20] = loadNoteFd(am, soundSetName, 18);
+            KeySoundIdx[21] = loadNoteFd(am, soundSetName, 19);
+            KeySoundIdx[22] = loadNoteFd(am, soundSetName, 20);
+            KeySoundIdx[23] = loadNoteFd(am, soundSetName, 21);
+            KeySoundIdx[24] = loadNoteFd(am, soundSetName, 22);
+            KeySoundIdx[25] = loadNoteFd(am, soundSetName, 23);
+            KeySoundIdx[26] = loadNoteFd(am, soundSetName, 24);
+            KeySoundIdx[27] = loadedNoNote;
         } catch (IOException e) {
             Log.d("PianOli::Piano", "Failed to load sounds");
             e.printStackTrace();
         }
+    }
+
+    private static int loadNoteFd(AssetManager am, String soundSetName, int noteNum) throws IOException {
+        return KeySound.load(am.openFd("sounds/"
+                + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/"
+                + String.format(Locale.ROOT, "n%02d.mp3", noteNum) // root locale OK for number-formatting.
+        ), 1);
     }
 
     private void play_sound(int key_idx) {
