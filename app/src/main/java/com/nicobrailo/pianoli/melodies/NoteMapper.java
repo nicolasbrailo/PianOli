@@ -1,8 +1,5 @@
 package com.nicobrailo.pianoli.melodies;
 
-import android.util.Log;
-
-
 /**
  * Converts most common musical notations (C1, D#1, Eb1, G♭1) to soundset-key indexes.
  */
@@ -97,7 +94,6 @@ public class NoteMapper {
                 return 26;
 
             default:
-                Log.w("PianOli::Piano", "Could not find a key corresponding to the note \"" + note + "\".");
                 return NO_NOTE;
         }
     }

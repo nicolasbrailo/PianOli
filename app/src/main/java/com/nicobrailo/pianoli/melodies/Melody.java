@@ -1,5 +1,6 @@
 package com.nicobrailo.pianoli.melodies;
 
+import android.util.Log;
 import com.nicobrailo.pianoli.song.ImALittleTeapot;
 import com.nicobrailo.pianoli.song.InsyWinsySpider;
 import com.nicobrailo.pianoli.song.TwinkleTwinkleLittleStar;
@@ -11,6 +12,9 @@ import com.nicobrailo.pianoli.song.WaltzingMatilda;
  * @see MelodyPlayer
  */
 public class Melody {
+    /** Log tag */
+    public static final String TAG = "MELODY";
+
     /**
      * All songs known to PianOli.
      *
@@ -45,7 +49,14 @@ public class Melody {
         // Stream would be nicer, but we deliberately target ancient APIs,
         // so our game works on old phones (which people are more likely to give to small children)
         for (int i = 0; i < notes.length; i++) {
-            parsedNotes[i] = NoteMapper.get_key_idx_from_note(notes[i]);
+            String note = notes[i];
+            int parsedNote = NoteMapper.get_key_idx_from_note(note);
+            parsedNotes[i] = parsedNote;
+
+            if (parsedNote == NoteMapper.NO_NOTE) {
+                // Log the parse-fail, while we still have all the context.
+                Log.w(TAG, String.format("%s: couldn't parse note '%s' at position %d", id, note, i));
+            }
         }
         return new Melody(id, parsedNotes);
     }
