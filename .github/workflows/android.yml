@@ -18,7 +18,14 @@ jobs:
         # https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Hosted-Tool-Cache
         distribution: 'temurin'
         java-version: '17'
-        cache: 'gradle'
+
+    # prevent supply chain attacks from replacing our gradle with malicious code
+    # https://github.com/gradle/wrapper-validation-action#readme
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v1
+
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
 
     - name: Gradle check
       run: ./gradlew check --no-daemon
