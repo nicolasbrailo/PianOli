@@ -35,7 +35,7 @@ public class MultipleSongsMelodyPlayer implements MelodyPlayer {
      * last melody is hit, go back to the first again.
      */
     @Override
-    public String nextNote() {
+    public int nextNote() {
         if (!songs.get(song_idx).hasNextNote()) {
             songs.get(song_idx).reset();
             song_idx = (song_idx + 1) % songs.size();
@@ -43,7 +43,6 @@ public class MultipleSongsMelodyPlayer implements MelodyPlayer {
         }
 
         return songs.get(song_idx).nextNote();
-
     }
 
     @Override

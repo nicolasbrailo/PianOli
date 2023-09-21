@@ -23,6 +23,9 @@ import androidx.core.graphics.ColorUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Renderer/View for our {@link Piano}.
+ */
 class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final float BEVEL_RATIO = 0.1f;
@@ -230,10 +233,12 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         redraw();
     }
 
+    /**
+     * Something has gone wrong with the piano or canvas state, and our state is out of sync
+     * with the real state of the world (e.g. somehow we missed a touch down or up event).
+     * Try to reset the state and hope the app survives.
+     */
     void resetPianoState() {
-        // Something has gone wrong with the piano or canvas state, and our state is out of sync
-        // with the real state of the world (e.g. somehow we missed a touch down or up event).
-        // Try to reset the state and hope the app survives.
         touch_pointer_to_keys.clear();
         piano.resetState();
     }
