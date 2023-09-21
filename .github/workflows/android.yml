@@ -3,13 +3,9 @@ name: Build and test app
 on:
   push:
     branches: [ '*' ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
-
   build-and-check:
-
     runs-on: ubuntu-latest
 
     steps:
