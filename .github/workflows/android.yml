@@ -26,6 +26,11 @@ jobs:
 
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
+      with:
+        # configure gradle to track dependency info for GitHub Dependency Graph API
+        # Submission is left to other job, due to (rightfully!) missing write permissions if branch is contributed
+        # from "foreign" repo, see submit-dependency-snapshot.yml
+        dependency-graph: generate
 
     - name: Gradle check
       run: ./gradlew check --no-daemon
