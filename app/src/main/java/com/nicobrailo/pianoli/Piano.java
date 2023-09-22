@@ -22,17 +22,15 @@ import java.util.Locale;
  * @see PianoCanvas
  */
 class Piano {
-    /** Height of a flat key in relation to screen size. */
-    private static final double KEYS_FLAT_HEIGHT_RATIO = 0.55;
-
-    /** Width of a flat key in relation to a regular key. */
-    private static final double KEYS_FLAT_WIDTH_RATIO = 0.6;
-
     /**
      * Floor limit, if screensize dictates less than this amount of keys, start shrinking key width,
      * so we always display at least an octave.
+     *
+     * @see #KEY_PREFERRED_WIDTH
      */
     private static final int MIN_NUMBER_OF_KEYS = 7;
+    /** Preferred width (device independent pixels) of a key, but see also {@link #MIN_NUMBER_OF_KEYS} */
+    public static final int KEY_PREFERRED_WIDTH = 220;
 
 
     private final int keys_width;
@@ -53,18 +51,19 @@ class Piano {
 
     Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset) {
         keys_height = screen_size_y;
-        keys_flats_height = (int) (screen_size_y * KEYS_FLAT_HEIGHT_RATIO);
+        keys_flats_height = (int) (screen_size_y * Key.FLAT_HEIGHT_RATIO);
 
-        keys_width = Math.min(screen_size_x / MIN_NUMBER_OF_KEYS, 220);
-        keys_flat_width = (int) (keys_width * KEYS_FLAT_WIDTH_RATIO);
+        keys_width = Math.min(screen_size_x / MIN_NUMBER_OF_KEYS, KEY_PREFERRED_WIDTH);
+        keys_flat_width = (int) (keys_width * Key.FLAT_WIDTH_RATIO);
 
         // Round up for possible half-key display
         final int big_keys = 1 + (screen_size_x / keys_width);
         // Count flats too
-        keys_count = (big_keys * 2) + 1;
+        keys_count = (big_keys * 2) + 1; // *2 because ALL big keys get a matching flat-key, though for some its 0x0 pixels.
 
         key_pressed = new boolean[keys_count];
         Arrays.fill(key_pressed, false);
+
         selectSoundset(context, soundset);
 
         if (Preferences.areMelodiesEnabled(context)) {
@@ -142,7 +141,7 @@ class Piano {
         final int octave_idx = (key_idx / 2) % 7;
         if (octave_idx == 2 || octave_idx == 6) {
             // Keys without flat get a null-area
-            return new Key(0, 0, 0, 0);
+            return Key.CANT_TOUCH_THIS;
         }
 
         final int offset = keys_width - (keys_flat_width / 2);
@@ -221,21 +220,5 @@ class Piano {
         }
 
         KeySound.play(KeySoundIdx[key_idx], 1, 1, 1, 0, 1f);
-    }
-
-    static class Key {
-        int x_i, x_f, y_i, y_f;
-
-        Key(int x_i, int x_f, int y_i, int y_f) {
-            this.x_i = x_i;
-            this.x_f = x_f;
-            this.y_i = y_i;
-            this.y_f = y_f;
-        }
-
-        boolean contains(float pos_x, float pos_y) {
-            return (pos_x > x_i && pos_x < x_f) &&
-                    (pos_y > y_i && pos_y < y_f);
-        }
     }
 }
