@@ -28,7 +28,7 @@ class Piano {
      *
      * @see #KEY_PREFERRED_WIDTH
      */
-    private static final int MIN_NUMBER_OF_KEYS = 7;
+    public static final int MIN_NUMBER_OF_KEYS = 7;
     /** Preferred width (device independent pixels) of a key, but see also {@link #MIN_NUMBER_OF_KEYS} */
     public static final int KEY_PREFERRED_WIDTH = 220;
 
@@ -49,7 +49,19 @@ class Piano {
     /** For song-auto-player, the state-tracker of where we are in our (selection of) melodie(s). */
     private MelodyPlayer melody = null;
 
-    Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset) {
+    /**
+     * Construct a partially initialised (geometry only) Piano model.
+     *
+     * <p>
+     * Resource- and Preference-depedendent init is deferred to {@link #init(Context, String)}, for better testability.
+     * </p>
+     *
+     * @param screen_size_x the long dimension of the screen (keys are side-by-side along this axis)
+     * @param screen_size_y the short dimension of the screen.
+     *
+     * @see #init(Context, String)
+     */
+    Piano(int screen_size_x, int screen_size_y) {
         keys_height = screen_size_y;
         keys_flats_height = (int) (screen_size_y * Key.FLAT_HEIGHT_RATIO);
 
@@ -59,17 +71,23 @@ class Piano {
         // Round up for possible half-key display
         final int big_keys = 1 + (screen_size_x / keys_width);
         // Count flats too
-        keys_count = (big_keys * 2) + 1; // *2 because ALL big keys get a matching flat-key, though for some its 0x0 pixels.
+        // *2: Because ALL big keys get a matching flat-key, though for some its 0x0 pixels.
+        // +1: not sure about this... The *2 already ensures a (partial) flat-key on the (partial) big-key.
+        keys_count = (big_keys * 2) + 1;
 
         key_pressed = new boolean[keys_count];
         Arrays.fill(key_pressed, false);
+    }
 
+    Piano init(final Context context, final String soundset) {
         selectSoundset(context, soundset);
 
         if (Preferences.areMelodiesEnabled(context)) {
             this.melody = new MultipleSongsMelodyPlayer(Preferences.selectedMelodies(context));
             this.melody.reset();
         }
+
+        return this;
     }
 
     int get_keys_flat_width() {
