@@ -3,32 +3,40 @@ name: Build and test app
 on:
   push:
     branches: [ '*' ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
-
   build-and-check:
-
     runs-on: ubuntu-latest
 
     steps:
-
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: set up JDK 17
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v3
       with:
-        java-version: 17
+        # temurin LTS is pre-cached on runners
+        # https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Hosted-Tool-Cache
+        distribution: 'temurin'
+        java-version: '17'
 
-    - name: Gradle build
-      run: ./gradlew build
+    # prevent supply chain attacks from replacing our gradle with malicious code
+    # https://github.com/gradle/wrapper-validation-action#readme
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v1
+
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        # configure gradle to track dependency info for GitHub Dependency Graph API
+        # Submission is left to other job, due to (rightfully!) missing write permissions if branch is contributed
+        # from "foreign" repo, see submit-dependency-snapshot.yml
+        dependency-graph: generate
 
     - name: Gradle check
-      run: ./gradlew check
+      run: ./gradlew check --no-daemon
 
     - name: Archive build artifacts
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: outputs
         path: app/build/outputs
