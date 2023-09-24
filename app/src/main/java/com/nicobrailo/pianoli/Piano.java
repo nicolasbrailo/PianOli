@@ -44,7 +44,7 @@ class Piano {
     /** handle to our android-provided sound mixer, that mixes multiple simultaneous tones */
     private static SoundPool KeySound = null;
     /** Resource handles to the mp3 samples of our currently active soundset, one for each note */
-    private int[] KeySoundIdx;
+    private int[] KeySoundIdx = new int[0]; // HACK: init empty to prevent NPE in tests
 
     /** For song-auto-player, the state-tracker of where we are in our (selection of) melodie(s). */
     private MelodyPlayer melody = null;
@@ -108,7 +108,7 @@ class Piano {
 
     boolean is_key_pressed(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
-            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+            Log.d("PianOli::Piano", "This shouldn't happen: isKeyPressed out of range, key" + key_idx);
             return false;
         }
 
@@ -117,7 +117,7 @@ class Piano {
 
     void on_key_down(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
-            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+            Log.d("PianOli::Piano", "This shouldn't happen: Key-Down out of range, key" + key_idx);
             return;
         }
         key_pressed[key_idx] = true;
@@ -126,7 +126,7 @@ class Piano {
 
     void on_key_up(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
-            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+            Log.d("PianOli::Piano", "This shouldn't happen: Key-Up out of range, key" + key_idx);
             return;
         }
 
@@ -167,6 +167,8 @@ class Piano {
         return new Key(x_i, x_i + keys_flat_width, 0, keys_flats_height);
     }
 
+    // Developer note: Sound-playing deals with android-resources, which makes me think
+    //     it would be better of in PianoCanvas instead (so Piano becomes pure "geometry")
     void selectSoundset(final Context context, String soundSetName) {
         if (KeySound != null) {
             KeySound.release();
