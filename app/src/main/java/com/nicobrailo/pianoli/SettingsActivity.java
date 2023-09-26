@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String SOUNDSET_DIR_PREFIX = "soundset_";
-    public static final int RESULT_QUIT = 1;
 
     public SettingsActivity() {
         // empty ctor may be required for fragments
@@ -37,8 +36,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void onQuit() {
-        setResult(RESULT_QUIT);
-        finish();
+        // Really don't want to go back to the main activity after quiting, so a normal
+        // finish() is no good (https://stackoverflow.com/questions/17719634/how-to-exit-an-android-app-programmatically).
+        // If we return to the main activity, it will prompt to lock the screen again, as if
+        // it was just launched.
+        finishAffinity();
     }
 
     @Override

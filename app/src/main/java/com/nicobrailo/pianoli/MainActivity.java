@@ -70,12 +70,6 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
         lock_app();
     }
 
-    public void quitApp() {
-        unlock_app();
-        this.startActivity(new Intent(this, MainActivity.class));
-        moveTaskToBack(true);
-    }
-
     private static final int REQUEST_CONFIG = 1;
 
     @Override
@@ -87,22 +81,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
         // child accidentally getting to the settings screen.
         unlock_app();
 
-        startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CONFIG);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (requestCode == REQUEST_CONFIG) {
-            if (resultCode == SettingsActivity.RESULT_QUIT) {
-                quitApp();
-            }
-
-            // Don't need to lock the app if the user just hit the "Up" button in the action bar here again,
-            // because onResume would have already been called.
-        }
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 
     @Override
