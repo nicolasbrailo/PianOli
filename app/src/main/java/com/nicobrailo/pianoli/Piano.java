@@ -22,17 +22,15 @@ import java.util.Locale;
  * @see PianoCanvas
  */
 class Piano {
-    /** Height of a flat key in relation to screen size. */
-    private static final double KEYS_FLAT_HEIGHT_RATIO = 0.55;
-
-    /** Width of a flat key in relation to a regular key. */
-    private static final double KEYS_FLAT_WIDTH_RATIO = 0.6;
-
     /**
      * Floor limit, if screensize dictates less than this amount of keys, start shrinking key width,
      * so we always display at least an octave.
+     *
+     * @see #KEY_PREFERRED_WIDTH
      */
-    private static final int MIN_NUMBER_OF_KEYS = 7;
+    public static final int MIN_NUMBER_OF_KEYS = 7;
+    /** Preferred width (device independent pixels) of a key, but see also {@link #MIN_NUMBER_OF_KEYS} */
+    public static final int KEY_PREFERRED_WIDTH = 220;
 
 
     private final int keys_width;
@@ -46,31 +44,50 @@ class Piano {
     /** handle to our android-provided sound mixer, that mixes multiple simultaneous tones */
     private static SoundPool KeySound = null;
     /** Resource handles to the mp3 samples of our currently active soundset, one for each note */
-    private int[] KeySoundIdx;
+    private int[] KeySoundIdx = new int[0]; // HACK: init empty to prevent NPE in tests
 
     /** For song-auto-player, the state-tracker of where we are in our (selection of) melodie(s). */
     private MelodyPlayer melody = null;
 
-    Piano(final Context context, int screen_size_x, int screen_size_y, final String soundset) {
+    /**
+     * Construct a partially initialised (geometry only) Piano model.
+     *
+     * <p>
+     * Resource- and Preference-depedendent init is deferred to {@link #init(Context, String)}, for better testability.
+     * </p>
+     *
+     * @param screen_size_x the long dimension of the screen (keys are side-by-side along this axis)
+     * @param screen_size_y the short dimension of the screen.
+     *
+     * @see #init(Context, String)
+     */
+    Piano(int screen_size_x, int screen_size_y) {
         keys_height = screen_size_y;
-        keys_flats_height = (int) (screen_size_y * KEYS_FLAT_HEIGHT_RATIO);
+        keys_flats_height = (int) (screen_size_y * Key.FLAT_HEIGHT_RATIO);
 
-        keys_width = Math.min(screen_size_x / MIN_NUMBER_OF_KEYS, 220);
-        keys_flat_width = (int) (keys_width * KEYS_FLAT_WIDTH_RATIO);
+        keys_width = Math.min(screen_size_x / MIN_NUMBER_OF_KEYS, KEY_PREFERRED_WIDTH);
+        keys_flat_width = (int) (keys_width * Key.FLAT_WIDTH_RATIO);
 
         // Round up for possible half-key display
         final int big_keys = 1 + (screen_size_x / keys_width);
         // Count flats too
+        // *2: Because ALL big keys get a matching flat-key, though for some its 0x0 pixels.
+        // +1: not sure about this... The *2 already ensures a (partial) flat-key on the (partial) big-key.
         keys_count = (big_keys * 2) + 1;
 
         key_pressed = new boolean[keys_count];
         Arrays.fill(key_pressed, false);
+    }
+
+    Piano init(final Context context, final String soundset) {
         selectSoundset(context, soundset);
 
         if (Preferences.areMelodiesEnabled(context)) {
             this.melody = new MultipleSongsMelodyPlayer(Preferences.selectedMelodies(context));
             this.melody.reset();
         }
+
+        return this;
     }
 
     int get_keys_flat_width() {
@@ -91,7 +108,7 @@ class Piano {
 
     boolean is_key_pressed(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
-            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+            Log.d("PianOli::Piano", "This shouldn't happen: isKeyPressed out of range, key" + key_idx);
             return false;
         }
 
@@ -100,7 +117,7 @@ class Piano {
 
     void on_key_down(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
-            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+            Log.d("PianOli::Piano", "This shouldn't happen: Key-Down out of range, key" + key_idx);
             return;
         }
         key_pressed[key_idx] = true;
@@ -109,7 +126,7 @@ class Piano {
 
     void on_key_up(int key_idx) {
         if (key_idx < 0 || key_idx >= key_pressed.length) {
-            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
+            Log.d("PianOli::Piano", "This shouldn't happen: Key-Up out of range, key" + key_idx);
             return;
         }
 
@@ -142,7 +159,7 @@ class Piano {
         final int octave_idx = (key_idx / 2) % 7;
         if (octave_idx == 2 || octave_idx == 6) {
             // Keys without flat get a null-area
-            return new Key(0, 0, 0, 0);
+            return Key.CANT_TOUCH_THIS;
         }
 
         final int offset = keys_width - (keys_flat_width / 2);
@@ -150,6 +167,8 @@ class Piano {
         return new Key(x_i, x_i + keys_flat_width, 0, keys_flats_height);
     }
 
+    // Developer note: Sound-playing deals with android-resources, which makes me think
+    //     it would be better of in PianoCanvas instead (so Piano becomes pure "geometry")
     void selectSoundset(final Context context, String soundSetName) {
         if (KeySound != null) {
             KeySound.release();
@@ -221,21 +240,5 @@ class Piano {
         }
 
         KeySound.play(KeySoundIdx[key_idx], 1, 1, 1, 0, 1f);
-    }
-
-    static class Key {
-        int x_i, x_f, y_i, y_f;
-
-        Key(int x_i, int x_f, int y_i, int y_f) {
-            this.x_i = x_i;
-            this.x_f = x_f;
-            this.y_i = y_i;
-            this.y_f = y_f;
-        }
-
-        boolean contains(float pos_x, float pos_y) {
-            return (pos_x > x_i && pos_x < x_f) &&
-                    (pos_y > y_i && pos_y < y_f);
-        }
     }
 }

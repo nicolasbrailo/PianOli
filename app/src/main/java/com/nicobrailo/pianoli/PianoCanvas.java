@@ -65,7 +65,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         screen_size_x = screen_size.x;
         screen_size_y = screen_size.y;
         final String soundset = Preferences.selectedSoundSet(context);
-        this.piano = new Piano(context, screen_size_x, screen_size_y, soundset);
+        this.piano = new Piano(screen_size_x, screen_size_y)
+                .init(context, soundset);
         this.bevelWidth = this.piano.get_keys_width() * BEVEL_RATIO;
         this.appConfigHandler = new AppConfigTrigger(ctx);
 
@@ -74,7 +75,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void selectSoundset(final Context context, final String selected_soundset) {
-        this.piano = new Piano(context, screen_size_x, screen_size_y, selected_soundset);
+        this.piano = new Piano(screen_size_x, screen_size_y)
+                .init(context, selected_soundset);
     }
 
     public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {
@@ -109,7 +111,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         appConfigHandler.onPianoRedrawFinish(this, canvas);
     }
 
-    void draw_key(final Canvas canvas, final Piano.Key rect, final Paint p) {
+    void draw_key(final Canvas canvas, final Key rect, final Paint p) {
         // Draw the main (solid) background of the key.
 
         Rect r = new Rect();
@@ -186,7 +188,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
      */
     void draw_icon_on_black_key(final Canvas canvas, final Drawable icon, Integer key_idx,
                                 final int icon_width, final int icon_height) {
-        final Piano.Key key = piano.get_area_for_flat_key(key_idx);
+        final Key key = piano.get_area_for_flat_key(key_idx);
         int icon_x = ((key.x_f - key.x_i) / 2) + key.x_i;
         int icon_y = icon_height;
 
