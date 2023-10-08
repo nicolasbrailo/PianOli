@@ -162,13 +162,16 @@ public class Piano {
 
     int pos_to_key_idx(float pos_x, float pos_y) {
         final int big_key_idx = 2 * ((int) pos_x / keys_width);
+        // high y is 'below' the flat keys, so can only be a big key.
         if (pos_y > keys_flats_height) return big_key_idx;
 
-        // Check if press is inside rect of flat key
-        Key flat = get_area_for_flat_key(big_key_idx);
-        if (flat.contains(pos_x, pos_y)) return big_key_idx + 1;
+        // low y could touch a flat key..
+        // Check if press is inside rect of flat key: right / higher-x
+        Key next_flat = get_area_for_flat_key(big_key_idx);
+        if (next_flat.contains(pos_x, pos_y)) return big_key_idx + 1;
 
-        if (big_key_idx > 0) {
+        // Check if press is inside rect of flat key: left / lower-x..
+        if (big_key_idx > 0) { // .. but only for the second key onwards; first C would otherwise go out-of-bounds.
             Key prev_flat = get_area_for_flat_key(big_key_idx - 2);
             if (prev_flat.contains(pos_x, pos_y)) return big_key_idx - 1;
         }
@@ -177,11 +180,19 @@ public class Piano {
         return big_key_idx;
     }
 
-    Key get_area_for_key(int key_idx) {
+    /**
+     * @param key_idx Index of the 'big' key.
+     *                This index is always even (0,2,4,...)
+     */
+    Key get_area_for_big_key(int key_idx) {
         int x_i = key_idx / 2 * keys_width;
         return new Key(x_i, x_i + keys_width, 0, keys_height);
     }
 
+    /**
+     * @param key_idx Index of the <em>matching 'big' key</em> (i.e. of the big key to this flats left/lower-x).
+     *                This index is always even (0,2,4,...)
+     */
     Key get_area_for_flat_key(int key_idx) {
         final int octave_idx = (key_idx / 2) % 7;
         if (octave_idx == 2 || octave_idx == 6) {
