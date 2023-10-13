@@ -1,0 +1,3 @@
+* New translation: German.
+* Updated translations.
+* Bugfix: Try to fix crash related to screen pinning.
