@@ -41,4 +41,5 @@
     <string name="theme_boomwhacker" translatable="false">Boomwhacker</string>
     <string name="theme_pastel">Pastel</string>
     <string name="theme_rainbow">Rainbow</string>
+    <string name="preferences">Preferences</string>
 </resources>

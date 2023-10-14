@@ -2,7 +2,7 @@
 
     <com.nicobrailo.pianoli.AboutPreference />
 
-    <PreferenceCategory app:title="Preferences" app:iconSpaceReserved="false">
+    <PreferenceCategory app:title="@string/preferences" app:iconSpaceReserved="false">
         <ListPreference
             app:defaultValue="piano"
             app:key="selectedSoundSet"
