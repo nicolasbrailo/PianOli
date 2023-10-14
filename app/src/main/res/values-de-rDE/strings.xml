@@ -4,7 +4,7 @@
     <string name="settings">Einstellungen</string>
 
     <!-- splash text at top of settings screen -->
-    <string name="some_info_about_this_app_title"><b><big><big>PianOli ist quell-offene Software!</big></big></b></string>
+    <string name="some_info_about_this_app_title">PianOli ist quell-offene Software!</string>
     <string name="some_info_about_this_app">bei Vorschlägen, Wünschen oder Problemmeldungen <a
             href="https://github.com/nicolasbrailo/PianOli">besuch unsere Webseite</a>.
     </string>

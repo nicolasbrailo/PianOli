@@ -23,6 +23,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="10dp"
         android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:text="@string/some_info_about_this_app_title" />
 
     <TextView

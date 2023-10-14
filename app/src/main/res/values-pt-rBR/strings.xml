@@ -2,7 +2,7 @@
 <resources>
     <string name="quit_app">Sair do App</string>
     <string name="settings">Opções</string>
-    <string name="some_info_about_this_app_title"><b><big><big>PianOli é de software livre!</big></big></b></string>
+    <string name="some_info_about_this_app_title">PianOli é de software livre!</string>
     <string name="some_info_about_this_app">
         <b><big>Se você tiver sugestões, nova s idéias ou relatório de falha, por favor
             <a href="https://github.com/nicolasbrailo/PianOli">visite o site do projeto</a>.

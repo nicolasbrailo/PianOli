@@ -2,7 +2,7 @@
 <resources>
     <string name="quit_app">退出游戏</string>
     <string name="settings">设置</string>
-    <string name="some_info_about_this_app_title"><b><big><big>PianOli是开源项目!</big></big></b></string>
+    <string name="some_info_about_this_app_title">PianOli是开源项目!</string>
     <string name="some_info_about_this_app">如果您有各种建议,功能需求或报告Bug,请访问我们的<a href="https://github.com/nicolasbrailo/PianOli">官网</a>。</string>
     <string name="config_tooltip">按住第一个齿轮图标，然后按第二个齿轮图标。</string>
 
