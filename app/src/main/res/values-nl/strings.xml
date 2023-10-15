@@ -2,35 +2,29 @@
 <resources>
     <string name="quit_app">Afsluiten</string>
     <string name="settings">Instellingen</string>
-
     <!-- Not a copy-paste error, English and Dutch are related languages, so this writes the same -->
     <string name="some_info_about_this_app_title"><b><big><big>PianOli is open-source!</big></big></b></string>
-
-    <string name="some_info_about_this_app">Heb je ideeën, verzoekjes of probleemmeldingen, <a
-            href="https://github.com/nicolasbrailo/PianOli">bezoek dan onze website</a>.
-    </string>
+    <string name="some_info_about_this_app">Heb je ideeën, verzoekjes of probleemmeldingen, <a href="https://github.com/nicolasbrailo/PianOli">bezoek dan onze website</a>.</string>
     <string name="config_tooltip">Houd het eerste tandwiel ingedrukt, tik dan het tweede aan.</string>
-
     <string name="soundset">Instrument</string>
     <string name="soundset_guitar">Gitaar</string>
     <string name="soundset_musicbox">Muziekdoos</string>
     <string name="soundset_piano">Piano</string>
     <string name="soundset_sine">Sinusgolf</string>
     <string name="soundset_vibraphone">Vibrafoon</string>
-
-   <!-- Song player settings -->
+    <!-- Song player settings -->
     <string name="pref_enable_melodies_summary">Een toets aanraken speelt de volgende noot van een liedje, niet de
         toets-noot.
     </string>
     <string name="pref_enable_melodies">Liedjesautomaat</string>
     <string name="pref_selected_melodies">Beschikbare liedjes</string>
     <string name="pref_selected_melodies_summary">Liedjes om doorheen te roteren</string>
-
     <!-- Song catalog -->
     <string name="melody_twinkle_twinkle_little_star">Twinkel, twinkel, kleine ster</string>
     <string name="melody_insy_winsy_spider">Hansje Pansje Kevertje</string>
-
     <!-- keyboard colour themes -->
     <string name="theme">Toetsenkleuren</string>
     <string name="theme_black_and_white">Zwart-Wit</string>
+    <string name="theme_pastel">Pastel</string>
+    <string name="theme_rainbow">Regenboog</string>
 </resources>
