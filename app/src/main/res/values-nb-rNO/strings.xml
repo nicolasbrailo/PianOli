@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="soundset_sine">Sinusbølge</string>
+    <string name="soundset">Klang</string>
+    <string name="theme_pastel">Pastell</string>
+    <string name="quit_app">Avslutt programmet</string>
+    <string name="pref_selected_melodies_summary">Liste over melodier å gå gjennom</string>
+    <string name="config_tooltip">Hold det første tannhjulsikonet, og trykk så på det andre for alternativer.</string>
+    <string name="soundset_vibraphone">Vibrafon</string>
+    <string name="some_info_about_this_app">Forslag, funksjonsforespørsler og feilrapporter kan sendes til <a href="https://github.com/nicolasbrailo/PianOli">prosjektets nettside</a>.</string>
+    <string name="melody_insy_winsy_spider">Lille Petter edderkopp</string>
+    <string name="soundset_musicbox">Musikkboks</string>
+    <string name="melody_twinkle_twinkle_little_star">Blink, lille stjerne</string>
+    <string name="melody_im_a_little_teapot">Jeg er en liten tekanne</string>
+    <string name="theme">Tangentfarger</string>
+    <string name="some_info_about_this_app_title"><b><big><big>PianOli er gemenfrihetslig programvare.</big></big></b></string>
+    <string name="melody_waltzing_matilda">Waltzing Matilda</string>
+    <string name="soundset_guitar">Gitar</string>
+    <string name="theme_rainbow">Regnbue</string>
+    <string name="soundset_piano">Piano</string>
+    <string name="pref_selected_melodies">Tilgjengelige melodier</string>
+    <string name="theme_black_and_white">Svart-hvitt</string>
+    <string name="settings">Innstillinger</string>
+    <string name="pref_enable_melodies_summary">Å trykke på en tangent spiller neste note i melodien, snarere enn tangentens faktiske tone.</string>
+    <string name="pref_enable_melodies">Auto-spill melodier</string>
+</resources>
