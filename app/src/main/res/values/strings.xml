@@ -6,7 +6,7 @@
     <string name="settings">Settings</string>
 
     <!-- splash text at top of settings screen -->
-    <string name="some_info_about_this_app_title"><b><big><big>PianOli is copylefted libre software.</big></big></b></string>
+    <string name="some_info_about_this_app_title"><b><big><big>PianOli is open-source!</big></big></b></string>
     <string name="some_info_about_this_app">Send suggestions, feature requests and bug reports to the <a href="https://github.com/nicolasbrailo/PianOli">project website</a>.</string>
 
     <!-- Explains to the adult user how to bypass our baby-protection and enter the settings screen -->
