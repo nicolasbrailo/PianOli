@@ -7,7 +7,7 @@
 
     <!-- splash text at top of settings screen -->
     <string name="some_info_about_this_app_title"><b><big><big>PianOli is open-source!</big></big></b></string>
-    <string name="some_info_about_this_app">If you have suggestions, feature requests or bug reports please <a href="https://github.com/nicolasbrailo/PianOli">visit the project\'s website</a>.</string>
+    <string name="some_info_about_this_app">Send suggestions, feature requests and bug reports to the <a href="https://github.com/nicolasbrailo/PianOli">project website</a>.</string>
 
     <!-- Explains to the adult user how to bypass our baby-protection and enter the settings screen -->
     <string name="config_tooltip">Hold the first gear icon, then press the second for options.</string>
@@ -32,12 +32,12 @@
             and with different lyrics, around the world -->
     <string name="melody_twinkle_twinkle_little_star">Twinkle, Twinkle, Little Star</string>
     <string name="melody_im_a_little_teapot">I\'m a Little Teapot</string>
-    <string name="melody_insy_winsy_spider">Insy Winsy Spider</string>
+    <string name="melody_insy_winsy_spider">Incy Winsy Spider</string>
     <string name="melody_waltzing_matilda">Waltzing Matilda</string>
 
     <!-- keyboard colour themes -->
     <string name="theme">Key Colours</string>
-    <string name="theme_black_and_white">Black and White</string>
+    <string name="theme_black_and_white">Black and white</string>
     <string name="theme_boomwhacker" translatable="false">Boomwhacker</string>
     <string name="theme_pastel">Pastel</string>
     <string name="theme_rainbow">Rainbow</string>
