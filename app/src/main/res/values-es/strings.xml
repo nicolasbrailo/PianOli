@@ -3,7 +3,6 @@
     <string name="quit_app">Salir</string>
     <string name="settings">Opciones</string>
     <string name="config_tooltip">Mantener el icono de opciones, luego presione el segundo icono para ver el menu.</string>
-
     <!-- Sound set selection and instrument names -->
     <string name="soundset">Sonido</string>
     <string name="soundset_piano">Piano</string>
@@ -11,4 +10,7 @@
     <string name="soundset_guitar">Guitarra</string>
     <string name="soundset_musicbox">Caja musical</string>
     <string name="melody_insy_winsy_spider">Canción de la araña</string>
+    <string name="soundset_sine">Tono sinusoidal</string>
+    <string name="some_info_about_this_app">Sugerencias, nuevas funcionalidades o reporte de fallas\? Visitá <a href="https://github.com/nicolasbrailo/PianOli">el website de la applicación</a>.</string>
+    <string name="some_info_about_this_app_title">PianOli es open-source!</string>
 </resources>
