@@ -2,7 +2,7 @@
 <resources>
     <string name="quit_app">Закрити застосунок</string>
     <string name="settings">Параметри</string>
-    <string name="some_info_about_this_app_title"><b><big><big>PianOli — вільний застосунок!</big></big></b></string>
+    <string name="some_info_about_this_app_title">PianOli — вільний застосунок!</string>
     <string name="some_info_about_this_app">Надсилайте пропозиції, прохання й звіти про вади на <a href="https://github.com/nicolasbrailo/PianOli">вебсайт проєкту</a>.</string>
     <string name="config_tooltip">Затисніть одне коліща й торкніть інше, щоб відкрити параметри.</string>
 

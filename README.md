@@ -1,5 +1,6 @@
 # PianOli
 
+[![Translation status](https://hosted.weblate.org/widgets/pianoli/-/svg-badge.svg)](https://hosted.weblate.org/engage/pianoli/)
 [![F-Droid version](https://img.shields.io/f-droid/v/com.nicobrailo.pianoli)](https://f-droid.org/packages/com.nicobrailo.pianoli/)
 
 [
@@ -34,6 +35,15 @@ second setting icon with another finger.
 ### Reporting Issues
 
 Please report any issues or suggest features on the [issue tracker](https://github.com/nicolasbrailo/PianOli/issues).
+
+### Translating
+
+We use [Weblate](https://hosted.weblate.org/engage/pianoli/) to manage translations. Please see [these instructions for using Weblate](https://hosted.weblate.org/engage/pianoli/) to translate Pianoli.
+
+| Android app                                                                                                                                          | F-Droid metadata                                                                                                                                  |
+|------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| [![Translation status](https://hosted.weblate.org/widgets/pianoli/-/android-strings/multi-auto.svg)](https://hosted.weblate.org/engage/pianoli/) | [![Translation status](https://hosted.weblate.org/widgets/pianoli/-/app-metadata/multi-auto.svg)](https://hosted.weblate.org/engage/pianoli/) |
+
 
 ### Submitting changes
 
