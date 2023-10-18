@@ -1,0 +1,14 @@
+¿Tiene un bebé curiosidad por las tabletas y teléfonos brillantes? Utilice esta aplicación como
+juego para bebés y, lo que es más importante, para evitar que un bebé toque al azar
+cualquier cosa que no quieras.
+
+Esta aplicación mostrará un pequeño piano que un bebé puede usar para explorar los sonidos en un
+dispositivo móvil. Al mismo tiempo, bloqueará cualquier intento de
+cerrar la aplicación. Se bloquearán los botones Atrás, Inicio y Menú de las aplicaciones.
+y el menú superior de Android no estará disponible.
+
+Esto asegura que el bebé no pueda cerrar el juego accidentalmente, evitando cualquier
+acción en el dispositivo que quizás no desees.
+
+Los adultos pueden desbloquear la aplicación tocando el ícono de configuración con un
+dedo y luego mantener presionado el segundo ícono de la configuración con otro.

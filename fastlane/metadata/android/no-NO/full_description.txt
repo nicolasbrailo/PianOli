@@ -1,0 +1,14 @@
+Har du en baby å holde unna nettbrett og telefoner? Bruk programmet som
+babyspill og forhindre tilfeldige trykk fra å gjøre uforutsette ting.
+
+Dette programmet viser et lite piano en baby kan bruker for å utforske
+lyder på en mobilenhet. Samtidig vil det blokkere alle naive forsøk
+på å lukke programmet. «Tilbake», «hjem», og programmenyknappene
+blokkeres og Androids toppmeny er ikke tilgjengelig.
+
+Dette forsikrer at en baby ikke tilfeldig kan lukke programmet, og dermed
+forhindres uønskede handlinger på enheten.
+
+Voksne kan låse opp programmet ved å trykke på innstillingsikonet
+med fingeren, for så å holde det andre innstillingsikonet med en annen
+finger.
