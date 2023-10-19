@@ -1,2 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="soundset_sine">Syntezator</string>
+    <string name="soundset">Zestaw dźwięków</string>
+    <string name="theme_pastel">Pastelowy</string>
+    <string name="quit_app">Wyjdź z aplikacji</string>
+    <string name="pref_selected_melodies_summary">Lista melodii do przełączania</string>
+    <string name="config_tooltip">Przytrzymaj pierwszą ikonę koła zębatego, a następnie naciśnij drugą, aby wyświetlić opcje.</string>
+    <string name="soundset_vibraphone">Wibrafon</string>
+    <string name="some_info_about_this_app">Wyślij sugestię lub zgłoś błąd na naszej <a href="https://github.com/nicolasbrailo/PianOli">stronie projektu</a>.</string>
+    <string name="melody_insy_winsy_spider">Tyciutki pajączek</string>
+    <string name="soundset_musicbox">Pozytywka</string>
+    <string name="melody_twinkle_twinkle_little_star">Mrugaj, mrugaj gwiazdeczko ma</string>
+    <string name="melody_im_a_little_teapot">Jestem małym czajniczkiem</string>
+    <string name="theme">Kolory klawiszy</string>
+    <string name="preferences">Preferencje</string>
+    <string name="some_info_about_this_app_title">PianOli jest aplikacją typu open-source!</string>
+    <string name="melody_waltzing_matilda">Waltzing Matilda</string>
+    <string name="soundset_guitar">Gitara</string>
+    <string name="theme_rainbow">Tęcza</string>
+    <string name="soundset_piano">Pianino</string>
+    <string name="pref_selected_melodies">Dostępne melodie</string>
+    <string name="theme_black_and_white">Czarny i biały</string>
+    <string name="settings">Ustawienia</string>
+    <string name="pref_enable_melodies_summary">Dotknięcie klawisza odtwarza następną nutę melodii, a nie samą nutę klawisza.</string>
+    <string name="pref_enable_melodies">Automatyczne odtwarzanie melodii</string>
+</resources>
