@@ -4,7 +4,7 @@
     <string name="settings">Instellingen</string>
     <!-- Not a copy-paste error, English and Dutch are related languages, so this writes the same -->
     <string name="some_info_about_this_app_title">PianOli is open-source!</string>
-    <string name="some_info_about_this_app">Heb je ideeën, verzoekjes of probleemmeldingen, <a href="https://github.com/nicolasbrailo/PianOli">bezoek dan onze website</a>.</string>
+    <string name="some_info_about_this_app">Stuue ideeën, verzoekjes en probleemmeldingen naar onze <a href="https://github.com/nicolasbrailo/PianOli">project website</a>.</string>
     <string name="config_tooltip">Houd het eerste tandwiel ingedrukt, tik dan het tweede aan.</string>
     <string name="soundset">Instrument</string>
     <string name="soundset_guitar">Gitaar</string>
@@ -24,7 +24,10 @@
     <string name="melody_insy_winsy_spider">Hansje Pansje Kevertje</string>
     <!-- keyboard colour themes -->
     <string name="theme">Toetsenkleuren</string>
-    <string name="theme_black_and_white">Zwart-Wit</string>
+    <string name="theme_black_and_white">Zwart-wit</string>
     <string name="theme_pastel">Pastel</string>
     <string name="theme_rainbow">Regenboog</string>
+    <string name="melody_im_a_little_teapot">Ik ben een Kleine Theepot</string>
+    <string name="preferences">Voorkeuren</string>
+    <string name="melody_waltzing_matilda">Waltzing Matilda</string>
 </resources>
