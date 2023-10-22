@@ -1,0 +1,5 @@
+New translations:
+ * Norwegian Bokmål (thanks @kingu)
+ * Polish (thanks @gnu-ewm)
+
+Want to help translate PianOli into your language? Join us on GitHub and Weblate.
