@@ -9,8 +9,20 @@
     <string name="soundset_vibraphone">Vibráfono</string>
     <string name="soundset_guitar">Guitarra</string>
     <string name="soundset_musicbox">Caja musical</string>
-    <string name="melody_insy_winsy_spider">Canción de la araña</string>
+    <string name="melody_insy_winsy_spider">La araña Incy Winsy</string>
     <string name="soundset_sine">Tono sinusoidal</string>
     <string name="some_info_about_this_app">Sugerencias, nuevas funcionalidades o reporte de fallas\? Visitá <a href="https://github.com/nicolasbrailo/PianOli">el website de la applicación</a>.</string>
     <string name="some_info_about_this_app_title">PianOli es open-source!</string>
+    <string name="theme_pastel">Pastel</string>
+    <string name="pref_selected_melodies_summary">Lista de melodías para el ciclo</string>
+    <string name="melody_twinkle_twinkle_little_star">Brilla, brilla, estrellita</string>
+    <string name="melody_im_a_little_teapot">Soy una tetera</string>
+    <string name="theme">Colores del teclado</string>
+    <string name="preferences">Ajustes</string>
+    <string name="melody_waltzing_matilda">Matilda que baila el vals</string>
+    <string name="theme_rainbow">Arco iris</string>
+    <string name="pref_selected_melodies">Melodías disponibles</string>
+    <string name="theme_black_and_white">Negro y blanco</string>
+    <string name="pref_enable_melodies_summary">Al tocar una tecla se reproduce la siguiente nota de una melodía, en lugar de la nota real de la tecla.</string>
+    <string name="pref_enable_melodies">Reproducir las melodías automáticamente</string>
 </resources>
