@@ -65,18 +65,22 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         screen_size_x = screen_size.x;
         screen_size_y = screen_size.y;
         final String soundset = Preferences.selectedSoundSet(context);
-        this.piano = new Piano(screen_size_x, screen_size_y)
-                .init(context, soundset);
-        this.bevelWidth = this.piano.get_keys_width() * BEVEL_RATIO;
         this.appConfigHandler = new AppConfigTrigger(ctx);
-
+        reInitPiano(context, soundset);
+        this.bevelWidth = this.piano.get_keys_width() * BEVEL_RATIO;
         Log.d("PianOli::DrawingCanvas", "Display is " + screen_size.x + "x" + screen_size.y +
                 ", there are " + piano.get_keys_count() + " keys");
     }
 
-    public void selectSoundset(final Context context, final String selected_soundset) {
+    public void reInitPiano(Context context, String soundset) {
         this.piano = new Piano(screen_size_x, screen_size_y)
-                .init(context, selected_soundset);
+                .init(context, soundset);
+
+        // for config trigger updates
+        piano.addListener(appConfigHandler);
+
+        // to redraw on key-touches, must be after config handler to ensure its input is also drawn
+        piano.addListener(this);
     }
 
     public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {
@@ -223,17 +227,11 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
     @Override
     public void onKeyUp(int keyIdx) {
-        Log.d("PianOli::DrawingCanvas", "Key " + keyIdx + " is now UP");
-        piano.onKeyUp(keyIdx);
-        appConfigHandler.onKeyUp(keyIdx);
         redraw();
     }
 
     @Override
     public void onKeyDown(int keyIdx) {
-        Log.d("PianOli::DrawingCanvas", "Key " + keyIdx + " is now DOWN");
-        piano.onKeyDown(keyIdx);
-        appConfigHandler.onKeyDown(keyIdx);
         redraw();
     }
 
@@ -273,7 +271,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
                 // Mark key down ptr_id
                 touch_pointer_to_keys.put(ptr_id, key_idx);
-                onKeyDown(key_idx);
+                piano.doKeyDown(key_idx);
 
                 return true;
             }
@@ -293,12 +291,13 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
                         return super.onTouchEvent(event);
                     }
                     // check if key changed
-                    if (touch_pointer_to_keys.get(ptr_id) != key_idx) {
+                    int prevKeyIdx = touch_pointer_to_keys.get(ptr_id);
+                    if (prevKeyIdx != key_idx) {
                         Log.d("PianOli::DrawingCanvas", "Moved to another key");
                         // Release key before storing new key_idx for new key down
-                        onKeyUp(touch_pointer_to_keys.get(ptr_id));
+                        piano.doKeyUp(prevKeyIdx);
                         touch_pointer_to_keys.put(ptr_id, key_idx);
-                        onKeyDown(key_idx);
+                        piano.doKeyDown(key_idx);
                     }
                 }
 
@@ -313,7 +312,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
                 }
 
                 touch_pointer_to_keys.remove(ptr_id);
-                onKeyUp(key_idx);
+                piano.doKeyUp(key_idx);
 
                 return true;
             }

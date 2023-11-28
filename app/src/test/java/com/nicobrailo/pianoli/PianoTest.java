@@ -1,6 +1,7 @@
 package com.nicobrailo.pianoli;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -14,16 +15,33 @@ import static org.junit.jupiter.api.Assumptions.*;
 
 class PianoTest {
     private static Piano piano;
+    private static SpyListener listener;
 
     @BeforeAll
     static void setup() {
         piano = new Piano(500, 80);
     }
 
+    @BeforeEach
+    void setupListener() {
+        piano.removeListener(listener); // remove old listener from previous test, if any (null OK)
+        listener = new SpyListener();
+        piano.addListener(listener);
+    }
+
     @ParameterizedTest
     @ValueSource(ints={-1, 18, Integer.MIN_VALUE, Integer.MAX_VALUE, -1000, +1000})
     void OutOfBoundsNeverPressed(int invalidIdx) {
-        assertFalse(piano.is_key_pressed(invalidIdx));
+        assertFalse(piano.is_key_pressed(invalidIdx),
+                "out of bounds key-state should never be 'pressed'");
+
+        piano.doKeyDown(invalidIdx);
+        assertEquals(-1, listener.lastDownIdx,
+                "doKeyDown should not notify listeners with bogus values");
+
+        piano.doKeyUp(invalidIdx);
+        assertEquals(-1, listener.lastUpIdx,
+                "doKeyUp should not notify listeners with bogus values");
     }
 
 
@@ -37,11 +55,15 @@ class PianoTest {
     void keyPressLifecycle(int i) {
         assertFalse(piano.is_key_pressed(i));
 
-        piano.onKeyDown(i);
+        piano.doKeyDown(i);
         assertTrue(piano.is_key_pressed(i));
+        assertEquals(i, listener.lastDownIdx,
+                "Listener should be notified of key DOWN");
 
-        piano.onKeyUp(i);
+        piano.doKeyUp(i);
         assertFalse(piano.is_key_pressed(i));
+        assertEquals(i, listener.lastUpIdx,
+                "Listener should be notified of key UP");
     }
 
     @ParameterizedTest
@@ -51,7 +73,7 @@ class PianoTest {
         // only assume it works, actual test-fails covered by #keyPressLifecycle
         // if an "assumption" fails, the test counts as "@Ignored".
         assumeFalse(piano.is_key_pressed(i));
-        piano.onKeyDown(i);
+        piano.doKeyDown(i);
         assumeTrue(piano.is_key_pressed(i));
 
         piano.resetState();

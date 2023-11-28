@@ -9,7 +9,9 @@ import com.nicobrailo.pianoli.melodies.MelodyPlayer;
 import com.nicobrailo.pianoli.melodies.MultipleSongsMelodyPlayer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -18,10 +20,16 @@ import java.util.Locale;
  * <p>
  * Handles geometry, coordinate conversion and current state.
  * </p>
+ * <p>
+ * If you wish to do anything in response to key-presses/releases, implement a {@link PianoListener},
+ * and register yourself via {@link #addListener(PianoListener)}.
+ * You'll then be notified of each event.
+ * </p>
  *
  * @see PianoCanvas
+ * @see PianoListener
  */
-class Piano implements PianoListener {
+class Piano {
     /**
      * Floor limit, if screensize dictates less than this amount of keys, start shrinking key width,
      * so we always display at least an octave.
@@ -41,6 +49,9 @@ class Piano implements PianoListener {
 
     /** state tracker: which keys are <em>currently</em> pressed */
     private final boolean[] key_pressed;
+
+    private final List<PianoListener> listeners;
+
     /** handle to our android-provided sound mixer, that mixes multiple simultaneous tones */
     private static SoundPool KeySound = null;
     /** Resource handles to the mp3 samples of our currently active soundset, one for each note */
@@ -76,6 +87,7 @@ class Piano implements PianoListener {
         keys_count = (big_keys * 2) + 1;
 
         key_pressed = new boolean[keys_count]; // new array defaults to all false;
+        listeners = new ArrayList<>();
     }
 
     Piano init(final Context context, final String soundset) {
@@ -114,28 +126,70 @@ class Piano implements PianoListener {
         return key_pressed[key_idx];
     }
 
-    @Override
-    public void onKeyDown(int keyIdx) {
+    /**
+     * Switch key <code>keyIdx</code> to DOWN state, notifying all {@link PianoListener}s.
+     *
+     * @see PianoListener#onKeyDown(int)
+     */
+    public void doKeyDown(int keyIdx) {
         if (isOutOfRange(keyIdx)) {
             Log.d("PianOli::Piano", "This shouldn't happen: Key-Down out of range, key" + keyIdx);
             return;
         }
+
+        Log.d("PianOli::Piano", "Key " + keyIdx + " is now DOWN");
         key_pressed[keyIdx] = true;
+
+        for (PianoListener l : listeners) {
+            l.onKeyDown(keyIdx);
+        }
         play_sound(keyIdx);
     }
 
-    @Override
-    public void onKeyUp(int keyIdx) {
+    /**
+     * Switch key <code>keyIdx</code> to UP state, notifying all {@link PianoListener}s.
+     *
+     * @see PianoListener#onKeyUp(int)
+     */
+    public void doKeyUp(int keyIdx) {
         if (isOutOfRange(keyIdx)) {
             Log.d("PianOli::Piano", "This shouldn't happen: Key-Up out of range, key" + keyIdx);
             return;
         }
 
+        Log.d("PianOli::Piano", "Key " + keyIdx + " is now UP");
         key_pressed[keyIdx] = false;
+
+        for (PianoListener l : listeners) {
+            l.onKeyUp(keyIdx);
+        }
     }
 
     private boolean isOutOfRange(int key_idx) {
         return key_idx < 0 || key_idx >= key_pressed.length;
+    }
+
+    /**
+     * @param l new Listener to be notified
+     * @return Per the {@link java.util.Collection#add(Object)} contract, <code>true</code> if the listener list changed as a result of this add,
+     *          <code>false</code> if it was already subscribed.
+     */
+    public boolean addListener(PianoListener l) {
+        if (l != null  // avoid NullPointerExceptions on notify
+                && !listeners.contains(l)) { // don't double-add listeners, to avoid double-triggers
+            listeners.add(l);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param l Listener to unsubscribe.
+     * @return Per the {@link java.util.Collection#remove(Object)} contract, <code>true</code> if the listener was removed,
+     *          <code>false</code> if it wasn't found.
+     */
+    public boolean removeListener(PianoListener l) {
+        return listeners.remove(l);
     }
 
     int pos_to_key_idx(float pos_x, float pos_y) {
