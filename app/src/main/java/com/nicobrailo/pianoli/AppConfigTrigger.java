@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-class AppConfigTrigger {
+class AppConfigTrigger implements PianoListener {
     private static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO = 0.5f;
     private static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO_PRESSED = 0.4f;
     private static final int CONFIG_TRIGGER_COUNT = 2;
@@ -74,14 +74,15 @@ class AppConfigTrigger {
         }
     }
 
-    void onKeyPress(int key_idx) {
-        if (key_idx == nextKeyPress) {
+    @Override
+    public void onKeyDown(int keyIdx) {
+        if (keyIdx == nextKeyPress) {
             if (!tooltip_shown) {
                 tooltip_shown = true;
                 cb.onShowConfigTooltip();
             }
 
-            pressedConfigKeys.add(key_idx);
+            pressedConfigKeys.add(keyIdx);
             if (pressedConfigKeys.size() == CONFIG_TRIGGER_COUNT) {
                 reset();
                 showConfigDialogue();
@@ -93,7 +94,7 @@ class AppConfigTrigger {
         }
     }
 
-    void onKeyUp(int key_idx) {
+    public void onKeyUp(int keyIdx) {
         reset();
     }
 

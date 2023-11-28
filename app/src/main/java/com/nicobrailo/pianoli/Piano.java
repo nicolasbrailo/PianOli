@@ -21,7 +21,7 @@ import java.util.Locale;
  *
  * @see PianoCanvas
  */
-class Piano {
+class Piano implements PianoListener {
     /**
      * Floor limit, if screensize dictates less than this amount of keys, start shrinking key width,
      * so we always display at least an octave.
@@ -114,22 +114,24 @@ class Piano {
         return key_pressed[key_idx];
     }
 
-    void on_key_down(int key_idx) {
-        if (isOutOfRange(key_idx)) {
-            Log.d("PianOli::Piano", "This shouldn't happen: Key-Down out of range, key" + key_idx);
+    @Override
+    public void onKeyDown(int keyIdx) {
+        if (isOutOfRange(keyIdx)) {
+            Log.d("PianOli::Piano", "This shouldn't happen: Key-Down out of range, key" + keyIdx);
             return;
         }
-        key_pressed[key_idx] = true;
-        play_sound(key_idx);
+        key_pressed[keyIdx] = true;
+        play_sound(keyIdx);
     }
 
-    void on_key_up(int key_idx) {
-        if (isOutOfRange(key_idx)) {
-            Log.d("PianOli::Piano", "This shouldn't happen: Key-Up out of range, key" + key_idx);
+    @Override
+    public void onKeyUp(int keyIdx) {
+        if (isOutOfRange(keyIdx)) {
+            Log.d("PianOli::Piano", "This shouldn't happen: Key-Up out of range, key" + keyIdx);
             return;
         }
 
-        key_pressed[key_idx] = false;
+        key_pressed[keyIdx] = false;
     }
 
     private boolean isOutOfRange(int key_idx) {

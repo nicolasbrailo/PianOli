@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Renderer/View for our {@link Piano}.
  */
-class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
+class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoListener {
 
     private static final float BEVEL_RATIO = 0.1f;
 
@@ -221,17 +221,19 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
-    void on_key_up(int key_idx) {
-        Log.d("PianOli::DrawingCanvas", "Key " + key_idx + " is now UP");
-        piano.on_key_up(key_idx);
-        appConfigHandler.onKeyUp(key_idx);
+    @Override
+    public void onKeyUp(int keyIdx) {
+        Log.d("PianOli::DrawingCanvas", "Key " + keyIdx + " is now UP");
+        piano.onKeyUp(keyIdx);
+        appConfigHandler.onKeyUp(keyIdx);
         redraw();
     }
 
-    void on_key_down(int key_idx) {
-        Log.d("PianOli::DrawingCanvas", "Key " + key_idx + " is now DOWN");
-        piano.on_key_down(key_idx);
-        appConfigHandler.onKeyPress(key_idx);
+    @Override
+    public void onKeyDown(int keyIdx) {
+        Log.d("PianOli::DrawingCanvas", "Key " + keyIdx + " is now DOWN");
+        piano.onKeyDown(keyIdx);
+        appConfigHandler.onKeyDown(keyIdx);
         redraw();
     }
 
@@ -271,7 +273,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
                 // Mark key down ptr_id
                 touch_pointer_to_keys.put(ptr_id, key_idx);
-                on_key_down(key_idx);
+                onKeyDown(key_idx);
 
                 return true;
             }
@@ -294,9 +296,9 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
                     if (touch_pointer_to_keys.get(ptr_id) != key_idx) {
                         Log.d("PianOli::DrawingCanvas", "Moved to another key");
                         // Release key before storing new key_idx for new key down
-                        on_key_up(touch_pointer_to_keys.get(ptr_id));
+                        onKeyUp(touch_pointer_to_keys.get(ptr_id));
                         touch_pointer_to_keys.put(ptr_id, key_idx);
-                        on_key_down(key_idx);
+                        onKeyDown(key_idx);
                     }
                 }
 
@@ -311,7 +313,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback {
                 }
 
                 touch_pointer_to_keys.remove(ptr_id);
-                on_key_up(key_idx);
+                onKeyUp(key_idx);
 
                 return true;
             }

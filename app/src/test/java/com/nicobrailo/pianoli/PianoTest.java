@@ -37,10 +37,10 @@ class PianoTest {
     void keyPressLifecycle(int i) {
         assertFalse(piano.is_key_pressed(i));
 
-        piano.on_key_down(i);
+        piano.onKeyDown(i);
         assertTrue(piano.is_key_pressed(i));
 
-        piano.on_key_up(i);
+        piano.onKeyUp(i);
         assertFalse(piano.is_key_pressed(i));
     }
 
@@ -51,7 +51,7 @@ class PianoTest {
         // only assume it works, actual test-fails covered by #keyPressLifecycle
         // if an "assumption" fails, the test counts as "@Ignored".
         assumeFalse(piano.is_key_pressed(i));
-        piano.on_key_down(i);
+        piano.onKeyDown(i);
         assumeTrue(piano.is_key_pressed(i));
 
         piano.resetState();
