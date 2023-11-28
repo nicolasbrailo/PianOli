@@ -75,8 +75,7 @@ class Piano {
         // +1: not sure about this... The *2 already ensures a (partial) flat-key on the (partial) big-key.
         keys_count = (big_keys * 2) + 1;
 
-        key_pressed = new boolean[keys_count];
-        Arrays.fill(key_pressed, false);
+        key_pressed = new boolean[keys_count]; // new array defaults to all false;
     }
 
     Piano init(final Context context, final String soundset) {
@@ -107,7 +106,7 @@ class Piano {
     }
 
     boolean is_key_pressed(int key_idx) {
-        if (key_idx < 0 || key_idx >= key_pressed.length) {
+        if (isOutOfRange(key_idx)) {
             Log.d("PianOli::Piano", "This shouldn't happen: isKeyPressed out of range, key" + key_idx);
             return false;
         }
@@ -116,7 +115,7 @@ class Piano {
     }
 
     void on_key_down(int key_idx) {
-        if (key_idx < 0 || key_idx >= key_pressed.length) {
+        if (isOutOfRange(key_idx)) {
             Log.d("PianOli::Piano", "This shouldn't happen: Key-Down out of range, key" + key_idx);
             return;
         }
@@ -125,12 +124,16 @@ class Piano {
     }
 
     void on_key_up(int key_idx) {
-        if (key_idx < 0 || key_idx >= key_pressed.length) {
+        if (isOutOfRange(key_idx)) {
             Log.d("PianOli::Piano", "This shouldn't happen: Key-Up out of range, key" + key_idx);
             return;
         }
 
         key_pressed[key_idx] = false;
+    }
+
+    private boolean isOutOfRange(int key_idx) {
+        return key_idx < 0 || key_idx >= key_pressed.length;
     }
 
     int pos_to_key_idx(float pos_x, float pos_y) {
