@@ -6,6 +6,9 @@ import android.media.SoundPool;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -26,6 +29,18 @@ public class SoundSet implements AutoCloseable {
      * </p>
      */
     public static final int SOUNDSET_SAMPLES_SIZE = 28;
+
+    /**
+     * prefix for soundset stuff, both of asset-folders containing instrument samples and translation string keys.
+     *
+     * <p>
+     * <ol>
+     *      <li>See resources folder <code>app/srx/main/assets/sounds/</code></li>
+     *      <li>Translation keys in <code>app/res/values../strings.xml</code></li>
+     * </ol>
+     * </p>
+     */
+    public static final String PREFIX = "soundset_";
 
     /**
      * Handle to our android-provided sound mixer, that mixes multiple simultaneous tones
@@ -86,7 +101,7 @@ public class SoundSet implements AutoCloseable {
      * Small helper to deduplicate sample-loading
      */
     private static int loadNoteFd(AssetManager am, SoundPool pool, String soundSetName, int noteNum) throws IOException {
-        String assetFolder = "sounds/" + DIR_PREFIX + soundSetName + "/";
+        String assetFolder = "sounds/" + addPrefix(soundSetName) + "/";
         String fileName = String.format(Locale.ROOT, "n%02d.mp3", noteNum); // root locale OK for number-formatting.
         return pool.load(am.openFd(assetFolder + fileName), 1);
     }
@@ -109,5 +124,53 @@ public class SoundSet implements AutoCloseable {
         }
 
         pool.play(samples[keyIdx], 1, 1, 1, 0, 1f);
+    }
+
+    /**
+     * Given a user-palatable soundset name, returns the system-prefixed version.
+     *
+     * <p>
+     * Won't double-prefix
+     * </p>
+     *
+     * @see #PREFIX
+     */
+    public static String addPrefix(String soundSetName) {
+        // Prevent double-prefixing
+        if (soundSetName.startsWith(PREFIX)) {
+            return soundSetName;
+        }
+
+        return PREFIX + soundSetName;
+    }
+
+    /**
+     * Given a system-prefixed soundset name, return the user-palatable version.
+     */
+    public static String stripPrefix(String soundSetName) {
+        // Don't strip if there is no prefix
+        if (!soundSetName.startsWith(PREFIX)) {
+            return soundSetName;
+        }
+
+        return soundSetName.substring(PREFIX.length());
+    }
+
+    public static List<String> getAvailableSoundsets(AssetManager am) {
+        try {
+            ArrayList<String> soundsetDirs = new ArrayList<>();
+            String[] allDirs = am.list("sounds");
+            for (final String d : allDirs) {
+                if (d.startsWith(PREFIX)) {
+                    // User display should be the asset name without the prefix
+                    soundsetDirs.add(stripPrefix(d));
+                }
+            }
+            return soundsetDirs;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Collections.emptyList();
     }
 }
