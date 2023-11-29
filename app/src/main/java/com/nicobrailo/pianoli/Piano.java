@@ -1,18 +1,13 @@
 package com.nicobrailo.pianoli;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.media.SoundPool;
 import android.util.Log;
-
 import com.nicobrailo.pianoli.melodies.MelodyPlayer;
 import com.nicobrailo.pianoli.melodies.MultipleSongsMelodyPlayer;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Backing model / state of our virtual piano keyboard.
@@ -52,10 +47,7 @@ class Piano {
 
     private final List<PianoListener> listeners;
 
-    /** handle to our android-provided sound mixer, that mixes multiple simultaneous tones */
-    private static SoundPool KeySound = null;
-    /** Resource handles to the mp3 samples of our currently active soundset, one for each note */
-    private int[] KeySoundIdx = new int[0]; // HACK: init empty to prevent NPE in tests
+    private SoundSet soundSet;
 
     /** For song-auto-player, the state-tracker of where we are in our (selection of) melodie(s). */
     private MelodyPlayer melody = null;
@@ -91,7 +83,7 @@ class Piano {
     }
 
     Piano init(final Context context, final String soundset) {
-        selectSoundset(context, soundset);
+        soundSet = new SoundSet(context, soundset);
 
         if (Preferences.areMelodiesEnabled(context)) {
             this.melody = new MultipleSongsMelodyPlayer(Preferences.selectedMelodies(context));
@@ -226,70 +218,7 @@ class Piano {
         return new Key(x_i, x_i + keys_flat_width, 0, keys_flats_height);
     }
 
-    // Developer note: Sound-playing deals with android-resources, which makes me think
-    //     it would be better of in PianoCanvas instead (so Piano becomes pure "geometry")
-    void selectSoundset(final Context context, String soundSetName) {
-        if (KeySound != null) {
-            KeySound.release();
-        }
-
-        KeySound = new SoundPool.Builder()
-                .setMaxStreams(7)   // Play max N concurrent sounds
-                .build();
-
-        KeySoundIdx = new int[28];
-        final AssetManager am = context.getAssets();
-        try {
-            int loadedNoNote = KeySound.load(context, R.raw.no_note, 1);
-
-            KeySoundIdx[0]  = loadNoteFd(am, soundSetName, 1);
-            KeySoundIdx[1]  = loadNoteFd(am, soundSetName, 2);
-            KeySoundIdx[2]  = loadNoteFd(am, soundSetName, 3);
-            KeySoundIdx[3]  = loadNoteFd(am, soundSetName, 4);
-            KeySoundIdx[4]  = loadNoteFd(am, soundSetName, 5);
-            KeySoundIdx[5]  = loadedNoNote;
-            KeySoundIdx[6]  = loadNoteFd(am, soundSetName, 6);
-            KeySoundIdx[7]  = loadNoteFd(am, soundSetName, 7);
-            KeySoundIdx[8]  = loadNoteFd(am, soundSetName, 8);
-            KeySoundIdx[9]  = loadNoteFd(am, soundSetName, 9);
-            KeySoundIdx[10] = loadNoteFd(am, soundSetName, 10);
-            KeySoundIdx[11] = loadNoteFd(am, soundSetName, 11);
-            KeySoundIdx[12] = loadNoteFd(am, soundSetName, 12);
-            KeySoundIdx[13] = loadedNoNote;
-
-            KeySoundIdx[14] = loadNoteFd(am, soundSetName, 13);
-            KeySoundIdx[15] = loadNoteFd(am, soundSetName, 14);
-            KeySoundIdx[16] = loadNoteFd(am, soundSetName, 15);
-            KeySoundIdx[17] = loadNoteFd(am, soundSetName, 16);
-            KeySoundIdx[18] = loadNoteFd(am, soundSetName, 17);
-            KeySoundIdx[19] = loadedNoNote;
-            KeySoundIdx[20] = loadNoteFd(am, soundSetName, 18);
-            KeySoundIdx[21] = loadNoteFd(am, soundSetName, 19);
-            KeySoundIdx[22] = loadNoteFd(am, soundSetName, 20);
-            KeySoundIdx[23] = loadNoteFd(am, soundSetName, 21);
-            KeySoundIdx[24] = loadNoteFd(am, soundSetName, 22);
-            KeySoundIdx[25] = loadNoteFd(am, soundSetName, 23);
-            KeySoundIdx[26] = loadNoteFd(am, soundSetName, 24);
-            KeySoundIdx[27] = loadedNoNote;
-        } catch (IOException e) {
-            Log.d("PianOli::Piano", "Failed to load sounds");
-            e.printStackTrace();
-        }
-    }
-
-    private static int loadNoteFd(AssetManager am, String soundSetName, int noteNum) throws IOException {
-        return KeySound.load(am.openFd("sounds/"
-                + SettingsActivity.SOUNDSET_DIR_PREFIX + soundSetName + "/"
-                + String.format(Locale.ROOT, "n%02d.mp3", noteNum) // root locale OK for number-formatting.
-        ), 1);
-    }
-
     private void play_sound(int key_idx) {
-        if (key_idx < 0 || key_idx >= KeySoundIdx.length) {
-            Log.d("PianOli::Piano", "This shouldn't happen: Sound out of range, key" + key_idx);
-            return;
-        }
-
         if (this.melody != null) {
             if (!this.melody.hasNextNote()) {
                 this.melody.reset();
@@ -298,6 +227,8 @@ class Piano {
             key_idx = this.melody.nextNote();
         }
 
-        KeySound.play(KeySoundIdx[key_idx], 1, 1, 1, 0, 1f);
+        if (soundSet != null) { // HACK: prevent NPE during tests
+            soundSet.playNote(key_idx);
+        }
     }
 }
