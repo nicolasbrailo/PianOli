@@ -21,6 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
 import com.nicobrailo.pianoli.melodies.Melody;
 import com.nicobrailo.pianoli.melodies.MultipleSongsMelodyPlayer;
+import com.nicobrailo.pianoli.sound.MelodicKeySoundMaker;
+import com.nicobrailo.pianoli.sound.SampledSoundSet;
+import com.nicobrailo.pianoli.sound.SoundSet;
+import com.nicobrailo.pianoli.sound.StraightKeySoundMaker;
 
 import java.util.HashMap;
 import java.util.List;

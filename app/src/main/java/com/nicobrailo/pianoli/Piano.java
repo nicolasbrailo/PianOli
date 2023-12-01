@@ -21,7 +21,7 @@ import java.util.List;
  * @see PianoCanvas
  * @see PianoListener
  */
-class Piano {
+public class Piano {
     /**
      * Floor limit, if screensize dictates less than this amount of keys, start shrinking key width,
      * so we always display at least an octave.

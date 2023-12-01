@@ -1,5 +1,6 @@
-package com.nicobrailo.pianoli;
+package com.nicobrailo.pianoli.sound;
 
+import com.nicobrailo.pianoli.sound.SoundSet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

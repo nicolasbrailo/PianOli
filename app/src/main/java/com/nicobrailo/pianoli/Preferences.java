@@ -5,6 +5,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.nicobrailo.pianoli.melodies.Melody;
+import com.nicobrailo.pianoli.sound.SoundSet;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,6 +1,7 @@
-package com.nicobrailo.pianoli;
+package com.nicobrailo.pianoli.sound;
 
 
+import com.nicobrailo.pianoli.PianoListener;
 import com.nicobrailo.pianoli.melodies.MelodyPlayer;
 
 import java.util.Objects;
@@ -9,7 +10,6 @@ import java.util.Objects;
  * When key is pressed, plays the next note of the loaded melody, regardless of which key it was.
  *
  * @see MelodyPlayer
- *
  */
 public class MelodicKeySoundMaker implements PianoListener {
     private final SoundSet soundSet;

@@ -13,6 +13,7 @@ import androidx.preference.MultiSelectListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.nicobrailo.pianoli.melodies.Melody;
+import com.nicobrailo.pianoli.sound.SoundSet;
 
 import java.util.List;
 

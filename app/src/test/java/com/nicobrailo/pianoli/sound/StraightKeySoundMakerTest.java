@@ -1,4 +1,4 @@
-package com.nicobrailo.pianoli;
+package com.nicobrailo.pianoli.sound;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

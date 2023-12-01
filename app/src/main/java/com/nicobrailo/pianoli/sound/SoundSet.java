@@ -1,4 +1,4 @@
-package com.nicobrailo.pianoli;
+package com.nicobrailo.pianoli.sound;
 
 import android.content.res.AssetManager;
 

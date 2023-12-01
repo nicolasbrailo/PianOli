@@ -1,4 +1,4 @@
-package com.nicobrailo.pianoli;
+package com.nicobrailo.pianoli.sound;
 
 import com.nicobrailo.pianoli.melodies.Melody;
 import com.nicobrailo.pianoli.melodies.SingleSongMelodyPlayer;

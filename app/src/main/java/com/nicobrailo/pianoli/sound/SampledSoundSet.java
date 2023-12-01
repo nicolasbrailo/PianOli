@@ -1,9 +1,11 @@
-package com.nicobrailo.pianoli;
+package com.nicobrailo.pianoli.sound;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.media.SoundPool;
 import android.util.Log;
+import com.nicobrailo.pianoli.Piano;
+import com.nicobrailo.pianoli.R;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -77,7 +79,7 @@ public class SampledSoundSet implements AutoCloseable, SoundSet {
             samples[26] = loadNoteFd(am, pool, soundSetName, 24);
             samples[27] = loadedNoNote;
         } catch (IOException e) {
-            Log.d("PianOli::Piano", "Failed to load sounds");
+            Log.d("PianOli::SoundSet", "Failed to load sounds");
             e.printStackTrace();
         }
     }

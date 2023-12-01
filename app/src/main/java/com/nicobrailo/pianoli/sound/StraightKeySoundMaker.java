@@ -1,5 +1,7 @@
-package com.nicobrailo.pianoli;
+package com.nicobrailo.pianoli.sound;
 
+
+import com.nicobrailo.pianoli.PianoListener;
 
 import java.util.Objects;
 

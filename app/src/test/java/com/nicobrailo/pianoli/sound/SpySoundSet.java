@@ -1,4 +1,6 @@
-package com.nicobrailo.pianoli;
+package com.nicobrailo.pianoli.sound;
+
+import com.nicobrailo.pianoli.sound.SoundSet;
 
 /**
  * observable dummy {@link SoundSet}, for test purposes.
