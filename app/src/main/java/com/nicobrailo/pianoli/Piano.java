@@ -1,9 +1,6 @@
 package com.nicobrailo.pianoli;
 
-import android.content.Context;
 import android.util.Log;
-import com.nicobrailo.pianoli.melodies.MelodyPlayer;
-import com.nicobrailo.pianoli.melodies.MultipleSongsMelodyPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,22 +44,11 @@ class Piano {
 
     private final List<PianoListener> listeners;
 
-    private SoundSet soundSet;
-
-    /** For song-auto-player, the state-tracker of where we are in our (selection of) melodie(s). */
-    private MelodyPlayer melody = null;
-
     /**
      * Construct a partially initialised (geometry only) Piano model.
      *
-     * <p>
-     * Resource- and Preference-depedendent init is deferred to {@link #init(Context, String)}, for better testability.
-     * </p>
-     *
      * @param screen_size_x the long dimension of the screen (keys are side-by-side along this axis)
      * @param screen_size_y the short dimension of the screen.
-     *
-     * @see #init(Context, String)
      */
     Piano(int screen_size_x, int screen_size_y) {
         keys_height = screen_size_y;
@@ -80,17 +66,6 @@ class Piano {
 
         key_pressed = new boolean[keys_count]; // new array defaults to all false;
         listeners = new ArrayList<>();
-    }
-
-    Piano init(final Context context, final String soundset) {
-        soundSet = new SoundSet(context, soundset);
-
-        if (Preferences.areMelodiesEnabled(context)) {
-            this.melody = new MultipleSongsMelodyPlayer(Preferences.selectedMelodies(context));
-            this.melody.reset();
-        }
-
-        return this;
     }
 
     int get_keys_flat_width() {
@@ -135,7 +110,6 @@ class Piano {
         for (PianoListener l : listeners) {
             l.onKeyDown(keyIdx);
         }
-        play_sound(keyIdx);
     }
 
     /**
@@ -216,19 +190,5 @@ class Piano {
         final int offset = keys_width - (keys_flat_width / 2);
         int x_i = (key_idx / 2) * keys_width + offset;
         return new Key(x_i, x_i + keys_flat_width, 0, keys_flats_height);
-    }
-
-    private void play_sound(int key_idx) {
-        if (this.melody != null) {
-            if (!this.melody.hasNextNote()) {
-                this.melody.reset();
-            }
-
-            key_idx = this.melody.nextNote();
-        }
-
-        if (soundSet != null) { // HACK: prevent NPE during tests
-            soundSet.playNote(key_idx);
-        }
     }
 }

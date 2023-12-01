@@ -19,8 +19,11 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
+import com.nicobrailo.pianoli.melodies.Melody;
+import com.nicobrailo.pianoli.melodies.MultipleSongsMelodyPlayer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,14 +76,28 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
     }
 
     public void reInitPiano(Context context, String soundset) {
-        this.piano = new Piano(screen_size_x, screen_size_y)
-                .init(context, soundset);
+        this.piano = new Piano(screen_size_x, screen_size_y);
 
         // for config trigger updates
         piano.addListener(appConfigHandler);
 
         // to redraw on key-touches, must be after config handler to ensure its input is also drawn
         piano.addListener(this);
+
+        // Respond musically to key-presses: listen with a "soundMaker"
+        // Use "strategy pattern" to deal with the two possible key-to-note mappings:
+        SoundSet soundSet = new SampledSoundSet(context, soundset);
+        PianoListener soundMaker;
+        if (Preferences.areMelodiesEnabled(context)) {
+            // "melodic" strategy: next note is determined by melody
+            List<Melody> selectedMelodies = Preferences.selectedMelodies(context);
+            MultipleSongsMelodyPlayer melodyPlayer = new MultipleSongsMelodyPlayer(selectedMelodies);
+            soundMaker = new MelodicKeySoundMaker(soundSet, melodyPlayer);
+        } else {
+            // "straight" strategy:
+            soundMaker = new StraightKeySoundMaker(soundSet);
+        }
+        piano.addListener(soundMaker);
     }
 
     public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {

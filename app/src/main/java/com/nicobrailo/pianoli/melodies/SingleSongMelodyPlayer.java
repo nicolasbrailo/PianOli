@@ -7,7 +7,7 @@ public class SingleSongMelodyPlayer implements MelodyPlayer {
     private int melody_idx = 0;
     private final Melody melody;
 
-    SingleSongMelodyPlayer(Melody melody) {
+    public SingleSongMelodyPlayer(Melody melody) {
         this.melody = melody;
     }
 
