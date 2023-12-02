@@ -115,7 +115,7 @@ class AppConfigTrigger implements PianoListener {
      * @see #pressedConfigKeys
      * @see #calculateNextExpectedKey()
      */
-    private void reset() {
+    void reset() {
         // Only change expected keys if there was some progress to reset, otherwise this would select a
         // new NextExpectedKey and move the icon around whenever the user presses a key.
         if (!pressedConfigKeys.isEmpty()) {

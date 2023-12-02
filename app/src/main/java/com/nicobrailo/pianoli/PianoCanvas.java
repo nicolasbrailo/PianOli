@@ -299,6 +299,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
      */
     void resetPianoState() {
         touch_pointer_to_keys.clear();
+        appConfigTrigger.reset();
         piano.resetState();
     }
 
