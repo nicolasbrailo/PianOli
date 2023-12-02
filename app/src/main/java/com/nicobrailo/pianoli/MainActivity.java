@@ -2,6 +2,7 @@ package com.nicobrailo.pianoli;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -69,13 +70,19 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
         lock_app();
     }
 
-    private static final int REQUEST_CONFIG = 1;
-
     @Override
     public void requestConfig() {
+        // play a loud, distinct noise to alert any adults nearby that *someone*
+        // (potentially a half-supervised child) has managed to break out of the app.
+        final MediaPlayer snd = MediaPlayer.create(this, R.raw.alert);
+        snd.seekTo(0);
+        snd.setVolume(100, 100);
+        snd.start();
+        snd.setOnCompletionListener(mediaPlayer -> snd.release());
+
         // If you've done the dance to press multiple specific buttons at once, no need to keep the screen locked.
         // It will be a minor inconvenience when returning from settings, because it will prompt the user again
-        // to lock the app. However the expectation is that the options are not used very often, and the benefit
+        // to lock the app. However, the expectation is that the options are not used very often, and the benefit
         // of having a settings screen work like a more typical Android app probably outweigh the negatives from a
         // child accidentally getting to the settings screen.
         unlock_app();

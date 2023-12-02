@@ -2,7 +2,6 @@ package com.nicobrailo.pianoli;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,8 +41,6 @@ class AppConfigTrigger implements PianoListener {
      */
     private static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 3, 7, 9, 11, 15));
 
-    private final AppCompatActivity activity;
-
     /**
      * Current progress in the unlock sequence: all already-held config-keys.
      *
@@ -71,7 +68,6 @@ class AppConfigTrigger implements PianoListener {
 
     AppConfigTrigger(AppCompatActivity activity) {
         nextExpectedKey = calculateNextExpectedKey();
-        this.activity = activity;
         this.icon = ContextCompat.getDrawable(activity, R.drawable.ic_settings);
         if (this.icon == null) {
             Log.wtf("PianOliError", "Config icon doesn't exist");
@@ -130,18 +126,6 @@ class AppConfigTrigger implements PianoListener {
         pressedConfigKeys.clear();
     }
 
-    private void showConfigDialogue() {
-        final MediaPlayer snd = MediaPlayer.create(activity, R.raw.alert);
-        snd.seekTo(0);
-        snd.setVolume(100, 100);
-        snd.start();
-        snd.setOnCompletionListener(mediaPlayer -> snd.release());
-
-        if (cb != null) {
-            cb.requestConfig();
-        }
-    }
-
     @Override
     public void onKeyDown(int keyIdx) {
         if (keyIdx == nextExpectedKey) {
@@ -156,7 +140,10 @@ class AppConfigTrigger implements PianoListener {
             if (pressedConfigKeys.size() == CONFIG_TRIGGER_COUNT) {
                 // Sequence complete!
                 reset(); // clear the currently tracked state, for next time.
-                showConfigDialogue(); // Open Sesame!
+                // Open Sesame!
+                if (cb != null) {
+                    cb.requestConfig();
+                }
             } else {
                 nextExpectedKey = calculateNextExpectedKey();
             }
