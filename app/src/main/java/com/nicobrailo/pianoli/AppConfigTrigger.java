@@ -24,7 +24,7 @@ import java.util.Set;
  */
 class AppConfigTrigger implements PianoListener {
     /** How many of the geared keys must be held before config opens */
-    private static final int CONFIG_TRIGGER_COUNT = 2;
+    public static final int CONFIG_TRIGGER_COUNT = 2;
 
     /**
      * Candidate keys to receive a gear icon.
