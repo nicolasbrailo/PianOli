@@ -1,11 +1,6 @@
 package com.nicobrailo.pianoli;
 
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,9 +23,6 @@ import java.util.Set;
  * </p>
  */
 class AppConfigTrigger implements PianoListener {
-    private static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO = 0.5f;
-    private static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO_PRESSED = 0.4f;
-
     /** How many of the geared keys must be held before config opens */
     private static final int CONFIG_TRIGGER_COUNT = 2;
 
@@ -56,7 +48,7 @@ class AppConfigTrigger implements PianoListener {
     /**
      * @see #calculateNextExpectedKey()
      */
-    private Integer nextExpectedKey;
+    private int nextExpectedKey;
 
     /**
      * Our "upstream", who knows enougjh about global app context to actually <em>do</em> stuff.
@@ -64,18 +56,28 @@ class AppConfigTrigger implements PianoListener {
     private AppConfigCallback cb = null;
 
     private boolean tooltip_shown = false;
-    private final Drawable icon;
 
-    AppConfigTrigger(AppCompatActivity activity) {
+    AppConfigTrigger() {
         nextExpectedKey = calculateNextExpectedKey();
-        this.icon = ContextCompat.getDrawable(activity, R.drawable.ic_settings);
-        if (this.icon == null) {
-            Log.wtf("PianOliError", "Config icon doesn't exist");
-        }
     }
 
     void setConfigRequestCallback(AppConfigCallback cb) {
         this.cb = cb;
+    }
+
+    /**
+     * @return set of currently-held config keys (defensively copied).
+     */
+    public Set<Integer> getPressedConfigKeys() {
+        return new HashSet<>(pressedConfigKeys);
+    }
+
+    /**
+     * @return currently expected next key in the sequence (without changing it)
+     * @see #calculateNextExpectedKey();
+     */
+    public int getNextExpectedKey() {
+        return nextExpectedKey;
     }
 
     /**
@@ -85,7 +87,7 @@ class AppConfigTrigger implements PianoListener {
      * Ensures already-held keys are not chosen again.
      * </p>
      */
-    private Integer calculateNextExpectedKey() {
+    private int calculateNextExpectedKey() {
         Set<Integer> candidates = new HashSet<>(BLACK_KEYS);
         candidates.removeAll(pressedConfigKeys);
 
@@ -170,19 +172,6 @@ class AppConfigTrigger implements PianoListener {
     @Override
     public void onKeyUp(int keyIdx) {
         reset();
-    }
-
-    /**
-     * Overlays gear icons onto the currently-held and next expected keys.
-     */
-    void drawGears(PianoCanvas pianoCanvas, Canvas androidCanvas) {
-        int pressedSize = (int) (pianoCanvas.piano.get_keys_flat_width() * CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO_PRESSED);
-        for (Integer cfgKey : pressedConfigKeys) {
-            pianoCanvas.draw_icon_on_black_key(androidCanvas, icon, cfgKey, pressedSize, pressedSize);
-        }
-
-        int normalSize = (int) (pianoCanvas.piano.get_keys_flat_width() * CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO);
-        pianoCanvas.draw_icon_on_black_key(androidCanvas, icon, nextExpectedKey, normalSize, normalSize);
     }
 
     /**

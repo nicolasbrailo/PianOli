@@ -18,6 +18,7 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import com.nicobrailo.pianoli.melodies.Melody;
 import com.nicobrailo.pianoli.melodies.MultipleSongsMelodyPlayer;
@@ -34,18 +35,23 @@ import java.util.Map;
  * Renderer/View for our {@link Piano}.
  */
 class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoListener {
-
-    private static final float BEVEL_RATIO = 0.1f;
+    /** Relative draw-size of gear icon on next-expected config key */
+    public static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO = 0.5f;
+    /** Relative draw-size of gear icon on already-held config keys */
+    public static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO_PRESSED = 0.4f;
+    /** Relative width of the 3D-effect edges of keys */
+    public static final float BEVEL_RATIO = 0.1f;
 
     private final float bevelWidth;
 
-    Piano piano;
-    final AppConfigTrigger appConfigHandler;
-    final int screen_size_y, screen_size_x;
+    private Piano piano;
+    final AppConfigTrigger appConfigTrigger;
 
-    final Theme theme;
+    private final int screen_size_y, screen_size_x;
+    private final Drawable gearIcon;
+    private final Theme theme;
 
-    Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
+    private Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
 
     public PianoCanvas(Context context, AttributeSet as) {
         this(context, as, 0);
@@ -72,9 +78,20 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         screen_size_x = screen_size.x;
         screen_size_y = screen_size.y;
         final String soundset = Preferences.selectedSoundSet(context);
-        this.appConfigHandler = new AppConfigTrigger(ctx);
-        reInitPiano(context, soundset);
-        this.bevelWidth = this.piano.get_keys_width() * BEVEL_RATIO;
+
+        // DANGER ZONE: !! delicate ordering dependencies in this block !!
+        appConfigTrigger = new AppConfigTrigger();
+        // gotcha: gets just-created appConfigHandler via field
+        reInitPiano(context, soundset); // danger: impl leaks `this` pointer before ctor finished
+        // gotcha: needs piano field that was just initialised by reInitPiano above
+        this.bevelWidth = piano.get_keys_width() * BEVEL_RATIO;
+
+        this.gearIcon = ContextCompat.getDrawable(context, R.drawable.ic_settings);
+        if (this.gearIcon == null) {
+            Log.wtf("PianOli::DrawingCanvas", "Config icon doesn't exist");
+        }
+
+        // log successful completion of ctor, since this a highly non-trivial one.
         Log.d("PianOli::DrawingCanvas", "Display is " + screen_size.x + "x" + screen_size.y +
                 ", there are " + piano.get_keys_count() + " keys");
     }
@@ -83,7 +100,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         this.piano = new Piano(screen_size_x, screen_size_y);
 
         // for config trigger updates
-        piano.addListener(appConfigHandler);
+        piano.addListener(appConfigTrigger);
 
         // to redraw on key-touches, must be after config handler to ensure its input is also drawn
         piano.addListener(this);
@@ -105,35 +122,47 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
     }
 
     public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {
-        this.appConfigHandler.setConfigRequestCallback(cb);
+        this.appConfigTrigger.setConfigRequestCallback(cb);
     }
 
-    void draw_all_keys(final Canvas canvas) {
-        /* Reset canvas */
-        {
-            Paint p = new Paint();
-            p.setColor(Color.BLACK);
-            canvas.drawPaint(p);
-        }
+    /** Resets the canvas to all-black*/
+    private static void resetCanvas(Canvas canvas) {
+        Paint p = new Paint();
+        p.setColor(Color.BLACK);
+        canvas.drawPaint(p);
+    }
 
+    private void drawBigKeys(Canvas canvas) {
         for (int i = 0; i < piano.get_keys_count(); i += 2) {
-            // Draw big key
-            Paint big_key_paint = new Paint();
-            big_key_paint.setColor(theme.getColorForKey(i, piano.is_key_pressed(i)));
-            draw_key(canvas, piano.get_area_for_key(i), big_key_paint);
+            Paint paint = new Paint();
+            paint.setColor(theme.getColorForKey(i, piano.is_key_pressed(i)));
+            draw_key(canvas, piano.get_area_for_key(i), paint);
         }
+    }
 
-        // Small keys drawn after big keys to ensure z-index
+    private void drawSmallKeys(Canvas canvas) {
         for (int i = 1; i < piano.get_keys_count(); i += 2) {
-            // Draw small key
-            Paint flat_key_paint = new Paint();
-            flat_key_paint.setColor(piano.is_key_pressed(i) ? Color.GRAY : 0xFF333333);
+            Paint paint = new Paint();
+            paint.setColor(piano.is_key_pressed(i) ? Color.GRAY : 0xFF333333);
             if (piano.get_area_for_flat_key(i) != null) {
-                draw_key(canvas, piano.get_area_for_flat_key(i), flat_key_paint);
+                draw_key(canvas, piano.get_area_for_flat_key(i), paint);
             }
         }
+    }
 
-        appConfigHandler.drawGears(this, canvas);
+    /**
+     * Overlays gear icons onto the currently-held and next expected flat keys.
+     */
+    void drawConfigGears(Canvas androidCanvas) {
+        // draw already-held keys with shrunken icon
+        int pressedSize = (int) (piano.get_keys_flat_width() * CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO_PRESSED);
+        for (int cfgKey : appConfigTrigger.getPressedConfigKeys()) {
+            draw_icon_on_black_key(androidCanvas, gearIcon, cfgKey, pressedSize, pressedSize);
+        }
+
+        // draw next expected key with large icon, for more user-attention.
+        int normalSize = (int) (piano.get_keys_flat_width() * CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO);
+        draw_icon_on_black_key(androidCanvas, gearIcon, appConfigTrigger.getNextExpectedKey(), normalSize, normalSize);
     }
 
     void draw_key(final Canvas canvas, final Key rect, final Paint p) {
@@ -211,7 +240,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
     /**
      * Draw something on a black key. Undefined if key_idx isn't black.
      */
-    void draw_icon_on_black_key(final Canvas canvas, final Drawable icon, Integer key_idx,
+    void draw_icon_on_black_key(final Canvas canvas, final Drawable icon, int key_idx,
                                 final int icon_width, final int icon_height) {
         final Key key = piano.get_area_for_flat_key(key_idx);
         int icon_x = ((key.x_f - key.x_i) / 2) + key.x_i;
@@ -239,10 +268,17 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
     public void redraw(SurfaceHolder surfaceHolder) {
         if (surfaceHolder == null) return;
+
         Canvas canvas = surfaceHolder.lockCanvas();
         if (canvas == null) return;
 
-        draw_all_keys(canvas);
+        resetCanvas(canvas);
+        drawBigKeys(canvas);
+        // Small keys drawn after big keys to ensure z-index
+        drawSmallKeys(canvas);
+        // Gear icons drawn after small keys, since they go on top of those.
+        drawConfigGears(canvas);
+
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
@@ -345,12 +381,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
 
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
-    }
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {}
 
     @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-
-    }
+    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {}
 }
