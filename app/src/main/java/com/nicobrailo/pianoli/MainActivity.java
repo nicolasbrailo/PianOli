@@ -9,7 +9,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
     private static final int REQUEST_CONFIG = 1;
 
     @Override
-    public void onConfigOpenRequested() {
+    public void requestConfig() {
         // If you've done the dance to press multiple specific buttons at once, no need to keep the screen locked.
         // It will be a minor inconvenience when returning from settings, because it will prompt the user again
         // to lock the app. However the expectation is that the options are not used very often, and the benefit
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
     }
 
     @Override
-    public void onShowConfigTooltip() {
+    public void showConfigTooltip() {
         Toast toast = Toast.makeText(getApplicationContext(), R.string.config_tooltip, Toast.LENGTH_LONG);
         toast.show();
     }

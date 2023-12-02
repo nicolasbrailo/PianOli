@@ -133,7 +133,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             }
         }
 
-        appConfigHandler.onPianoRedrawFinish(this, canvas);
+        appConfigHandler.drawGears(this, canvas);
     }
 
     void draw_key(final Canvas canvas, final Key rect, final Paint p) {
