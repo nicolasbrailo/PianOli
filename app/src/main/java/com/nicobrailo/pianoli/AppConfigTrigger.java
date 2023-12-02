@@ -91,6 +91,11 @@ class AppConfigTrigger implements PianoListener {
         Set<Integer> candidates = new HashSet<>(BLACK_KEYS);
         candidates.removeAll(pressedConfigKeys);
 
+        if (candidates.isEmpty()) {
+            Log.e("PianOliError", "No next config key possible");
+            return -1;
+        }
+
         // Since we cannot easily pick a random selection from a set directly,
         // (at least not at the low API-level we want to support)
         // iterate the set to a random depth and select that one.
@@ -100,7 +105,9 @@ class AppConfigTrigger implements PianoListener {
             if (i <= 0) { return nextKey; }
         }
 
-        Log.e("PianOliError", "No next config key possible");
+        // Unreachable due to way candidates.size is upper bound for loop count,
+        // but that's too complicated for the compiler to figure out.
+        // (it can't see through the Random.nextInt() ).
         return -1;
     }
 
