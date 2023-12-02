@@ -64,6 +64,27 @@ class AppConfigTriggerTest {
         }
     }
 
+    /**
+     * When touching any key that <em>isn't</em> a config key, the next expected key
+     * should remain constant, to avoid the gear icon twitching on every key-press.
+     */
+    @Test
+    public void gearIconShouldntTwitch() {
+        int originalConfigKey = trigger.getNextExpectedKey();
+        int pianoSize = 50; // given our wonderfully decoupled interface, this is all the piano-mock we need :-D
+
+        for (int i = 0; i < pianoSize; i++) {
+            if (i == originalConfigKey) {
+                continue; // skip the ONE key we're actually listening for
+            }
+            trigger.onKeyDown(i); // trigger all other keys
+            assertEquals(originalConfigKey, trigger.getNextExpectedKey(),
+                    "Expected key should change ONLY if the current expected key is triggered." +
+                            "(to prevent distracting visual twitches of the icon under normal use)");
+        }
+    }
+
+
     static class SpyCallback implements AppConfigTrigger.AppConfigCallback {
         int triggerCount = 0;
         int toastCount = 0;
