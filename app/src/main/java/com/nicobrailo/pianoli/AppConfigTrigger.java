@@ -44,6 +44,7 @@ class AppConfigTrigger implements PianoListener {
      * </p>
      */
     private final Set<Integer> pressedConfigKeys = new HashSet<>();
+    private TooltipReminder tooltipReminder;
 
     /**
      * @see #calculateNextExpectedKey()
@@ -55,14 +56,13 @@ class AppConfigTrigger implements PianoListener {
      */
     private AppConfigCallback cb = null;
 
-    private boolean tooltip_shown = false;
-
     AppConfigTrigger() {
         nextExpectedKey = calculateNextExpectedKey();
     }
 
     void setConfigRequestCallback(AppConfigCallback cb) {
         this.cb = cb;
+        tooltipReminder = new TooltipReminder(cb);
     }
 
     /**
@@ -138,17 +138,11 @@ class AppConfigTrigger implements PianoListener {
     @Override
     public void onKeyDown(int keyIdx) {
         if (keyIdx == nextExpectedKey) {
-            // Hint the user at what to do next, if not already done.
-            if (!tooltip_shown) {
-                tooltip_shown = true;
-                cb.showConfigTooltip();
-            }
-
             // track user's progress in the unlock-sequence
             pressedConfigKeys.add(keyIdx);
             if (pressedConfigKeys.size() == CONFIG_TRIGGER_COUNT) {
                 // Sequence complete!
-                reset(); // clear the currently tracked state, for next time.
+                reset(); // clear it so it's no longer counted as in-progress.
                 // Open Sesame!
                 if (cb != null) {
                     cb.requestConfig();
@@ -178,6 +172,11 @@ class AppConfigTrigger implements PianoListener {
      */
     @Override
     public void onKeyUp(int keyIdx) {
+        if (pressedConfigKeys.contains(keyIdx)) {
+            // The released key was part of an in-progress unlock-sequence
+            // (completed sequence would have invoked reset, thus clearing this set, before we get here)
+            tooltipReminder.registerFailedAttempt();
+        }
         reset();
     }
 

@@ -26,6 +26,12 @@ class AppConfigTriggerTest {
         }
         assertEquals(1, spyCallback.triggerCount,
                 "after hitting the required amount of trigger keys, without mistakes, config should trigger.");
+
+        assertTrue(trigger.getPressedConfigKeys().isEmpty(),
+                "unlock should clear the pressed-state for the successful sequence.\n" +
+                        "Our unlock instruction reminder counts key-ups of config keys, to track \"user frustration\".\n" +
+                        "Thus, it is important that key-ups of <em>successful</em> unlocks (hopefully a non-frustrating event),\n" +
+                        "clear state before they are accidentally counted.");
     }
 
     @Test
@@ -85,18 +91,4 @@ class AppConfigTriggerTest {
     }
 
 
-    static class SpyCallback implements AppConfigTrigger.AppConfigCallback {
-        int triggerCount = 0;
-        int toastCount = 0;
-
-        @Override
-        public void requestConfig() {
-            triggerCount++;
-        }
-
-        @Override
-        public void showConfigTooltip() {
-            toastCount++;
-        }
-    }
 }
