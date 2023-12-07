@@ -3,6 +3,8 @@ package com.nicobrailo.pianoli;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.nicobrailo.pianoli.TooltipReminder.COUNTING_WINDOW;
+import static com.nicobrailo.pianoli.TooltipReminder.TRIGGER_COUNT;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -22,12 +24,12 @@ class TooltipReminderTest {
     public void firstTouchShouldTrigger() {
         reminder.registerFailedAttempt();
         assertEquals(1, spyCallback.toastCount,
-                "First touch of a config key after init should show a reminder, to preserve old behaviour.");
+                "First touch after init should show a reminder, to preserve old behaviour.");
     }
 
     @Test
     public void slowTouchesDontTrigger() {
-        long slowInterval = TooltipReminder.COUNTING_WINDOW + 1;
+        long slowInterval = COUNTING_WINDOW + 1;
 
         // get initial reminder-trigger out of the way
         reminder.registerFailedAttempt();
@@ -36,33 +38,56 @@ class TooltipReminderTest {
             reminder.nextNow += slowInterval; // "time passes"
             reminder.registerFailedAttempt(); // user acts
             assertEquals(1, spyCallback.toastCount,
-                    "slow hits of the config keys shouldn't trigger a reminder");
+                    "slow hits shouldn't trigger a reminder");
         }
     }
 
     @Test
     public void fastTouchesDoTrigger() {
-        long fastInterval = TooltipReminder.COUNTING_WINDOW - 1;
+        long fastInterval = COUNTING_WINDOW - 1;
 
         // get initial reminder-trigger out of the way
         reminder.registerFailedAttempt();
 
         // simulate nothing happening for a while, or only normal piano playing
-        reminder.nextNow += TooltipReminder.COUNTING_WINDOW + 1;
+        reminder.nextNow += COUNTING_WINDOW + 1;
 
         // prime the pump: attempts until just before we start triggering
-        for (int i = 0; i < TooltipReminder.TRIGGER_COUNT; i++) {
+        for (int i = 0; i < TRIGGER_COUNT; i++) {
+            reminder.nextNow += fastInterval; // "time passes", but not enough
             reminder.registerFailedAttempt();
         }
         assertEquals(1, spyCallback.toastCount,
                 "after a long-ish time of inactivity, failed attempts should not immediately trigger " +
                         "(to avoid distraction on accidental presses).");
 
-        for (int i = 1; i <= 10; i++) { // gotacha: one-based counting! (for easier loop counting, below
-            reminder.nextNow += fastInterval; // "time passes", but not enough
-            reminder.registerFailedAttempt(); // user acts
-            assertEquals(1 + i, spyCallback.toastCount, // 1 base reminder, plus our loop count
-                    "slow hits of the config keys shouldn't trigger a reminder");
+        reminder.nextNow += fastInterval; // "time passes", but not enough
+        reminder.registerFailedAttempt(); // user acts
+        assertEquals(2, spyCallback.toastCount,
+                "Fast hits should trigger a reminder");
+    }
+
+    @Test
+    public void reminderShouldntSpam() {
+        reminder.registerFailedAttempt(); // get initial reminder-trigger out of the way
+
+        // gotcha: one-based loop-counting; so that expected-counts become easier.
+        for (int repeat = 1; repeat < 5; repeat++) {
+            // first few triggers shouldn't spam
+            for (int i = 1; i < TRIGGER_COUNT; i++) {
+                reminder.registerFailedAttempt();
+                assertEquals(repeat, spyCallback.toastCount,
+                        "Shouldn't re-toast immediately, so we don't spam; previous trigger should have reset counter."
+                                + " repeat=" + repeat
+                                + " i=" + i);
+            }
+            // at trigger count: should trigger
+            reminder.registerFailedAttempt();
+            assertEquals(1 + repeat, spyCallback.toastCount,
+                    "a triggered reminder should reset our counter, so we don't spam toasts on repeated attempts"
+                            + " repeat=" + repeat);
+
+            // continue loop with a (hopefully) fresh window
         }
     }
 

@@ -68,6 +68,10 @@ public class TooltipReminder {
 
         if (frustration >= TRIGGER_COUNT) {
             cb.showConfigTooltip();
+
+            // reminder was shown, user should no longer be frustrated
+            // reset the counter to ensure we don't immediately spam reminders on the next hit.
+            frustration = 0;
         }
     }
 
