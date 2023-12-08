@@ -71,7 +71,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             Display display = ctx.getWindowManager().getDefaultDisplay();
             display.getSize(screen_size);
         } catch (ClassCastException ex) {
-            Log.e("PianOli::DrawingCanvas", "Can't read screen size");
+            Log.e("PianOli::PianoCanvas", "Can't read screen size");
             throw ex;
         }
 
@@ -97,6 +97,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
     }
 
     public void reInitPiano(Context context, String soundset) {
+        Log.i("PianOli::PianoCanvas", "re-initialising Piano");
         this.piano = new Piano(screen_size_x, screen_size_y);
 
         // for config trigger updates
@@ -119,6 +120,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             soundMaker = new StraightKeySoundMaker(soundSet);
         }
         piano.addListener(soundMaker);
+        Log.i("PianOli::PianoCanvas", "re-initialising Piano - DONE");
     }
 
     public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {
@@ -259,6 +261,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+        Log.i("PianOli::PianoCanvas", "surfaceCreated");
         redraw(surfaceHolder);
     }
 
@@ -382,8 +385,12 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
 
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {}
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+        Log.i("PianOli::PianoCanvas", "surfaceChanged: ignoring!");
+    }
 
     @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {}
+    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
+        Log.i("PianOli::PianoCanvas", "surfaceDestroyed: ignoring!");
+    }
 }

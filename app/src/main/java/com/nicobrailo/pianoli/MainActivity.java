@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
 
     @Override
     public void requestConfig() {
+        Log.i("PianOli::main", "opening config");
         // play a loud, distinct noise to alert any adults nearby that *someone*
         // (potentially a half-supervised child) has managed to break out of the app.
         final MediaPlayer snd = MediaPlayer.create(this, R.raw.alert);
