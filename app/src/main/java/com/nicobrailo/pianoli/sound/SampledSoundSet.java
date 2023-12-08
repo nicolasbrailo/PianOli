@@ -1,6 +1,7 @@
 package com.nicobrailo.pianoli.sound;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.SoundPool;
 import android.util.Log;
@@ -90,7 +91,9 @@ public class SampledSoundSet implements AutoCloseable, SoundSet {
     private static int loadNoteFd(AssetManager am, SoundPool pool, String soundSetName, int noteNum) throws IOException {
         String assetFolder = "sounds/" + SoundSet.addPrefix(soundSetName) + "/";
         String fileName = String.format(Locale.ROOT, "n%02d.mp3", noteNum); // root locale OK for number-formatting.
-        return pool.load(am.openFd(assetFolder + fileName), 1);
+        try (AssetFileDescriptor afd = am.openFd(assetFolder + fileName)) {
+            return pool.load(afd, 1);
+        }
     }
 
     @Override
