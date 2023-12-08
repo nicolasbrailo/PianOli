@@ -19,7 +19,7 @@ import java.util.Locale;
  * object, and replace it with a new instance.
  * </p>
  */
-public class SampledSoundSet implements AutoCloseable, SoundSet {
+public class SampledSoundSet implements SoundSet {
     /**
      * The amount of samples/notes in each sound-set.
      *
@@ -39,8 +39,11 @@ public class SampledSoundSet implements AutoCloseable, SoundSet {
      * Resource handles to the mp3 samples of our currently active soundset, one for each note
      */
     private final int[] samples;
+    private final String name;
 
     public SampledSoundSet(final Context context, String soundSetName) {
+        this.name = soundSetName;
+
         pool = new SoundPool.Builder()
                 .setMaxStreams(7)   // Play max N concurrent sounds
                 .build();
@@ -98,6 +101,7 @@ public class SampledSoundSet implements AutoCloseable, SoundSet {
 
     @Override
     public void close() {
+        Log.d("PianOli::SoundSet", "releasing soundset " + name);
         pool.release();
     }
 
