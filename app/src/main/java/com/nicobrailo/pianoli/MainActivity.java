@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
 
     @Override
     public void showConfigTooltip() {
-        Toast toast = Toast.makeText(getApplicationContext(), R.string.config_tooltip, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this, R.string.config_tooltip, Toast.LENGTH_LONG);
         toast.show();
     }
 }
