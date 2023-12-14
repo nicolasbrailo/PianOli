@@ -25,7 +25,7 @@ public class TooltipReminder {
      *
      * @see #COUNTING_WINDOW
      */
-    public static final int TRIGGER_COUNT = 3;
+    public static final int TRIGGER_COUNT = 5;
     /**
      * Start of currently running tooltip reminder time window (epoch millis).
      *
