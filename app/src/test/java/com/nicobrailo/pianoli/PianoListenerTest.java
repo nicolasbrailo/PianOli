@@ -77,12 +77,13 @@ public class PianoListenerTest {
 
     @Test
     public void nullSafeAdd() {
-        assertFalse(piano.addListener(null), "null-listener should be silently accepted, but not do anything");
+        //noinspection DataFlowIssue // intentionally violating @NonNull to test handling.
+        assertThrows(NullPointerException.class, () -> piano.addListener(null), "null-listener should not be accepted");
 
         assertDoesNotThrow(() -> piano.doKeyDown(0),
-                "after adding a null-listener, notification should not explode");
+                "after adding a null-listener, listener notification should not explode");
         assertDoesNotThrow(() -> piano.doKeyUp(0),
-                "after adding a null-listener, notification should not explode");
+                "after adding a null-listener, listener notification should not explode");
     }
 
     @Test
