@@ -9,10 +9,8 @@ import java.util.List;
 
 /**
  * {@link SoundSet}s represent PianOli's capability to make musical noise in response to keypresses.
- *
- * This interface
  */
-public interface SoundSet {
+public interface SoundSet extends AutoCloseable {
     /**
      * prefix for soundset stuff, both of asset-folders containing instrument samples and translation string keys.
      *
@@ -74,4 +72,6 @@ public interface SoundSet {
     }
 
     void playNote(int keyIdx);
+
+    void close();
 }

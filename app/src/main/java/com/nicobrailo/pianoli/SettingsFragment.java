@@ -42,7 +42,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             Toast toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
             toast.show();
 
-            Log.d("PianOli::Activity", "Sound assets not available: piano will have no sound!");
+            Log.e("PianOli::Settings", "Sound assets not available: piano will have no sound!");
         }
     }
 

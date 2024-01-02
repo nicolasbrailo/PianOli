@@ -52,6 +52,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
     private final Theme theme;
 
     private Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
+    private SoundSet soundSet;
 
     public PianoCanvas(Context context, AttributeSet as) {
         this(context, as, 0);
@@ -71,18 +72,18 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             Display display = ctx.getWindowManager().getDefaultDisplay();
             display.getSize(screen_size);
         } catch (ClassCastException ex) {
-            Log.e("PianOli::DrawingCanvas", "Can't read screen size");
+            Log.e("PianOli::PianoCanvas", "Can't read screen size");
             throw ex;
         }
 
         screen_size_x = screen_size.x;
         screen_size_y = screen_size.y;
-        final String soundset = Preferences.selectedSoundSet(context);
+        final String prefSoundset = Preferences.selectedSoundSet(context);
 
         // DANGER ZONE: !! delicate ordering dependencies in this block !!
         appConfigTrigger = new AppConfigTrigger();
         // gotcha: gets just-created appConfigHandler via field
-        reInitPiano(context, soundset); // danger: impl leaks `this` pointer before ctor finished
+        reInitPiano(context, prefSoundset); // danger: impl leaks `this` pointer before ctor finished
         // gotcha: needs piano field that was just initialised by reInitPiano above
         this.bevelWidth = piano.get_keys_width() * BEVEL_RATIO;
 
@@ -96,7 +97,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
                 ", there are " + piano.get_keys_count() + " keys");
     }
 
-    public void reInitPiano(Context context, String soundset) {
+    public void reInitPiano(Context context, String prefSoundset) {
+        Log.i("PianOli::PianoCanvas", "re-initialising Piano");
         this.piano = new Piano(screen_size_x, screen_size_y);
 
         // for config trigger updates
@@ -105,9 +107,12 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         // to redraw on key-touches, must be after config handler to ensure its input is also drawn
         piano.addListener(this);
 
+        if (soundSet != null) {
+            soundSet.close();
+        }
         // Respond musically to key-presses: listen with a "soundMaker"
         // Use "strategy pattern" to deal with the two possible key-to-note mappings:
-        SoundSet soundSet = new SampledSoundSet(context, soundset);
+        soundSet = new SampledSoundSet(context, prefSoundset);
         PianoListener soundMaker;
         if (Preferences.areMelodiesEnabled(context)) {
             // "melodic" strategy: next note is determined by melody
@@ -119,6 +124,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             soundMaker = new StraightKeySoundMaker(soundSet);
         }
         piano.addListener(soundMaker);
+        Log.i("PianOli::PianoCanvas", "re-initialising Piano - DONE");
     }
 
     public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {
@@ -259,6 +265,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+        Log.i("PianOli::PianoCanvas", "surfaceCreated");
         redraw(surfaceHolder);
     }
 
@@ -382,8 +389,12 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
 
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {}
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+        Log.i("PianOli::PianoCanvas", "surfaceChanged: ignoring!");
+    }
 
     @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {}
+    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
+        Log.i("PianOli::PianoCanvas", "surfaceDestroyed: ignoring!");
+    }
 }

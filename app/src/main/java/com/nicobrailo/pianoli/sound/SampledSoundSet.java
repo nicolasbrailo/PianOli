@@ -1,6 +1,7 @@
 package com.nicobrailo.pianoli.sound;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.SoundPool;
 import android.util.Log;
@@ -18,7 +19,7 @@ import java.util.Locale;
  * object, and replace it with a new instance.
  * </p>
  */
-public class SampledSoundSet implements AutoCloseable, SoundSet {
+public class SampledSoundSet implements SoundSet {
     /**
      * The amount of samples/notes in each sound-set.
      *
@@ -38,8 +39,11 @@ public class SampledSoundSet implements AutoCloseable, SoundSet {
      * Resource handles to the mp3 samples of our currently active soundset, one for each note
      */
     private final int[] samples;
+    private final String name;
 
     public SampledSoundSet(final Context context, String soundSetName) {
+        this.name = soundSetName;
+
         pool = new SoundPool.Builder()
                 .setMaxStreams(7)   // Play max N concurrent sounds
                 .build();
@@ -90,11 +94,14 @@ public class SampledSoundSet implements AutoCloseable, SoundSet {
     private static int loadNoteFd(AssetManager am, SoundPool pool, String soundSetName, int noteNum) throws IOException {
         String assetFolder = "sounds/" + SoundSet.addPrefix(soundSetName) + "/";
         String fileName = String.format(Locale.ROOT, "n%02d.mp3", noteNum); // root locale OK for number-formatting.
-        return pool.load(am.openFd(assetFolder + fileName), 1);
+        try (AssetFileDescriptor afd = am.openFd(assetFolder + fileName)) {
+            return pool.load(afd, 1);
+        }
     }
 
     @Override
     public void close() {
+        Log.d("PianOli::SoundSet", "releasing soundset " + name);
         pool.release();
     }
 
