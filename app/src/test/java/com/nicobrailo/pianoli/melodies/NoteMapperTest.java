@@ -2,9 +2,12 @@ package com.nicobrailo.pianoli.melodies;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.nicobrailo.pianoli.melodies.NoteMapper.NO_NOTE;
 import static com.nicobrailo.pianoli.melodies.NoteMapper.get_key_idx_from_note;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,6 +20,41 @@ class NoteMapperTest {
         assertEquals(26, get_key_idx_from_note("B2"),
                 "lowest parsable note should be parsed");
 
+    }
+
+
+    static List<Arguments> allNotesSource() {
+        List<String> octaves = List.of("1", "2");
+        List<String> baseNotes = List.of("C", "D", "E", "F", "G", "A", "B");
+        List<String> modifiers = List.of("b", "", "#"); // ordered to keep resulting indexes in ascending order
+
+        ArrayList<Arguments> result = new ArrayList<>(42);
+
+        // loop order differs from notation order, to keep notes in roughly ascending order
+        for (String octave: octaves) {
+            for (String base: baseNotes) {
+                for (String modifier: modifiers) {
+                    String note = base + modifier + octave;
+
+                    // special handling for notes outside our range limits, which the combinator could create
+                    switch (note) {
+                        case "Cb1": continue; // before first possible key; Keyboard starts at C1.
+                        case "B#2": continue; // after last possible key; We don't have sound samples beyond B2.
+                    }
+
+                    result.add(Arguments.of(note));
+                }
+            }
+        }
+        return result;
+    }
+
+    @ParameterizedTest
+    @MethodSource("allNotesSource")
+    public void allNotesWork(String note) {
+        int idx = get_key_idx_from_note(note);
+
+        assertNotEquals(NO_NOTE, idx);
     }
 
     @ParameterizedTest
