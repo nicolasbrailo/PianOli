@@ -9,9 +9,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity {
-
-    public static final String SOUNDSET_DIR_PREFIX = "soundset_";
-
     public SettingsActivity() {
         // empty ctor may be required for fragments
     }

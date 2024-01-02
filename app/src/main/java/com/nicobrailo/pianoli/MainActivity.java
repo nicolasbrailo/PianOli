@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
 
         piano_canvas = findViewById(R.id.piano_canvas);
         piano_canvas.setConfigRequestCallback(this);
-        piano_canvas.selectSoundset(this, Preferences.selectedSoundSet(this));
+        piano_canvas.reInitPiano(this, Preferences.selectedSoundSet(this));
 
         try {
             View decorView = getWindow().getDecorView();
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
     protected void onResume() {
         super.onResume();
 
-        piano_canvas.selectSoundset(this, Preferences.selectedSoundSet(this));
+        piano_canvas.reInitPiano(this, Preferences.selectedSoundSet(this));
         lock_app();
     }
 
