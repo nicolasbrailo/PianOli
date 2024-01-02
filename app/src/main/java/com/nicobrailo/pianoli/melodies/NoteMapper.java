@@ -22,6 +22,7 @@ public class NoteMapper {
 
         switch (note) {
             // Octave 1
+            case "B#0": // special, below our first supported octave, but the modifier bumps it up.
             case "C1":
                 return 0;
             case "C#1":
@@ -35,7 +36,10 @@ public class NoteMapper {
             case "E♭1":
                 return 3;
             case "E1":
+            case "Fb1":
+            case "F♭1":
                 return 4;
+            case "E#1":
             case "F1":
                 return 6;
             case "F#1":
@@ -55,9 +59,12 @@ public class NoteMapper {
             case "B♭1":
                 return 11;
             case "B1":
+            case "Cb2":
+            case "C♭2":
                 return 12;
 
             // Octave 2
+            case "B#1":
             case "C2":
                 return 14;
             case "C#2":
@@ -71,7 +78,10 @@ public class NoteMapper {
             case "E♭2":
                 return 17;
             case "E2":
+            case "Fb2":
+            case "F♭2":
                 return 18;
+            case "E#2":
             case "F2":
                 return 20;
             case "F#2":
@@ -91,6 +101,8 @@ public class NoteMapper {
             case "B♭2":
                 return 25;
             case "B2":
+            case "Cb3": // special, beyond our first supported octave, but the modifier brings it down.
+            case "C♭3": // special, beyond our first supported octave, but the modifier brings it down.
                 return 26;
 
             default:
