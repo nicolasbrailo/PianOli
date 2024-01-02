@@ -1,6 +1,7 @@
 package com.nicobrailo.pianoli;
 
 import android.util.Log;
+import androidx.annotation.NonNull;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -44,6 +45,13 @@ class AppConfigTrigger implements PianoListener {
      * </p>
      */
     private final Set<Integer> pressedConfigKeys = new HashSet<>();
+
+    /**
+     * User frustration tracker: how badly are they failing to open the config?
+     *
+     * @see #cb
+     * @see #setConfigRequestCallback(AppConfigCallback)
+     */
     private TooltipReminder tooltipReminder;
 
     /**
@@ -52,7 +60,10 @@ class AppConfigTrigger implements PianoListener {
     private int nextExpectedKey;
 
     /**
-     * Our "upstream", who knows enougjh about global app context to actually <em>do</em> stuff.
+     * Our "upstream", who knows enough about global app context to actually <em>do</em> stuff.
+     *
+     * @see #tooltipReminder
+     * @see #setConfigRequestCallback(AppConfigCallback)
      */
     private AppConfigCallback cb = null;
 
@@ -60,9 +71,18 @@ class AppConfigTrigger implements PianoListener {
         nextExpectedKey = calculateNextExpectedKey();
     }
 
-    void setConfigRequestCallback(AppConfigCallback cb) {
+    /**
+     * Dependency injection for context-handling stuff: switching to settings activity, and showing toasts.
+     *
+     * <p>
+     * Since this callback is <em>required</em> for this trigger to do anything at all, it would have been preferable
+     * to require this is provided in the constructor. Alas, the way we initialise our upstream <code>PianoCanvas</code>
+     * via XML definition precludes this.
+     * </p>
+     */
+    void setConfigRequestCallback(@NonNull AppConfigCallback cb) {
         this.cb = cb;
-        tooltipReminder = new TooltipReminder(cb);
+        this.tooltipReminder = new TooltipReminder(cb);
     }
 
     /**
@@ -144,9 +164,7 @@ class AppConfigTrigger implements PianoListener {
                 // Sequence complete!
                 reset(); // clear it so it's no longer counted as in-progress.
                 // Open Sesame!
-                if (cb != null) {
-                    cb.requestConfig();
-                }
+                cb.requestConfig();
             } else {
                 nextExpectedKey = calculateNextExpectedKey();
             }
