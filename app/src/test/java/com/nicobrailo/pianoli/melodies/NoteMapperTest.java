@@ -22,6 +22,37 @@ class NoteMapperTest {
 
     }
 
+    /**
+     *
+     * half-steps that don't have a black key in-between.
+     *
+     * <p>"Enharmonic equivalents" are different notations for the same note.
+     * "B#", or half-step up from B, is equal to a normal "C".
+     * The reasons for this are grounded in history and musical theory, but suffice to say:
+     * many things in notation become easier if the half-step modifiers #/b are <em>always</em> allowed,
+     * instead of forbidden on the notes missing their black-key.
+     * </p>
+     * <p>
+     * Further reading:<ul>
+     *     <li><a href="https://www.reddit.com/r/musictheory/comments/2rxyyg/can_someone_please_explain_why_b_equals_c/">Music Theory reddit: Can someone please explain why B# equals C?</a></li>
+     * </ul>
+     * </p>
+     */
+    @ParameterizedTest
+    @CsvSource({
+            "B#,C",
+            "Cb,B",
+            "E#,F",
+            "Fb,E",
+
+    })
+    public void enharmonicEquivalantsAreEqual(String modifiedNote, String plainEquivalent) {
+        int modified = get_key_idx_from_note(modifiedNote);
+        int plain = get_key_idx_from_note(plainEquivalent);
+        assertEquals(plain, modified,
+                "Enharmonic equivalent notation should work should work");
+
+    }
 
     static List<Arguments> allNotesSource() {
         List<String> octaves = List.of("1", "2");
