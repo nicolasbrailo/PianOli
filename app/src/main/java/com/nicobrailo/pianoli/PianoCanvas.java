@@ -49,7 +49,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
     private final int screen_size_y, screen_size_x;
     private final Drawable gearIcon;
-    private final Theme theme;
+    private Theme theme;
 
     private Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
     private SoundSet soundSet;
@@ -62,8 +62,6 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         super(context, as, defStyle);
         this.setFocusable(true);
         this.getHolder().addCallback(this);
-
-        theme = Theme.fromPreferences(context);
 
         final Point screen_size = new Point();
         final AppCompatActivity ctx;
@@ -100,6 +98,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
     public void reInitPiano(Context context, String prefSoundset) {
         Log.i("PianOli::PianoCanvas", "re-initialising Piano");
         this.piano = new Piano(screen_size_x, screen_size_y);
+        this.theme = Theme.fromPreferences(context);
 
         // for config trigger updates
         piano.addListener(appConfigTrigger);
