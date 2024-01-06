@@ -126,7 +126,12 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         Log.i("PianOli::PianoCanvas", "re-initialising Piano - DONE");
     }
 
-    public void setConfigRequestCallback(AppConfigTrigger.AppConfigCallback cb) {
+    /**
+     * Dependency injection for context-handling stuff: switching to settings activity, and showing toasts.
+     *
+     * @see AppConfigTrigger#setConfigRequestCallback(AppConfigTrigger.AppConfigCallback)
+     */
+    public void setConfigRequestCallback(@NonNull AppConfigTrigger.AppConfigCallback cb) {
         this.appConfigTrigger.setConfigRequestCallback(cb);
     }
 

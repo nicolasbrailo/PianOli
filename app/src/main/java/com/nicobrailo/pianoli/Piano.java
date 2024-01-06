@@ -1,10 +1,12 @@
 package com.nicobrailo.pianoli;
 
 import android.util.Log;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Backing model / state of our virtual piano keyboard.
@@ -140,11 +142,11 @@ public class Piano {
      * @return Per the {@link java.util.Collection#add(Object)} contract, <code>true</code> if the listener list changed as a result of this add,
      *          <code>false</code> if it was already subscribed.
      */
-    public boolean addListener(PianoListener l) {
-        if (l != null  // avoid NullPointerExceptions on notify
-                && !listeners.contains(l)) { // don't double-add listeners, to avoid double-triggers
-            listeners.add(l);
-            return true;
+    public boolean addListener(@NonNull PianoListener l) {
+        Objects.requireNonNull(l, "Listeners must not be null to avoid NullPointerExceptions on notify");
+
+        if (!listeners.contains(l)) { // don't double-add listeners, to avoid double-triggers
+            return listeners.add(l);
         }
         return false;
     }
