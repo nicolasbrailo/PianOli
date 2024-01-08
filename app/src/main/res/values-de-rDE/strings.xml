@@ -24,4 +24,5 @@
     <string name="theme_black_and_white">schwarz-weiß</string>
     <string name="melody_twinkle_twinkle_little_star">Morgen kommt der Weihnachtsmann</string>
     <string name="melody_waltzing_matilda">Waltzing Matilda</string>
+    <string name="soundset_piano2">Piano 2</string>
 </resources>
