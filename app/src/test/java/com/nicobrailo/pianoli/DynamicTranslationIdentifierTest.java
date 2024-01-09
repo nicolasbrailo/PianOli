@@ -1,5 +1,6 @@
 package com.nicobrailo.pianoli;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import com.nicobrailo.pianoli.sound.SoundSet;
 import org.jetbrains.annotations.NotNull;
@@ -9,12 +10,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,6 +30,7 @@ import java.util.stream.Stream;
  * These unit tests cover those holes for the following entities:
  * <ul>
  *     <li>SoundSets</li>
+ *     <li>Themes</li>
  * </ul>
  * </p>
  */
@@ -81,6 +85,45 @@ public class DynamicTranslationIdentifierTest {
 
 
     /**
+     * Ensures that all specific {@link Theme}s are translatable.
+     *
+     * @see Theme
+     * @see Theme#PREFIX
+     * @see Theme#fromPreferences(Context)
+     * @see Preferences#selectedTheme(Context)
+     * @see R.xml#root_preferences
+     */
+    @ParameterizedTest
+    @MethodSource("getThemes")
+    public void testThemesHaveTranslationEntities(String themeName) {
+        List<String> translatables = getThemeTranslations();
+
+        String matchingForm = Theme.PREFIX + themeName.toLowerCase(Locale.ROOT);
+        assertContains(translatables, matchingForm,
+                "Theme '" + themeName + "' has no translation string ('" + matchingForm + "') in app/src/main/res/values/strings.xml");
+    }
+
+    /**
+     * Ensures our translations actually have a Theme backing them.
+     *
+     * <p>
+     * Inverse of {@link #testThemesHaveTranslationEntities(String)}, useful if we rename or delete themes.
+     * </p>
+     */
+    @ParameterizedTest
+    @MethodSource("getThemeTranslations")
+    public void testNoLeftoverThemeTranslations(String translationIdentifier) {
+        List<String> themes = getThemes();
+
+        String matchingForm = translationIdentifier
+                .replaceFirst("^" + Theme.PREFIX, "")
+                .toUpperCase(Locale.ROOT);
+        assertContains(themes, matchingForm,
+                "Translation id '" + translationIdentifier + "' translates a theme that doesn't exist in Theme.java " +
+                        "(" + themes + ")");
+    }
+
+    /**
      * Fails (with <code>message</code>) if collection <code>haystack</code> does not contain <code>needle</code>.
      */
     public <T> void assertContains(Collection<T> haystack, T needle, String message) {
@@ -122,5 +165,26 @@ public class DynamicTranslationIdentifierTest {
                     .filter(path -> path.getFileName().toString().startsWith(SoundSet.PREFIX))
                     .collect(Collectors.toList());
         }
+    }
+
+    /**
+     * {@link MethodSource} for all theme translation identifiers
+     */
+    public static List<String> getThemeTranslations() {
+        return getTranslationsByPrefix(Theme.PREFIX);
+    }
+
+    /**
+     * {@link MethodSource} for all themes known to PianOli
+     *
+     * @see Theme
+     */
+    public static List<String> getThemes() {
+        Field[] fields = Theme.class.getDeclaredFields();
+        return Arrays.stream(fields)
+                .filter(field -> Theme.class.equals(field.getType()))
+                .filter(field -> Modifier.isStatic(field.getModifiers()))
+                .map(Field::getName)
+                .collect(Collectors.toList());
     }
 }
