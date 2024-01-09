@@ -15,6 +15,8 @@ public class Melody {
     /** Log tag */
     public static final String TAG = "MELODY";
 
+    public static final String PREFIX = "melody_";
+
     /**
      * All songs known to PianOli.
      *

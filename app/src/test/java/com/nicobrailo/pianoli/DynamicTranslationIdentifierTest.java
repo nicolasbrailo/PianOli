@@ -2,6 +2,7 @@ package com.nicobrailo.pianoli;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import com.nicobrailo.pianoli.melodies.Melody;
 import com.nicobrailo.pianoli.sound.SoundSet;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -31,6 +32,7 @@ import java.util.stream.Stream;
  * <ul>
  *     <li>SoundSets</li>
  *     <li>Themes</li>
+ *     <li>Melodies</li>
  * </ul>
  * </p>
  */
@@ -123,6 +125,46 @@ public class DynamicTranslationIdentifierTest {
                         "(" + themes + ")");
     }
 
+
+    /**
+     * Ensures that all specific {@link Melody Melodies} are translatable.
+     *
+     * @see Melody
+     * @see Melody#PREFIX
+     * @see Melody#all
+     * @see SettingsFragment#loadMelodies()
+     */
+    @ParameterizedTest
+    @MethodSource("getMelodies")
+    public void testMelodiesHaveTranslationEntities(String melodyId) {
+        List<String> translatables = getMelodyTranslations();
+
+        String matchingForm = Melody.PREFIX + melodyId.toLowerCase(Locale.ROOT);
+        assertContains(translatables, matchingForm,
+                "Melody '" + melodyId + "' has no translation string ('" + matchingForm + "') in app/src/main/res/values/strings.xml");
+    }
+
+
+    /**
+     * Ensures our translations actually have a melody backing them.
+     *
+     * <p>
+     * Inverse of {@link #testMelodiesHaveTranslationEntities(String)}, useful if we rename or delete melodies.
+     * </p>
+     */
+    @ParameterizedTest
+    @MethodSource("getMelodyTranslations")
+    public void testNoLeftoverMelodyTranslations(String translationIdentifier) {
+        List<String> melodies = getMelodies();
+
+        String matchingForm = translationIdentifier
+                .replaceFirst("^" + Melody.PREFIX, "");
+
+        assertContains(melodies, matchingForm,
+                "Translation id '" + translationIdentifier + "' translates a melody that doesn't exist in Melody.java " +
+                        "(" + melodies + ")");
+    }
+
     /**
      * Fails (with <code>message</code>) if collection <code>haystack</code> does not contain <code>needle</code>.
      */
@@ -185,6 +227,20 @@ public class DynamicTranslationIdentifierTest {
                 .filter(field -> Theme.class.equals(field.getType()))
                 .filter(field -> Modifier.isStatic(field.getModifiers()))
                 .map(Field::getName)
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * {@link MethodSource} for all melody translation identifiers
+     */
+    public static List<String> getMelodyTranslations() {
+        return getTranslationsByPrefix(Melody.PREFIX);
+    }
+
+    public static List<String> getMelodies() {
+        return Arrays.stream(Melody.all)
+                .map(Melody::getId)
                 .collect(Collectors.toList());
     }
 }
