@@ -5,7 +5,6 @@ import android.content.res.AssetManager;
 import com.nicobrailo.pianoli.melodies.Melody;
 import com.nicobrailo.pianoli.sound.SoundSet;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -16,11 +15,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.nicobrailo.pianoli.AssertionsExt.*;
 
 /**
  * Consistency checks for dynamically-accessed entities: do they have translation-strings?
@@ -163,15 +163,6 @@ public class DynamicTranslationIdentifierTest {
         assertContains(melodies, matchingForm,
                 "Translation id '" + translationIdentifier + "' translates a melody that doesn't exist in Melody.java " +
                         "(" + melodies + ")");
-    }
-
-    /**
-     * Fails (with <code>message</code>) if collection <code>haystack</code> does not contain <code>needle</code>.
-     */
-    public <T> void assertContains(Collection<T> haystack, T needle, String message) {
-        if (!haystack.contains(needle)) {
-            Assertions.fail(message);
-        }
     }
 
     /**
