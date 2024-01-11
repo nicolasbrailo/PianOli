@@ -5,6 +5,7 @@ import com.nicobrailo.pianoli.song.ImALittleTeapot;
 import com.nicobrailo.pianoli.song.InsyWinsySpider;
 import com.nicobrailo.pianoli.song.TwinkleTwinkleLittleStar;
 import com.nicobrailo.pianoli.song.WaltzingMatilda;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Parsed representation of a children's song.
@@ -30,7 +31,7 @@ public class Melody {
             TwinkleTwinkleLittleStar.melody,
             InsyWinsySpider.melody,
             ImALittleTeapot.melody,
-            WaltzingMatilda.melody
+            WaltzingMatilda.melody,
     };
 
     /**
@@ -77,5 +78,13 @@ public class Melody {
 
     public int[] getNotes() {
         return notes;
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "Melody{" +
+                '\'' + id + '\'' +
+                ", " + notes.length + " notes}";
     }
 }
