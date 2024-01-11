@@ -1,10 +1,7 @@
 package com.nicobrailo.pianoli.melodies;
 
 import android.util.Log;
-import com.nicobrailo.pianoli.song.ImALittleTeapot;
-import com.nicobrailo.pianoli.song.InsyWinsySpider;
-import com.nicobrailo.pianoli.song.TwinkleTwinkleLittleStar;
-import com.nicobrailo.pianoli.song.WaltzingMatilda;
+import com.nicobrailo.pianoli.song.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,6 +29,7 @@ public class Melody {
             InsyWinsySpider.melody,
             ImALittleTeapot.melody,
             WaltzingMatilda.melody,
+            BrotherJohn.melody,
     };
 
     /**
