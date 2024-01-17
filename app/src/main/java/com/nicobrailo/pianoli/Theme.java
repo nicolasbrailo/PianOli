@@ -8,6 +8,9 @@ import androidx.core.graphics.ColorUtils;
 public class Theme {
     public static final String PREFIX = "theme_";
 
+    /**
+     * The sequence of colors to render; repeats from the start if there are more keys than array entries.
+     */
     private final KeyColor[] colors;
 
     public static Theme fromPreferences(Context context) {
@@ -84,13 +87,32 @@ public class Theme {
     }
 
     public int getColorForKey(int keyIndex, boolean isPressed) {
-        final int col_idx = (keyIndex / 2) % colors.length;
+        final int col_idx = (keyIndex / 2) % colors.length; // divide by two to skip 'flat'/black keys at odd positions.
         final KeyColor color = colors[col_idx];
         return isPressed ? color.pressed : color.normal;
     }
 
+    /**
+     * The render-colours for a big piano key: {@link #normal} and {@link #pressed}.
+     *
+     * <p>
+     * Note that this only applies to big keys, the 'flat' keys are always black.
+     * </p>
+     */
     private static class KeyColor {
+        /** The normal rendering color, when the key is inactive */
         public final int normal;
+
+        /**
+         * The pressed/touched color of a key.
+         *
+         * <p>
+         * Not automatically derived from {@link #normal}, because different hues need different amounts of
+         * real lightening for the same amount of subjective lightening.
+         * </p>
+         *
+         * @see #createLighterWhenPressed(int, float)
+         */
         public final int pressed;
 
         public KeyColor(int normal, int pressed) {
@@ -102,5 +124,4 @@ public class Theme {
             return new KeyColor(color, ColorUtils.blendARGB(color, Color.WHITE, blendWhiteFactor));
         }
     }
-
 }
