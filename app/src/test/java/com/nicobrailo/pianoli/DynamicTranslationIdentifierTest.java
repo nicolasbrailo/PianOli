@@ -90,7 +90,7 @@ public class DynamicTranslationIdentifierTest {
      *
      * @see Theme
      * @see Theme#PREFIX
-     * @see Theme#fromPreferences(Context)
+     * @see Theme#fromPreference(String) 
      * @see Preferences#selectedTheme(Context)
      * @see R.xml#root_preferences
      */

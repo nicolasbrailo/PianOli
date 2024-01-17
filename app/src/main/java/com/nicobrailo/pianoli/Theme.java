@@ -1,6 +1,5 @@
 package com.nicobrailo.pianoli;
 
-import android.content.Context;
 import android.graphics.Color;
 
 import androidx.core.graphics.ColorUtils;
@@ -57,8 +56,7 @@ public enum Theme {
      */
     private final KeyColor[] colors;
 
-    public static Theme fromPreferences(Context context) {
-        String selectedTheme = Preferences.selectedTheme(context);
+    public static Theme fromPreference(String selectedTheme) {
         switch (selectedTheme) {
             case "black_and_white":
                 return BLACK_AND_WHITE;

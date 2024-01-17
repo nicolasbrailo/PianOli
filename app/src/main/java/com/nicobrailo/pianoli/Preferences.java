@@ -20,7 +20,7 @@ public class Preferences {
     private final static String PREF_SELECTED_SOUND_SET = "selectedSoundSet";
     private final static String PREF_SELECTED_MELODIES = "selectedMelodies";
     private final static String PREF_ENABLE_MELODIES = "enableMelodies";
-    private static final String DEFAULT_THEME = "rainbow";
+    public static final String DEFAULT_THEME = "rainbow";
     private final static String PREF_THEME = "theme";
 
     /**

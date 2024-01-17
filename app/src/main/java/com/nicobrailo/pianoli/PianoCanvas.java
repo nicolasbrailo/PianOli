@@ -98,7 +98,9 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
     public void reInitPiano(Context context, String prefSoundset) {
         Log.i("PianOli::PianoCanvas", "re-initialising Piano");
         this.piano = new Piano(screen_size_x, screen_size_y);
-        this.theme = Theme.fromPreferences(context);
+
+        String prefTheme = Preferences.selectedTheme(context);
+        this.theme = Theme.fromPreference(prefTheme);
 
         // for config trigger updates
         piano.addListener(appConfigTrigger);
