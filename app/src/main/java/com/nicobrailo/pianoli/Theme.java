@@ -85,6 +85,10 @@ public enum Theme {
     }
 
     public int getColorForKey(int keyIndex, boolean isPressed) {
+        if ((keyIndex & 1) == 1) { // odd index = black/flat/small key
+            return isPressed ? Color.GRAY : 0xFF333333; // hardcoded "black" for now, but theme-able in the future.
+        }
+
         final int col_idx = (keyIndex / 2) % colors.length; // divide by two to skip 'flat'/black keys at odd positions.
         final KeyColor color = colors[col_idx];
         return isPressed ? color.pressed : color.normal;

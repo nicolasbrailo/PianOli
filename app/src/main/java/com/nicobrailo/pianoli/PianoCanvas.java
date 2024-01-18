@@ -146,18 +146,14 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
     private void drawBigKeys(Canvas canvas) {
         for (int i = 0; i < piano.get_keys_count(); i += 2) {
-            Paint paint = new Paint();
-            paint.setColor(theme.getColorForKey(i, piano.is_key_pressed(i)));
-            draw_key(canvas, piano.get_area_for_key(i), paint);
+            draw_key(canvas, piano.get_area_for_key(i), i);
         }
     }
 
     private void drawSmallKeys(Canvas canvas) {
         for (int i = 1; i < piano.get_keys_count(); i += 2) {
-            Paint paint = new Paint();
-            paint.setColor(piano.is_key_pressed(i) ? Color.GRAY : 0xFF333333);
             if (piano.get_area_for_flat_key(i) != Key.CANT_TOUCH_THIS) {
-                draw_key(canvas, piano.get_area_for_flat_key(i), paint);
+                draw_key(canvas, piano.get_area_for_flat_key(i), i);
             }
         }
     }
@@ -177,7 +173,10 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         draw_icon_on_black_key(androidCanvas, gearIcon, appConfigTrigger.getNextExpectedKey(), normalSize, normalSize);
     }
 
-    void draw_key(final Canvas canvas, final Key rect, final Paint p) {
+    void draw_key(final Canvas canvas, final Key rect, int i) {
+        Paint p = new Paint();
+        p.setColor(theme.getColorForKey(i, piano.is_key_pressed(i)));
+
         // Draw the main (solid) background of the key.
 
         Rect r = new Rect();
