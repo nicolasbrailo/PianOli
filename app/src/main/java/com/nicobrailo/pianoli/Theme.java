@@ -57,6 +57,12 @@ public enum Theme {
     private final KeyColor[] colors;
 
     public static Theme fromPreference(String selectedTheme) {
+        // defensive programming: if we ever mess up our preferences handling, it's better to fall back to default,
+        // than to crash the app.
+        if (selectedTheme == null) {
+            return RAINBOW;
+        }
+
         switch (selectedTheme) {
             case "black_and_white":
                 return BLACK_AND_WHITE;
