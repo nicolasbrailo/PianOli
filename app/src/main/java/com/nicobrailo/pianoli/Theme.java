@@ -6,6 +6,7 @@ import android.graphics.Color;
 import androidx.core.graphics.ColorUtils;
 
 public class Theme {
+    public static final String PREFIX = "theme_";
 
     private final KeyColor[] colors;
 

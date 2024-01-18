@@ -17,8 +17,10 @@
     <string name="soundset_guitar">Guitar</string>
     <string name="soundset_musicbox">Music Box</string>
     <string name="soundset_piano">Piano</string>
+    <string name="soundset_piano2">Piano 2</string>
     <string name="soundset_sine">Sine Wave</string>
     <string name="soundset_vibraphone">Vibraphone</string>
+
 
     <!-- Song player settings -->
     <string name="pref_enable_melodies">Auto play melodies</string>
@@ -34,6 +36,7 @@
     <string name="melody_im_a_little_teapot">I\'m a Little Teapot</string>
     <string name="melody_insy_winsy_spider">Incy Winsy Spider</string>
     <string name="melody_waltzing_matilda">Waltzing Matilda</string>
+    <string name="melody_brother_john">Brother John</string>
 
     <!-- keyboard colour themes -->
     <string name="theme">Key Colours</string>

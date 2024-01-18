@@ -1,10 +1,8 @@
 package com.nicobrailo.pianoli.melodies;
 
 import android.util.Log;
-import com.nicobrailo.pianoli.song.ImALittleTeapot;
-import com.nicobrailo.pianoli.song.InsyWinsySpider;
-import com.nicobrailo.pianoli.song.TwinkleTwinkleLittleStar;
-import com.nicobrailo.pianoli.song.WaltzingMatilda;
+import com.nicobrailo.pianoli.song.*;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Parsed representation of a children's song.
@@ -14,6 +12,8 @@ import com.nicobrailo.pianoli.song.WaltzingMatilda;
 public class Melody {
     /** Log tag */
     public static final String TAG = "MELODY";
+
+    public static final String PREFIX = "melody_";
 
     /**
      * All songs known to PianOli.
@@ -28,7 +28,8 @@ public class Melody {
             TwinkleTwinkleLittleStar.melody,
             InsyWinsySpider.melody,
             ImALittleTeapot.melody,
-            WaltzingMatilda.melody
+            WaltzingMatilda.melody,
+            BrotherJohn.melody,
     };
 
     /**
@@ -75,5 +76,13 @@ public class Melody {
 
     public int[] getNotes() {
         return notes;
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "Melody{" +
+                '\'' + id + '\'' +
+                ", " + notes.length + " notes}";
     }
 }
