@@ -144,20 +144,6 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         canvas.drawPaint(p);
     }
 
-    private void drawBigKeys(Canvas canvas) {
-        for (int i = 0; i < piano.get_keys_count(); i += 2) {
-            draw_key(canvas, piano.get_area_for_key(i), i);
-        }
-    }
-
-    private void drawSmallKeys(Canvas canvas) {
-        for (int i = 1; i < piano.get_keys_count(); i += 2) {
-            if (piano.get_area_for_flat_key(i) != Key.CANT_TOUCH_THIS) {
-                draw_key(canvas, piano.get_area_for_flat_key(i), i);
-            }
-        }
-    }
-
     /**
      * Overlays gear icons onto the currently-held and next expected flat keys.
      */
@@ -173,7 +159,12 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         draw_icon_on_black_key(androidCanvas, gearIcon, appConfigTrigger.getNextExpectedKey(), normalSize, normalSize);
     }
 
-    void draw_key(final Canvas canvas, final Key rect, int i) {
+    void drawKey(final Canvas canvas, final int i) {
+        Key rect = piano.getAreaForKey(i);
+        if (rect == Key.CANT_TOUCH_THIS) {
+            return; // don't waste performance drawing the skipped black keys.
+        }
+
         Paint p = new Paint();
         p.setColor(theme.getColorForKey(i, piano.is_key_pressed(i)));
 
@@ -253,7 +244,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
      */
     void draw_icon_on_black_key(final Canvas canvas, final Drawable icon, int key_idx,
                                 final int icon_width, final int icon_height) {
-        final Key key = piano.get_area_for_flat_key(key_idx);
+        final Key key = piano.getAreaForKey(key_idx);
         int icon_x = ((key.x_f - key.x_i) / 2) + key.x_i;
         int icon_y = icon_height;
 
@@ -285,9 +276,17 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         if (canvas == null) return;
 
         resetCanvas(canvas);
-        drawBigKeys(canvas);
-        // Small keys drawn after big keys to ensure z-index
-        drawSmallKeys(canvas);
+
+        // draw main, big keys (even key index)
+        for (int i = 0; i < piano.get_keys_count(); i += 2) {
+            drawKey(canvas, i);
+        }
+
+        // Small keys drawn after big keys to ensure z-index (odd key index)
+        for (int i = 1; i < piano.get_keys_count(); i += 2) {
+            drawKey(canvas, i);
+        }
+
         // Gear icons drawn after small keys, since they go on top of those.
         drawConfigGears(canvas);
 

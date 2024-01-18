@@ -165,11 +165,11 @@ public class Piano {
         if (pos_y > keys_flats_height) return big_key_idx;
 
         // Check if press is inside rect of flat key
-        Key flat = get_area_for_flat_key(big_key_idx);
+        Key flat = getAreaForSmallKey(big_key_idx + 1);
         if (flat.contains(pos_x, pos_y)) return big_key_idx + 1;
 
         if (big_key_idx > 0) {
-            Key prev_flat = get_area_for_flat_key(big_key_idx - 2);
+            Key prev_flat = getAreaForSmallKey(big_key_idx - 1);
             if (prev_flat.contains(pos_x, pos_y)) return big_key_idx - 1;
         }
 
@@ -177,20 +177,31 @@ public class Piano {
         return big_key_idx;
     }
 
-    Key get_area_for_key(int key_idx) {
-        int x_i = key_idx / 2 * keys_width;
+    @NonNull
+    Key getAreaForKey(int keyIdx) {
+        if ((keyIdx & 1) == 0) { // even positions are the full, big keys
+            return getAreaForBigKey(keyIdx);
+        } else {
+            return getAreaForSmallKey(keyIdx); // odd positions are the small/black/flat keys.
+        }
+    }
+
+    @NonNull
+    private Key getAreaForBigKey(int keyIdx) {
+        int x_i = keyIdx / 2 * keys_width;
         return new Key(x_i, x_i + keys_width, 0, keys_height);
     }
 
-    Key get_area_for_flat_key(int key_idx) {
-        final int octave_idx = (key_idx / 2) % 7;
-        if (octave_idx == 2 || octave_idx == 6) {
+    @NonNull
+    private Key getAreaForSmallKey(int keyIdx) {
+        final int octaveIdx = (keyIdx / 2) % 7;
+        if (octaveIdx == 2 || octaveIdx == 6) {
             // Keys without flat get a null-area
             return Key.CANT_TOUCH_THIS;
         }
 
         final int offset = keys_width - (keys_flat_width / 2);
-        int x_i = (key_idx / 2) * keys_width + offset;
+        int x_i = (keyIdx / 2) * keys_width + offset;
         return new Key(x_i, x_i + keys_flat_width, 0, keys_flats_height);
     }
 }
