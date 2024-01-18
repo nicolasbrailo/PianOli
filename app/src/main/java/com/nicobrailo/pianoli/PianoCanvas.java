@@ -156,7 +156,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         for (int i = 1; i < piano.get_keys_count(); i += 2) {
             Paint paint = new Paint();
             paint.setColor(piano.is_key_pressed(i) ? Color.GRAY : 0xFF333333);
-            if (piano.get_area_for_flat_key(i) != null) {
+            if (piano.get_area_for_flat_key(i) != Key.CANT_TOUCH_THIS) {
                 draw_key(canvas, piano.get_area_for_flat_key(i), paint);
             }
         }
