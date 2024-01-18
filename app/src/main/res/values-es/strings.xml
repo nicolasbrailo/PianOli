@@ -25,4 +25,6 @@
     <string name="theme_black_and_white">Negro y blanco</string>
     <string name="pref_enable_melodies_summary">Al tocar una tecla se reproduce la siguiente nota de una melodía, en lugar de la nota real de la tecla.</string>
     <string name="pref_enable_melodies">Reproducir las melodías automáticamente</string>
+    <string name="melody_brother_john">Brother John</string>
+    <string name="soundset_piano2">Piano 2</string>
 </resources>
