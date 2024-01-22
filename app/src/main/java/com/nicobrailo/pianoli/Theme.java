@@ -1,14 +1,36 @@
 package com.nicobrailo.pianoli;
 
 import android.graphics.Color;
-
 import androidx.core.graphics.ColorUtils;
 
+
+/**
+ * Switchable key-colouring decisions for {@link PianoCanvas}.
+ *
+ * <p>
+ * Whenever {@link PianoCanvas} renders a key, it asks the current <code>Theme</code>-variant for the paint colour.
+ * This allows us to switch palettes via preferences.
+ * </p>
+ *
+ * @see Preferences#selectedTheme(android.content.Context)
+ * @see PianoCanvas#drawKey(android.graphics.Canvas, int)
+ */
 public enum Theme {
     /**
+     * Boomwhackers are colour-coded pipes that produce a (tuned) note when hit.
+     * Their popularity in educational circles cemented their colour-to-note mapping as a de-facto international standard.
+     *
+     * <p>
+     * See also: <a href="https://en.wikipedia.org/wiki/Boomwhacker">wikipedia: Boomwhacker</a>, and
+     * <a href="https://boomwhackers.com/">boomwhackers.com</a>.
+     * </p>
+     *
+     *
+     * <p>
      * Note that light green, orange and yellow have higher lightness than other colors,
      * so adding just a little white doesn't have the desired effect.
      * That is why they have a larger proportion of white added in.
+     * </p>
      */
     BOOMWHACKER(new KeyColor[] {
         KeyColor.createLighterWhenPressed(Color.rgb(220, 0, 0), 0.5f),     // Red
@@ -20,17 +42,22 @@ public enum Theme {
                 KeyColor.createLighterWhenPressed(Color.rgb(213, 43, 149), 0.5f),  // Pink
     }),
 
+    /**
+     * Soft pastel tones, derived from <a href="https://colorbrewer2.org/#type=qualitative&scheme=Pastel1&n=8">Colorbrewer2.org: Pastel</a>.
+     */
     PASTEL(new KeyColor[] {
-        // https://colorbrewer2.org/#type=qualitative&scheme=Pastel1&n=8
-        KeyColor.createLighterWhenPressed(0xfffbb4ae, 0.5f),
-                KeyColor.createLighterWhenPressed(0xffb3cde3, 0.5f),
-                KeyColor.createLighterWhenPressed(0xffccebc5, 0.5f),
-                KeyColor.createLighterWhenPressed(0xffdecbe4, 0.5f),
-                KeyColor.createLighterWhenPressed(0xfffed9a6, 0.5f),
-                KeyColor.createLighterWhenPressed(0xffffffcc, 0.5f),
-                KeyColor.createLighterWhenPressed(0xffe5d8bd, 0.5f),
+        KeyColor.createLighterWhenPressed(0xfffbb4ae, 0.5f), // dark pink
+                KeyColor.createLighterWhenPressed(0xffb3cde3, 0.5f), // powder blue
+                KeyColor.createLighterWhenPressed(0xffccebc5, 0.5f), // pistachio green
+                KeyColor.createLighterWhenPressed(0xffdecbe4, 0.5f), // lavender
+                KeyColor.createLighterWhenPressed(0xfffed9a6, 0.5f), // orange
+                KeyColor.createLighterWhenPressed(0xffffffcc, 0.5f), // pale yellow
+                KeyColor.createLighterWhenPressed(0xffe5d8bd, 0.5f), // light pink
     }),
 
+    /**
+     * All the colours of the rainbow, C1 dark blue, C2 red, then looping back to blue.
+     */
     RAINBOW(new KeyColor[] {
         KeyColor.createLighterWhenPressed(0xff001caf, 0.5f), // darkblue
                 KeyColor.createLighterWhenPressed(0xff0099ff, 0.5f), // lightblue
@@ -42,13 +69,23 @@ public enum Theme {
                 KeyColor.createLighterWhenPressed(0xffd51016, 0.5f), // red
     }),
 
+    /**
+     * "classic" Ivory and Black.
+     */
     BLACK_AND_WHITE(new KeyColor[] {
-        new KeyColor(
-                Color.rgb(240, 240, 240),
-                Color.rgb(200, 200, 200)
+        new KeyColor( // white, lighter
+                Color.rgb(240, 240, 240), // normal: slightly muted white;
+                Color.rgb(200, 200, 200)  // darker gray when pressed
         )
-    });
+    }); // note that the black flat keys are implicit and hardcoded for all themes at the moment.
 
+    /**
+     * Prefix for preferences-values and translation strings.
+     *
+     * <p>
+     * Often used implicitly, so don't forget to do full-text searches across the project when changing this.
+     * </p>
+     */
     public static final String PREFIX = "theme_";
 
     /**
