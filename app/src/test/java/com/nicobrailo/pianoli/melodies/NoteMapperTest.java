@@ -2,13 +2,11 @@ package com.nicobrailo.pianoli.melodies;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.nicobrailo.pianoli.melodies.NoteMapper.NO_NOTE;
 import static com.nicobrailo.pianoli.melodies.NoteMapper.get_key_idx_from_note;
@@ -99,10 +97,25 @@ class NoteMapperTest {
         assertNotEquals(NO_NOTE, idx);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"C#1", "Db1", "D♭1"})
-    public void fancySynonyms(String note) {
-        assertEquals(1, get_key_idx_from_note(note),
+    /**
+     * Derives fancy ♭/♯ versions of modified notes from {@link #allNotesSource()}.
+     */
+    static List<Arguments> allSynonymsSource() {
+        return allNotesSource().stream()
+                .filter(note -> note.contains("#") || note.contains("b")) // keep only notes with (non-fancy) modifiers
+                .map(note -> Arguments.of(
+                        note,
+                        note
+                                .replace('b', '♭')
+                                .replace('#', '♯')
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @ParameterizedTest(name = "[{index}] {0} == {1}")
+    @MethodSource("allSynonymsSource")
+    public void fancySynonyms(String drabNote, String fancyNote) {
+        assertEquals(get_key_idx_from_note(drabNote), get_key_idx_from_note(fancyNote),
                 "all synonyms for the same note should work, including fancy symbols");
     }
 
