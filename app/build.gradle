@@ -11,8 +11,8 @@ android {
         // "drawer phones", which are more likely to be given to babies.
         //noinspection OldTargetApi
         targetSdkVersion 33
-        versionCode 24
-        versionName "1.24"
+        versionCode 25
+        versionName "1.25"
     }
 
 
