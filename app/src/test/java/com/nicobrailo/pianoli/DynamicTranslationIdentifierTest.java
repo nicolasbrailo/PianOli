@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -91,7 +90,7 @@ public class DynamicTranslationIdentifierTest {
      *
      * @see Theme
      * @see Theme#PREFIX
-     * @see Theme#fromPreferences(Context)
+     * @see Theme#fromPreference(String) 
      * @see Preferences#selectedTheme(Context)
      * @see R.xml#root_preferences
      */
@@ -213,11 +212,8 @@ public class DynamicTranslationIdentifierTest {
      * @see Theme
      */
     public static List<String> getThemes() {
-        Field[] fields = Theme.class.getDeclaredFields();
-        return Arrays.stream(fields)
-                .filter(field -> Theme.class.equals(field.getType()))
-                .filter(field -> Modifier.isStatic(field.getModifiers()))
-                .map(Field::getName)
+        return Arrays.stream(Theme.values())
+                .map(Enum::name)
                 .collect(Collectors.toList());
     }
 
