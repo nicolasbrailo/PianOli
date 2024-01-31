@@ -1,0 +1,5 @@
+Improvements:
+ * New melody: Frère Jacques
+ * Improved tips for unlocking to avoid frustrated parents who need to access the phone. Previously a single failed attempt at touching the gear icon and you would never see instructions again. Now it will reshow the instructions after a few more attempts. 
+
+Want to help contribute or translate PianOli into your language? Join us on GitHub and Weblate.
