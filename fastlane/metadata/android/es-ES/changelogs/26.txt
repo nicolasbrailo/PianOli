@@ -1,0 +1,4 @@
+Cambio técnico:
+ * Objetivo: último SDK de Android
+
+¿Quieres ayudar a traducir PianOli a tu idioma? Únete a nosotros en GitHub y Weblate.
