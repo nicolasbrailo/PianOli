@@ -1,0 +1,4 @@
+Technical change:
+ * Target latest Android SDK
+
+Want to help contribute or translate PianOli into your language? Join us on GitHub and Weblate.

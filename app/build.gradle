@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'de.mannodermaus.android-junit5'
 
 android {
-    compileSdk 33
+    compileSdk 34
     defaultConfig {
         applicationId "com.nicobrailo.pianoli"
         minSdkVersion 21
@@ -10,9 +10,9 @@ android {
         // We deliberately target the oldest API that Google Play allows, to allow running PianOli on ancient
         // "drawer phones", which are more likely to be given to babies.
         //noinspection OldTargetApi
-        targetSdkVersion 33
-        versionCode 25
-        versionName "1.25"
+        targetSdkVersion 34
+        versionCode 26
+        versionName "1.26"
     }
 
 
@@ -51,11 +51,11 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.preference:preference:1.2.1'
-    implementation "androidx.annotation:annotation:1.7.0"
+    implementation "androidx.annotation:annotation:1.8.1"
 
     testImplementation "org.junit.jupiter:junit-jupiter:5.9.2"
 }
