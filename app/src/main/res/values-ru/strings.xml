@@ -1,2 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="settings">Настройки</string>
+    <string name="config_tooltip">Удерживайте первую иконку шестерёнки, а затем нажмите на вторую, чтобы открыть настройки.</string>
+    <string name="soundset">Выбор набора звуков</string>
+    <string name="soundset_guitar">Гитара</string>
+    <string name="soundset_musicbox">Музыкальная шкатулка</string>
+    <string name="soundset_piano2">Фортепиано 2</string>
+    <string name="soundset_sine">Синусоидальный генератор</string>
+    <string name="soundset_vibraphone">Вибрафон</string>
+    <string name="pref_enable_melodies_summary">Нажатие клавиши воспроизводит следующую ноту в мелодии, а не саму ноту клавиши.</string>
+    <string name="pref_selected_melodies_summary">Список мелодий для воспроизведения</string>
+    <string name="melody_twinkle_twinkle_little_star">Сияй, сияй, маленькая звёздочка</string>
+    <string name="melody_insy_winsy_spider">Инси-Винси паучок</string>
+    <string name="melody_waltzing_matilda">К Вальсу, Матильда</string>
+    <string name="melody_brother_john">Братец Джон</string>
+    <string name="theme_black_and_white">Чёрные и белые</string>
+    <string name="preferences">Предпочтения</string>
+    <string name="some_info_about_this_app_title">PianOli - приложение с открытым исходным кодом!</string>
+    <string name="quit_app">Выход из приложения</string>
+    <string name="some_info_about_this_app">Вы можете оставить предложения, замечания и сообщения об ошибках на <a href="https://github.com/nicolasbrailo/PianOli">сайте проекта</a>.</string>
+    <string name="soundset_piano">Фортепиано</string>
+    <string name="pref_enable_melodies">Автовоспроизведение мелодий</string>
+    <string name="pref_selected_melodies">Доступные мелодии</string>
+    <string name="melody_im_a_little_teapot">Я - маленький чайничек</string>
+    <string name="theme">Цвета клавиш</string>
+    <string name="theme_pastel">Пастельные</string>
+    <string name="theme_rainbow">Радужные</string>
+</resources>
