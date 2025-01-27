@@ -1,2 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="quit_app">பயன்பாட்டை விட்டு</string>
+    <string name="preferences">விருப்பத்தேர்வுகள்</string>
+    <string name="settings">அமைப்புகள்</string>
+    <string name="some_info_about_this_app_title">பியானோலி திறந்த மூல!</string>
+    <string name="some_info_about_this_app">பரிந்துரைகள், அம்ச கோரிக்கைகள் மற்றும் பிழை அறிக்கைகளை <a href="https://github.com/nicolasbrailo/pianoli"> திட்ட வலைத்தளம் </a> க்கு அனுப்பவும்.</string>
+    <string name="config_tooltip">முதல் கியர் ஐகானைப் பிடிக்கவும், பின்னர் விருப்பங்களுக்கு இரண்டாவது அழுத்தவும்.</string>
+    <string name="soundset">ஒலி தொகுப்பு</string>
+    <string name="soundset_guitar">கிட்டார்</string>
+    <string name="soundset_musicbox">இசை பெட்டி</string>
+    <string name="soundset_piano">பியானோ</string>
+    <string name="soundset_piano2">பியானோ 2</string>
+    <string name="soundset_sine">சைன் அலை</string>
+    <string name="soundset_vibraphone">வைப்ராஃபோன்</string>
+    <string name="pref_enable_melodies">ஆட்டோ பிளே மெலடிகள்</string>
+    <string name="pref_enable_melodies_summary">ஒரு விசையைத் தொடுவது விசையின் உண்மையான குறிப்பைக் காட்டிலும், மெல்லிசையில் அடுத்த குறிப்பை இயக்குகிறது.</string>
+    <string name="pref_selected_melodies">கிடைக்கும் மெல்லிசைகள்</string>
+    <string name="pref_selected_melodies_summary">மூலம் சுழற்சிக்கு மெல்லிசைகளின் பட்டியல்</string>
+    <string name="melody_twinkle_twinkle_little_star">ட்விங்கிள், ட்விங்கிள், லிட்டில் ச்டார்</string>
+    <string name="melody_im_a_little_teapot">நான் கொஞ்சம் தேனீர்</string>
+    <string name="melody_insy_winsy_spider">இன்கி வின்சி ச்பைடர்</string>
+    <string name="melody_waltzing_matilda">வால்ட்சிங் மாடில்டா</string>
+    <string name="melody_brother_john">சகோதரர் சான்</string>
+    <string name="theme">முக்கிய வண்ணங்கள்</string>
+    <string name="theme_black_and_white">கருப்பு மற்றும் வெள்ளை</string>
+    <string name="theme_pastel">பாச்டல்</string>
+    <string name="theme_rainbow">ரெயின்போ</string>
+</resources>
