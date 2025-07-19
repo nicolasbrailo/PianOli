@@ -16,8 +16,8 @@
     <string name="melody_brother_john">Братец Джон</string>
     <string name="theme_black_and_white">Чёрные и белые</string>
     <string name="preferences">Предпочтения</string>
-    <string name="some_info_about_this_app_title">PianOli - приложение с открытым исходным кодом!</string>
-    <string name="quit_app">Выход из приложения</string>
+    <string name="some_info_about_this_app_title">ПианОли - приложение с открытым исходным кодом!</string>
+    <string name="quit_app">Выйти из приложения</string>
     <string name="some_info_about_this_app">Вы можете оставить предложения, замечания и сообщения об ошибках на <a href="https://github.com/nicolasbrailo/PianOli">сайте проекта</a>.</string>
     <string name="soundset_piano">Фортепиано</string>
     <string name="pref_enable_melodies">Автовоспроизведение мелодий</string>
