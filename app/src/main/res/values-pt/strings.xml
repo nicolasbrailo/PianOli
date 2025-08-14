@@ -1,3 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="quit_app">Sair da App</string>
+    <string name="settings">Opções</string>
+    <string name="some_info_about_this_app_title">PianOli é de software livre!</string>
+    <string name="config_tooltip">Segure a tecla com o Ícone de opções, depois toque no segundo Ícone para entrar.</string>
+    <string name="soundset">Tipo de som</string>
+    <string name="soundset_guitar">Guitarra</string>
+    <string name="soundset_musicbox">Caixa de música</string>
+    <string name="soundset_vibraphone">Vibrafone</string>
+    <string name="some_info_about_this_app">Envie sugestões, solicitações de recursos e relatórios de bugs para o <a href="https://github.com/nicolasbrailo/PianOli">site do projeto</a>.</string>
+    <string name="soundset_piano">Piano</string>
+    <string name="soundset_piano2">Piano 2</string>
+    <string name="pref_enable_melodies">Reproduzir melodias automaticamente</string>
+    <string name="pref_enable_melodies_summary">Tocar numa tecla reproduz a próxima nota numa melodia, em vez da nota real da tecla.</string>
+    <string name="pref_selected_melodies">Melodias disponíveis</string>
+    <string name="theme_black_and_white">Preto e branco</string>
+    <string name="theme_pastel">Pastel</string>
+    <string name="theme_rainbow">Arco-íris</string>
+    <string name="preferences">Preferências</string>
 </resources>
