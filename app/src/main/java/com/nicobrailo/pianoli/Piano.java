@@ -106,11 +106,13 @@ public class Piano {
             return;
         }
 
-        Log.d("PianOli::Piano", "Key " + keyIdx + " is now DOWN");
-        key_pressed[keyIdx] = true;
+        if (!key_pressed[keyIdx]) {
+            Log.d("PianOli::Piano", "Key " + keyIdx + " is now DOWN");
+            key_pressed[keyIdx] = true;
 
-        for (PianoListener l : listeners) {
-            l.onKeyDown(keyIdx);
+            for (PianoListener l : listeners) {
+                l.onKeyDown(keyIdx);
+            }
         }
     }
 
@@ -125,11 +127,13 @@ public class Piano {
             return;
         }
 
-        Log.d("PianOli::Piano", "Key " + keyIdx + " is now UP");
-        key_pressed[keyIdx] = false;
+        if (key_pressed[keyIdx]) {
+            Log.d("PianOli::Piano", "Key " + keyIdx + " is now UP");
+            key_pressed[keyIdx] = false;
 
-        for (PianoListener l : listeners) {
-            l.onKeyUp(keyIdx);
+            for (PianoListener l : listeners) {
+                l.onKeyUp(keyIdx);
+            }
         }
     }
 
