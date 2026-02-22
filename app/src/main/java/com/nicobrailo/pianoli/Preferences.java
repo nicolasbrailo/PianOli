@@ -22,6 +22,7 @@ public class Preferences {
     private final static String PREF_ENABLE_MELODIES = "enableMelodies";
     public static final String DEFAULT_THEME = "rainbow";
     private final static String PREF_THEME = "theme";
+    private final static String PREF_APP_LOCK_ENABLED = "appLockEnabled";
 
     /**
      * If none are selected, then we play all melodies.
@@ -86,6 +87,11 @@ public class Preferences {
                 .edit()
                 .putString(PREF_SELECTED_SOUND_SET, soundSet)
                 .apply();
+    }
+
+    /// Return whether the app lock should be enabled.
+    public static boolean isLockEnabled(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_APP_LOCK_ENABLED, true);
     }
 
 }

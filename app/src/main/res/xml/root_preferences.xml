@@ -30,6 +30,13 @@
             app:title="@string/pref_selected_melodies"
             app:summary="@string/pref_selected_melodies_summary"
             app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            app:key="appLockEnabled"
+            app:defaultValue="true"
+            app:title="@string/pref_app_lock_enabled"
+            app:summary="@string/pref_app_lock_enabled_summary"
+            app:iconSpaceReserved="false"
+            />
     </PreferenceCategory>
 
 </PreferenceScreen>
