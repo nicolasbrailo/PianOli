@@ -1,7 +1,7 @@
 package com.nicobrailo.pianoli;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.nicobrailo.pianoli.melodies.Melody;
@@ -24,6 +24,15 @@ public class Preferences {
     private final static String PREF_THEME = "theme";
     private final static String PREF_APP_LOCK_ENABLED = "appLockEnabled";
 
+    private static SharedPreferences preferenceCache = null;
+
+    private static SharedPreferences appPreferences(Context context) {
+        if (preferenceCache == null) {
+            preferenceCache = context.getApplicationContext().getSharedPreferences("com.nicobrailo.pianoli_preferences", Context.MODE_PRIVATE);
+        }
+        return preferenceCache;
+    }
+
     /**
      * If none are selected, then we play all melodies.
      * This is counter intuitive from a user perspective ("Why is it playing all the
@@ -35,7 +44,7 @@ public class Preferences {
         final String[] defaultMelodies = context.getResources().getStringArray(R.array.default_selected_melodies);
         Set<String> defaultMelodiesSet = new HashSet<>();
         Collections.addAll(defaultMelodiesSet, defaultMelodies);
-        final Set<String> selectedMelodies = PreferenceManager.getDefaultSharedPreferences(context).getStringSet(PREF_SELECTED_MELODIES, defaultMelodiesSet);
+        final Set<String> selectedMelodies = appPreferences(context).getStringSet(PREF_SELECTED_MELODIES, defaultMelodiesSet);
 
         final ArrayList<Melody> melodies = new ArrayList<>(selectedMelodies.size());
         for (Melody melody : Melody.all) {
@@ -47,11 +56,11 @@ public class Preferences {
     }
 
     public static String selectedTheme(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_THEME, DEFAULT_THEME);
+        return appPreferences(context).getString(PREF_THEME, DEFAULT_THEME);
     }
 
     public static boolean areMelodiesEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_MELODIES, false);
+        return appPreferences(context).getBoolean(PREF_ENABLE_MELODIES, false);
     }
 
     /**
@@ -59,7 +68,7 @@ public class Preferences {
      * (note that the soundset_ prefix is stripped from the directory name before being recorded here).
      */
     public static String selectedSoundSet(Context context) {
-        final String soundsetName = PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_SELECTED_SOUND_SET, DEFAULT_SOUNDSET);
+        final String soundsetName = appPreferences(context).getString(PREF_SELECTED_SOUND_SET, DEFAULT_SOUNDSET);
 
         // Should never return null, but the linter has picked up that getString() can strictly speaking
         // return null if a null was saved into preferences in the past, so may as well be defensive here.
@@ -83,7 +92,7 @@ public class Preferences {
 
     public static void setSelectedSoundSet(Context context, String soundSet) {
         Log.d(TAG, "Selecting soundset \"" + soundSet + "\"");
-        PreferenceManager.getDefaultSharedPreferences(context)
+        appPreferences(context)
                 .edit()
                 .putString(PREF_SELECTED_SOUND_SET, soundSet)
                 .apply();
@@ -91,7 +100,7 @@ public class Preferences {
 
     /// Return whether the app lock should be enabled.
     public static boolean isLockEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_APP_LOCK_ENABLED, true);
+        return appPreferences(context).getBoolean(PREF_APP_LOCK_ENABLED, true);
     }
 
 }
