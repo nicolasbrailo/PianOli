@@ -7,6 +7,9 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 public class SettingsActivity extends AppCompatActivity {
     public SettingsActivity() {
@@ -30,6 +33,13 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings_scroll), (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // No top padding, already consumed by the toolbar
+            v.setPadding(bars.left, 0, bars.right, bars.bottom);
+            return insets;
+        });
     }
 
     private void onQuit() {
