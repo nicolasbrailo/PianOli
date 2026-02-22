@@ -9,23 +9,45 @@ class AppConfigTriggerTest {
     private SpyCallback spyCallback;
     private AppConfigTrigger trigger;
 
+    private boolean automaticTrigger = false;
+    private int scheduledTimerID = -1;
+
     @BeforeEach
     public void setup() {
         spyCallback = new SpyCallback();
-        trigger = new AppConfigTrigger();
+        trigger = new AppConfigTrigger() {
+            @Override
+            protected void scheduleTimer(int delayMs, int timerID) {
+                assertTrue(delayMs >= 0, "delay should not be negative");
+                assertTrue(timerID >= 0, "timer ID must be positive");
+                if (automaticTrigger) {
+                    onTimer(timerID);
+                } else {
+                    scheduledTimerID = timerID;
+                }
+            }
+        };
         trigger.setConfigRequestCallback(spyCallback);
     }
 
     @Test
     public void happyPathWorks() {
+        automaticTrigger = false;
         for (int i = 0; i < AppConfigTrigger.CONFIG_TRIGGER_COUNT; i++) {
             assertEquals(0, spyCallback.triggerCount,
                     "Before reaching trigger limit, we should not yet trigger (i=" + i + ")");
             int nextExpectedKey = trigger.getNextExpectedKey();
             trigger.onKeyDown(nextExpectedKey);
         }
+        assertEquals(0, spyCallback.triggerCount, "should not trigger yet");
+        assertEquals(-1, trigger.getNextExpectedKey(), "while waiting for the timer, there should be no expected key to press");
+        assertEquals(2, trigger.getPressedConfigKeys().size(), "while waiting for the timer, the pressed key should still be pressed");
+        assertNotEquals(-1, scheduledTimerID, "there should be a timer scheduled");
+
+        trigger.onTimer(scheduledTimerID);
+
         assertEquals(1, spyCallback.triggerCount,
-                "after hitting the required amount of trigger keys, without mistakes, config should trigger.");
+                "after hitting the required amount of trigger keys, without mistakes and after waiting for timer, config should trigger.");
 
         assertTrue(trigger.getPressedConfigKeys().isEmpty(),
                 "unlock should clear the pressed-state for the successful sequence.\n" +
@@ -35,7 +57,45 @@ class AppConfigTriggerTest {
     }
 
     @Test
+    public void timerCancelledOnKeyUp() {
+        automaticTrigger = false;
+        int lastKey = 0;
+        for (int i = 0; i < AppConfigTrigger.CONFIG_TRIGGER_COUNT; i++) {
+            assertEquals(0, spyCallback.triggerCount,
+                    "Before reaching trigger limit, we should not yet trigger (i=" + i + ")");
+            int nextExpectedKey = trigger.getNextExpectedKey();
+            trigger.onKeyDown(nextExpectedKey);
+            lastKey = nextExpectedKey;
+        }
+
+        assertEquals(0, spyCallback.triggerCount);
+        trigger.onKeyUp(lastKey);
+        assertEquals(0, spyCallback.triggerCount);
+        trigger.onTimer(scheduledTimerID);
+        assertEquals(0, spyCallback.triggerCount);
+    }
+
+
+    @Test
+    public void timerCancelledOnKeyDown() {
+        automaticTrigger = false;
+        for (int i = 0; i < AppConfigTrigger.CONFIG_TRIGGER_COUNT; i++) {
+            assertEquals(0, spyCallback.triggerCount,
+                    "Before reaching trigger limit, we should not yet trigger (i=" + i + ")");
+            int nextExpectedKey = trigger.getNextExpectedKey();
+            trigger.onKeyDown(nextExpectedKey);
+        }
+
+        assertEquals(0, spyCallback.triggerCount);
+        trigger.onKeyDown(2);// Not a black key, so it is not pressed down
+        assertEquals(0, spyCallback.triggerCount);
+        trigger.onTimer(scheduledTimerID);
+        assertEquals(0, spyCallback.triggerCount);
+    }
+
+    @Test
     public void badKeyDownShouldCancelProgress() {
+        automaticTrigger = true;
         for (int i = 0; i < 100; i++) {
             // make some correct progress
             int nextExpectedKey = trigger.getNextExpectedKey();
@@ -54,6 +114,7 @@ class AppConfigTriggerTest {
 
     @Test
     public void anyKeyUpShouldCancelProgress() {
+        automaticTrigger = true;
         for (int i = 0; i < 50; i++) { // try with a LOT of keys, including some absurdly high ones.
             // make some correct progress
             int nextExpectedKey = trigger.getNextExpectedKey();

@@ -51,7 +51,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
     private final Drawable gearIcon;
     private Theme theme;
 
-    private Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
+    private final Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
     private SoundSet soundSet;
 
     public PianoCanvas(Context context, AttributeSet as) {
@@ -79,7 +79,12 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         final String prefSoundset = Preferences.selectedSoundSet(context);
 
         // DANGER ZONE: !! delicate ordering dependencies in this block !!
-        appConfigTrigger = new AppConfigTrigger();
+        appConfigTrigger = new AppConfigTrigger() {
+            @Override
+            protected void scheduleTimer(int delayMs, int timerID) {
+                getHandler().postDelayed(() -> appConfigTrigger.onTimer(timerID), delayMs);
+            }
+        };
         // gotcha: gets just-created appConfigHandler via field
         reInitPiano(context, prefSoundset); // danger: impl leaks `this` pointer before ctor finished
         // gotcha: needs piano field that was just initialised by reInitPiano above
@@ -155,8 +160,11 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         }
 
         // draw next expected key with large icon, for more user-attention.
-        int normalSize = (int) (piano.get_keys_flat_width() * CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO);
-        draw_icon_on_black_key(androidCanvas, gearIcon, appConfigTrigger.getNextExpectedKey(), normalSize, normalSize);
+        int key = appConfigTrigger.getNextExpectedKey();
+        if (key >= 0) {
+            int normalSize = (int) (piano.get_keys_flat_width() * CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO);
+            draw_icon_on_black_key(androidCanvas, gearIcon, key, normalSize, normalSize);
+        }
     }
 
     void drawKey(final Canvas canvas, final int i) {
