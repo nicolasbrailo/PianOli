@@ -109,6 +109,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
         // for config trigger updates
         piano.addListener(appConfigTrigger);
+        appConfigTrigger.resetPressedKeys();
 
         // to redraw on key-touches, must be after config handler to ensure its input is also drawn
         piano.addListener(this);

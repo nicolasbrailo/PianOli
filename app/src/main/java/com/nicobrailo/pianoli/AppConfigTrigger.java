@@ -50,6 +50,12 @@ abstract class AppConfigTrigger implements PianoListener {
     private final Set<Integer> pressedConfigKeys = new HashSet<>();
 
     /**
+     * The total amount of currently pressed keys.
+     * We do not allow the unlock sequence to start if there are any other pressed keys.
+     */
+    private int pressedKeyCount = 0;
+
+    /**
      * User frustration tracker: how badly are they failing to open the config?
      *
      * @see #cb
@@ -174,7 +180,15 @@ abstract class AppConfigTrigger implements PianoListener {
 
     @Override
     public void onKeyDown(int keyIdx) {
-        if (keyIdx == nextExpectedKey && pendingTimerID == NO_TIMER_ID) {
+        boolean validSequence = keyIdx == nextExpectedKey && pendingTimerID == NO_TIMER_ID;
+        if (validSequence && pressedConfigKeys.isEmpty() && pressedKeyCount != 0) {
+            // If this is the first key of the sequence, but there are already some pressed keys,
+            // do not start the sequence.
+            validSequence = false;
+        }
+
+        pressedKeyCount++;
+        if (validSequence) {
             // track user's progress in the unlock-sequence
             pressedConfigKeys.add(keyIdx);
             if (pressedConfigKeys.size() == CONFIG_TRIGGER_COUNT) {
@@ -206,12 +220,23 @@ abstract class AppConfigTrigger implements PianoListener {
      */
     @Override
     public void onKeyUp(int keyIdx) {
+        pressedKeyCount--;
+
         if (pressedConfigKeys.contains(keyIdx)) {
             // The released key was part of an in-progress unlock-sequence
             // (completed sequence would have invoked reset, thus clearing this set, before we get here)
             tooltipReminder.registerFailedAttempt();
         }
         reset();
+    }
+
+    /**
+     * Reset the pressed key count.
+     * This is done to protect us should the user somehow manage to create unbalanced key-down/up
+     * calls. In that case it would not be possible to unlock the config an the user would get stuck.
+     */
+    public void resetPressedKeys() {
+        pressedKeyCount = 0;
     }
 
     /**

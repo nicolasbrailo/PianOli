@@ -94,6 +94,20 @@ class AppConfigTriggerTest {
     }
 
     @Test
+    public void noOtherKeysMustBePressedToUnlock() {
+        automaticTrigger = true;
+        trigger.onKeyDown(2);// Not a black key, so it is not pressed down
+
+        for (int i = 0; i < AppConfigTrigger.CONFIG_TRIGGER_COUNT; i++) {
+            assertEquals(0, spyCallback.triggerCount,
+                    "Before reaching trigger limit, we should not yet trigger (i=" + i + ")");
+            int nextExpectedKey = trigger.getNextExpectedKey();
+            trigger.onKeyDown(nextExpectedKey);
+        }
+        assertEquals(0, spyCallback.triggerCount, "should not trigger yet");
+    }
+
+    @Test
     public void badKeyDownShouldCancelProgress() {
         automaticTrigger = true;
         for (int i = 0; i < 100; i++) {
@@ -109,6 +123,8 @@ class AppConfigTriggerTest {
                     "a bad key-down should reset all progress");
             assertEquals(0, spyCallback.triggerCount,
                     "even after a gazillion (i="+i+") bad attempts, we should never trigger");
+            // Reset
+            trigger.resetPressedKeys();
         }
     }
 
