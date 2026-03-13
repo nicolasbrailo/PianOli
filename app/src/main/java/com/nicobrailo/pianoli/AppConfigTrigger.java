@@ -28,7 +28,7 @@ abstract class AppConfigTrigger implements PianoListener {
     public static final int CONFIG_TRIGGER_COUNT = 2;
 
     /** For how many milliseconds must the trigger key combination be held to activate. */
-    public static final int TRIGGER_DELAY_MS = 500;
+    public static final int TRIGGER_DELAY_MS = 300;
 
     /**
      * Candidate keys to receive a gear icon.
