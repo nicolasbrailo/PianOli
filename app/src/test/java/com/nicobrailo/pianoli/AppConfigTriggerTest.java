@@ -124,7 +124,8 @@ class AppConfigTriggerTest {
             assertEquals(0, spyCallback.triggerCount,
                     "even after a gazillion (i="+i+") bad attempts, we should never trigger");
             // Reset
-            trigger.resetPressedKeys();
+            trigger.reset();
+            trigger.onAllKeysUp();
         }
     }
 

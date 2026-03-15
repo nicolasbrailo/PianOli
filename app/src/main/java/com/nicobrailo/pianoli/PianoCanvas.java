@@ -109,7 +109,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
         // for config trigger updates
         piano.addListener(appConfigTrigger);
-        resetPianoState();
+        appConfigTrigger.reset();
 
         // to redraw on key-touches, must be after config handler to ensure its input is also drawn
         piano.addListener(this);
@@ -131,6 +131,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             soundMaker = new StraightKeySoundMaker(soundSet);
         }
         piano.addListener(soundMaker);
+
+        piano.doAllKeysUp();
         Log.i("PianOli::PianoCanvas", "re-initialising Piano - DONE");
     }
 
@@ -312,16 +314,10 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         redraw();
     }
 
-    /**
-     * Something has gone wrong with the piano or canvas state, and our state is out of sync
-     * with the real state of the world (e.g. somehow we missed a touch down or up event).
-     * Try to reset the state and hope the app survives.
-     */
-    void resetPianoState() {
+    // This is called though piano.doAllKeysUp().
+    @Override
+    public void onAllKeysUp() {
         touch_pointer_to_keys.clear();
-        appConfigTrigger.reset();
-        appConfigTrigger.resetPressedKeys();
-        piano.resetState();
     }
 
     @Override
@@ -344,7 +340,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             case MotionEvent.ACTION_POINTER_DOWN: {
                 if (touch_pointer_to_keys.containsKey(ptr_id)) {
                     Log.e("PianOli::DrawingCanvas", "Touch-track error: Repeated touch-down event received");
-                    resetPianoState();
+                    piano.doAllKeysUp();
                     return super.onTouchEvent(event);
                 }
 
@@ -366,7 +362,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
                     if (!touch_pointer_to_keys.containsKey(ptr_id)) {
                         Log.e("PianOli::DrawingCanvas", "Touch-track error: Missed touch-up event");
-                        resetPianoState();
+                        piano.doAllKeysUp();
                         return super.onTouchEvent(event);
                     }
                     // check if key changed
@@ -386,12 +382,22 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             case MotionEvent.ACTION_UP: {
                 if (!touch_pointer_to_keys.containsKey(ptr_id)) {
                     Log.e("PianOli::DrawingCanvas", "Touch-track error: Repeated touch-up event received");
-                    resetPianoState();
+                    piano.doAllKeysUp();
                     return super.onTouchEvent(event);
                 }
 
                 touch_pointer_to_keys.remove(ptr_id);
                 piano.doKeyUp(key_idx);
+
+                // We are worried about missing touch events, since it would leave us in an invalid
+                // state. We assume, that getting MotionEvents may not be reliable,
+                // but that the information contained within these events is reliable.
+                // So if we detect that there are no touches on the screen right now,
+                // we call the onAllKeysUp signal (via piano) - it should not do anything,
+                // but it will fix our state if it is broken.
+                if (event.getPointerCount() <= 1) {
+                    piano.doAllKeysUp();
+                }
 
                 return true;
             }

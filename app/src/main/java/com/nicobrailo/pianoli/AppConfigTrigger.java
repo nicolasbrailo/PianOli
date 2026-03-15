@@ -230,12 +230,8 @@ abstract class AppConfigTrigger implements PianoListener {
         reset();
     }
 
-    /**
-     * Reset the pressed key count.
-     * This is done to protect us should the user somehow manage to create unbalanced key-down/up
-     * calls. In that case it would not be possible to unlock the config an the user would get stuck.
-     */
-    public void resetPressedKeys() {
+    @Override
+    public void onAllKeysUp() {
         pressedKeyCount = 0;
     }
 

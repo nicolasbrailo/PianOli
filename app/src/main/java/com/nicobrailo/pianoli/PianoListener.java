@@ -10,7 +10,16 @@ public interface PianoListener {
     void onKeyDown(int keyIdx);
 
     /**
-     * signals key <code>keyIdx</code> has been released.
+     * Signals key <code>keyIdx</code> has been released.
      */
     void onKeyUp(int keyIdx);
+
+    /**
+     * Signals that all keys should be released right now.
+     * Called after the last onKeyUp.
+     * This method is used purely as a safeguard - it should not add any new information.
+     * But in case that there is a bug and the key down and up is unbalanced,
+     * this can be used to reset to a valid state.
+     */
+    default void onAllKeysUp() {}
 }

@@ -82,10 +82,6 @@ public class Piano {
         return keys_count;
     }
 
-    void resetState() {
-        Arrays.fill(key_pressed, 0);
-    }
-
     boolean is_key_pressed(int key_idx) {
         if (isOutOfRange(key_idx)) {
             Log.d("PianOli::Piano", "This shouldn't happen: isKeyPressed out of range, key" + key_idx);
@@ -134,6 +130,16 @@ public class Piano {
             for (PianoListener l : listeners) {
                 l.onKeyUp(keyIdx);
             }
+        }
+    }
+
+    /**
+     * Call whenever you are sure that all keys should be up (not pressed).
+     */
+    public void doAllKeysUp() {
+        Arrays.fill(key_pressed, 0);
+        for (PianoListener l : listeners) {
+            l.onAllKeysUp();
         }
     }
 
