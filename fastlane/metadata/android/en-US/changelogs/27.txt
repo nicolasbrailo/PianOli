@@ -1,0 +1,13 @@
+New features:
+ * Optional setting to disable app pinning, so PianOli can be used without locking the device
+
+Improvements:
+ * More natural multi-touch behaviour when several keys are pressed at once
+ * Unlock sequence now waits briefly before opening settings, reducing accidental triggers
+ * Targets latest Android SDK
+ * Internal rendering rewrite for better compatibility
+
+Translations:
+ * New Portuguese, Russian, Tamil translations. Updated Spanish.
+
+Want to help contribute or translate PianOli into your language? Join us on GitHub and Weblate.
