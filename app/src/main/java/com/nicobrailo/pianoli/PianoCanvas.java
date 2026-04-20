@@ -9,6 +9,8 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -79,10 +81,14 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         final String prefSoundset = Preferences.selectedSoundSet(context);
 
         // DANGER ZONE: !! delicate ordering dependencies in this block !!
+        // Bind to the main Looper explicitly rather than calling View.getHandler() at
+        // schedule-time: getHandler() returns null while the view is detached from a
+        // window, which would NPE if a timer is ever scheduled off-screen.
+        final Handler mainHandler = new Handler(Looper.getMainLooper());
         appConfigTrigger = new AppConfigTrigger() {
             @Override
             protected void scheduleTimer(int delayMs, int timerID) {
-                getHandler().postDelayed(() -> appConfigTrigger.onTimer(timerID), delayMs);
+                mainHandler.postDelayed(() -> appConfigTrigger.onTimer(timerID), delayMs);
             }
         };
         // gotcha: gets just-created appConfigHandler via field
@@ -314,7 +320,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         redraw();
     }
 
-    // This is called though piano.doAllKeysUp().
+    // This is called through piano.doAllKeysUp().
     @Override
     public void onAllKeysUp() {
         touch_pointer_to_keys.clear();

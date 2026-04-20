@@ -77,7 +77,7 @@ abstract class AppConfigTrigger implements PianoListener {
     private AppConfigCallback cb = null;
 
     /**
-     * Represents an timer ID that does not exist.
+     * Represents a timer ID that does not exist.
      */
     private static final int NO_TIMER_ID = -1;
 
@@ -88,6 +88,9 @@ abstract class AppConfigTrigger implements PianoListener {
      * this field will be reset and no config will open.
      */
     private int pendingTimerID = NO_TIMER_ID;
+
+    /** Monotonic counter used to hand out unique timer IDs. */
+    private int nextTimerID = 0;
 
     AppConfigTrigger() {
         nextExpectedKey = calculateNextExpectedKey();
@@ -193,7 +196,7 @@ abstract class AppConfigTrigger implements PianoListener {
             pressedConfigKeys.add(keyIdx);
             if (pressedConfigKeys.size() == CONFIG_TRIGGER_COUNT) {
                 nextExpectedKey = -1;
-                pendingTimerID = (int)(System.nanoTime() & 0x7FFF_FFFF);// Arbitrary positive semi-unique ID
+                pendingTimerID = nextTimerID++ & 0x7FFF_FFFF;
                 scheduleTimer(TRIGGER_DELAY_MS, pendingTimerID);
             } else {
                 nextExpectedKey = calculateNextExpectedKey();
@@ -220,7 +223,7 @@ abstract class AppConfigTrigger implements PianoListener {
      */
     @Override
     public void onKeyUp(int keyIdx) {
-        pressedKeyCount--;
+        pressedKeyCount = Math.max(0, pressedKeyCount - 1);
 
         if (pressedConfigKeys.contains(keyIdx)) {
             // The released key was part of an in-progress unlock-sequence
@@ -233,6 +236,7 @@ abstract class AppConfigTrigger implements PianoListener {
     @Override
     public void onAllKeysUp() {
         pressedKeyCount = 0;
+        reset();
     }
 
     /**
