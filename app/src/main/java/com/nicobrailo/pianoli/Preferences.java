@@ -28,7 +28,8 @@ public class Preferences {
 
     private static SharedPreferences appPreferences(Context context) {
         if (preferenceCache == null) {
-            preferenceCache = context.getApplicationContext().getSharedPreferences("com.nicobrailo.pianoli_preferences", Context.MODE_PRIVATE);
+            final Context app = context.getApplicationContext();
+            preferenceCache = app.getSharedPreferences(app.getPackageName() + "_preferences", Context.MODE_PRIVATE);
         }
         return preferenceCache;
     }
