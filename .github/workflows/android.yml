@@ -2,7 +2,7 @@ name: Build and test app
 
 on:
   push:
-    branches: [ '*' ]
+    branches: [ '**' ]
 
 jobs:
   build-and-check:
