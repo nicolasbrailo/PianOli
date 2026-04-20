@@ -15,8 +15,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +35,7 @@ import java.util.Map;
 /**
  * Renderer/View for our {@link Piano}.
  */
-class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoListener {
+class PianoCanvas extends View implements PianoListener {
     /** Relative draw-size of gear icon on next-expected config key */
     public static final float CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO = 0.5f;
     /** Relative draw-size of gear icon on already-held config keys */
@@ -63,7 +62,6 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
     public PianoCanvas(Context context, AttributeSet as, int defStyle) {
         super(context, as, defStyle);
         this.setFocusable(true);
-        this.getHolder().addCallback(this);
 
         final Point screen_size = new Point();
         final AppCompatActivity ctx;
@@ -149,13 +147,6 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
      */
     public void setConfigRequestCallback(@NonNull AppConfigTrigger.AppConfigCallback cb) {
         this.appConfigTrigger.setConfigRequestCallback(cb);
-    }
-
-    /** Resets the canvas to all-black*/
-    private static void resetCanvas(Canvas canvas) {
-        Paint p = new Paint();
-        p.setColor(Color.BLACK);
-        canvas.drawPaint(p);
     }
 
     /**
@@ -276,23 +267,18 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         icon.draw(canvas);
     }
 
-    @Override
-    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        Log.i("PianOli::PianoCanvas", "surfaceCreated");
-        redraw(surfaceHolder);
-    }
-
     public void redraw() {
-        redraw(getHolder());
+        invalidate();
     }
 
-    public void redraw(SurfaceHolder surfaceHolder) {
-        if (surfaceHolder == null) return;
+    private final Paint backgroundPaint = new Paint();
+    {
+        backgroundPaint.setColor(Color.BLACK);
+    }
 
-        Canvas canvas = surfaceHolder.lockCanvas();
-        if (canvas == null) return;
-
-        resetCanvas(canvas);
+    @Override
+    protected void onDraw(@NonNull Canvas canvas) {
+        canvas.drawPaint(backgroundPaint);
 
         // draw main, big keys (even key index)
         for (int i = 0; i < piano.get_keys_count(); i += 2) {
@@ -306,8 +292,6 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
         // Gear icons drawn after small keys, since they go on top of those.
         drawConfigGears(canvas);
-
-        surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
     @Override
@@ -411,16 +395,5 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             default:
                 return super.onTouchEvent(event);
         }
-    }
-
-
-    @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        Log.i("PianOli::PianoCanvas", "surfaceChanged: ignoring!");
-    }
-
-    @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-        Log.i("PianOli::PianoCanvas", "surfaceDestroyed: ignoring!");
     }
 }
