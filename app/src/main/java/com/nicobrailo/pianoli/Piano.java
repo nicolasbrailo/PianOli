@@ -41,8 +41,8 @@ public class Piano {
     private final int keys_flats_height;
     private final int keys_count;
 
-    /** state tracker: which keys are <em>currently</em> pressed */
-    private final boolean[] key_pressed;
+    /** State tracker: which keys are <em>currently</em> pressed (and with how many fingers) */
+    private final int[] key_pressed;
 
     private final List<PianoListener> listeners;
 
@@ -66,7 +66,7 @@ public class Piano {
         // +1: not sure about this... The *2 already ensures a (partial) flat-key on the (partial) big-key.
         keys_count = (big_keys * 2) + 1;
 
-        key_pressed = new boolean[keys_count]; // new array defaults to all false;
+        key_pressed = new int[keys_count]; // new array defaults to all 0
         listeners = new ArrayList<>();
     }
 
@@ -82,17 +82,13 @@ public class Piano {
         return keys_count;
     }
 
-    void resetState() {
-        Arrays.fill(key_pressed, false);
-    }
-
     boolean is_key_pressed(int key_idx) {
         if (isOutOfRange(key_idx)) {
             Log.d("PianOli::Piano", "This shouldn't happen: isKeyPressed out of range, key" + key_idx);
             return false;
         }
 
-        return key_pressed[key_idx];
+        return key_pressed[key_idx] > 0;
     }
 
     /**
@@ -106,11 +102,13 @@ public class Piano {
             return;
         }
 
-        Log.d("PianOli::Piano", "Key " + keyIdx + " is now DOWN");
-        key_pressed[keyIdx] = true;
+        key_pressed[keyIdx] += 1;
+        if (key_pressed[keyIdx] == 1) {
+            Log.d("PianOli::Piano", "Key " + keyIdx + " is now DOWN");
 
-        for (PianoListener l : listeners) {
-            l.onKeyDown(keyIdx);
+            for (PianoListener l : listeners) {
+                l.onKeyDown(keyIdx);
+            }
         }
     }
 
@@ -125,11 +123,23 @@ public class Piano {
             return;
         }
 
-        Log.d("PianOli::Piano", "Key " + keyIdx + " is now UP");
-        key_pressed[keyIdx] = false;
+        key_pressed[keyIdx] -= 1;
+        if (key_pressed[keyIdx] == 0) {
+            Log.d("PianOli::Piano", "Key " + keyIdx + " is now UP");
 
+            for (PianoListener l : listeners) {
+                l.onKeyUp(keyIdx);
+            }
+        }
+    }
+
+    /**
+     * Call whenever you are sure that all keys should be up (not pressed).
+     */
+    public void doAllKeysUp() {
+        Arrays.fill(key_pressed, 0);
         for (PianoListener l : listeners) {
-            l.onKeyUp(keyIdx);
+            l.onAllKeysUp();
         }
     }
 

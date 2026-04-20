@@ -9,6 +9,8 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -51,7 +53,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
     private final Drawable gearIcon;
     private Theme theme;
 
-    private Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
+    private final Map<Integer, Integer> touch_pointer_to_keys = new HashMap<>();
     private SoundSet soundSet;
 
     public PianoCanvas(Context context, AttributeSet as) {
@@ -79,7 +81,16 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         final String prefSoundset = Preferences.selectedSoundSet(context);
 
         // DANGER ZONE: !! delicate ordering dependencies in this block !!
-        appConfigTrigger = new AppConfigTrigger();
+        // Bind to the main Looper explicitly rather than calling View.getHandler() at
+        // schedule-time: getHandler() returns null while the view is detached from a
+        // window, which would NPE if a timer is ever scheduled off-screen.
+        final Handler mainHandler = new Handler(Looper.getMainLooper());
+        appConfigTrigger = new AppConfigTrigger() {
+            @Override
+            protected void scheduleTimer(int delayMs, int timerID) {
+                mainHandler.postDelayed(() -> appConfigTrigger.onTimer(timerID), delayMs);
+            }
+        };
         // gotcha: gets just-created appConfigHandler via field
         reInitPiano(context, prefSoundset); // danger: impl leaks `this` pointer before ctor finished
         // gotcha: needs piano field that was just initialised by reInitPiano above
@@ -104,6 +115,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
         // for config trigger updates
         piano.addListener(appConfigTrigger);
+        appConfigTrigger.reset();
 
         // to redraw on key-touches, must be after config handler to ensure its input is also drawn
         piano.addListener(this);
@@ -125,6 +137,8 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             soundMaker = new StraightKeySoundMaker(soundSet);
         }
         piano.addListener(soundMaker);
+
+        piano.doAllKeysUp();
         Log.i("PianOli::PianoCanvas", "re-initialising Piano - DONE");
     }
 
@@ -155,8 +169,11 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         }
 
         // draw next expected key with large icon, for more user-attention.
-        int normalSize = (int) (piano.get_keys_flat_width() * CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO);
-        draw_icon_on_black_key(androidCanvas, gearIcon, appConfigTrigger.getNextExpectedKey(), normalSize, normalSize);
+        int key = appConfigTrigger.getNextExpectedKey();
+        if (key >= 0) {
+            int normalSize = (int) (piano.get_keys_flat_width() * CONFIG_ICON_SIZE_TO_FLAT_KEY_RATIO);
+            draw_icon_on_black_key(androidCanvas, gearIcon, key, normalSize, normalSize);
+        }
     }
 
     void drawKey(final Canvas canvas, final int i) {
@@ -303,15 +320,10 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
         redraw();
     }
 
-    /**
-     * Something has gone wrong with the piano or canvas state, and our state is out of sync
-     * with the real state of the world (e.g. somehow we missed a touch down or up event).
-     * Try to reset the state and hope the app survives.
-     */
-    void resetPianoState() {
+    // This is called through piano.doAllKeysUp().
+    @Override
+    public void onAllKeysUp() {
         touch_pointer_to_keys.clear();
-        appConfigTrigger.reset();
-        piano.resetState();
     }
 
     @Override
@@ -334,7 +346,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             case MotionEvent.ACTION_POINTER_DOWN: {
                 if (touch_pointer_to_keys.containsKey(ptr_id)) {
                     Log.e("PianOli::DrawingCanvas", "Touch-track error: Repeated touch-down event received");
-                    resetPianoState();
+                    piano.doAllKeysUp();
                     return super.onTouchEvent(event);
                 }
 
@@ -356,7 +368,7 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
 
                     if (!touch_pointer_to_keys.containsKey(ptr_id)) {
                         Log.e("PianOli::DrawingCanvas", "Touch-track error: Missed touch-up event");
-                        resetPianoState();
+                        piano.doAllKeysUp();
                         return super.onTouchEvent(event);
                     }
                     // check if key changed
@@ -376,12 +388,22 @@ class PianoCanvas extends SurfaceView implements SurfaceHolder.Callback, PianoLi
             case MotionEvent.ACTION_UP: {
                 if (!touch_pointer_to_keys.containsKey(ptr_id)) {
                     Log.e("PianOli::DrawingCanvas", "Touch-track error: Repeated touch-up event received");
-                    resetPianoState();
+                    piano.doAllKeysUp();
                     return super.onTouchEvent(event);
                 }
 
                 touch_pointer_to_keys.remove(ptr_id);
                 piano.doKeyUp(key_idx);
+
+                // We are worried about missing touch events, since it would leave us in an invalid
+                // state. We assume, that getting MotionEvents may not be reliable,
+                // but that the information contained within these events is reliable.
+                // So if we detect that there are no touches on the screen right now,
+                // we call the onAllKeysUp signal (via piano) - it should not do anything,
+                // but it will fix our state if it is broken.
+                if (event.getPointerCount() <= 1) {
+                    piano.doAllKeysUp();
+                }
 
                 return true;
             }

@@ -23,14 +23,17 @@ import java.util.Set;
  * brushing another key), but they <em>would</em> be able to trigger a serial sequence by playing "follow the gear".
  * </p>
  */
-class AppConfigTrigger implements PianoListener {
+abstract class AppConfigTrigger implements PianoListener {
     /** How many of the geared keys must be held before config opens */
     public static final int CONFIG_TRIGGER_COUNT = 2;
+
+    /** For how many milliseconds must the trigger key combination be held to activate. */
+    public static final int TRIGGER_DELAY_MS = 300;
 
     /**
      * Candidate keys to receive a gear icon.
      *
-     * <p>Currently a hardcoded set of the first </p>
+     * <p>Currently a hardcoded set of keys</p>
      */
     private static final Set<Integer> BLACK_KEYS = new HashSet<>(Arrays.asList(1, 3, 7, 9, 11, 15));
 
@@ -45,6 +48,12 @@ class AppConfigTrigger implements PianoListener {
      * </p>
      */
     private final Set<Integer> pressedConfigKeys = new HashSet<>();
+
+    /**
+     * The total amount of currently pressed keys.
+     * We do not allow the unlock sequence to start if there are any other pressed keys.
+     */
+    private int pressedKeyCount = 0;
 
     /**
      * User frustration tracker: how badly are they failing to open the config?
@@ -66,6 +75,22 @@ class AppConfigTrigger implements PianoListener {
      * @see #setConfigRequestCallback(AppConfigCallback)
      */
     private AppConfigCallback cb = null;
+
+    /**
+     * Represents a timer ID that does not exist.
+     */
+    private static final int NO_TIMER_ID = -1;
+
+    /**
+     * Which timer are we waiting for right now to open the config?
+     * This is set only when all trigger keys have been pressed and the timer has not fired yet.
+     * If a key is pressed or released while we are waiting for the timer to finish,
+     * this field will be reset and no config will open.
+     */
+    private int pendingTimerID = NO_TIMER_ID;
+
+    /** Monotonic counter used to hand out unique timer IDs. */
+    private int nextTimerID = 0;
 
     AppConfigTrigger() {
         nextExpectedKey = calculateNextExpectedKey();
@@ -93,7 +118,7 @@ class AppConfigTrigger implements PianoListener {
     }
 
     /**
-     * @return currently expected next key in the sequence (without changing it)
+     * @return currently expected next key in the sequence (without changing it). May be -1 if there is no expected key.
      * @see #calculateNextExpectedKey();
      */
     public int getNextExpectedKey() {
@@ -153,18 +178,26 @@ class AppConfigTrigger implements PianoListener {
         }
 
         pressedConfigKeys.clear();
+        pendingTimerID = NO_TIMER_ID;
     }
 
     @Override
     public void onKeyDown(int keyIdx) {
-        if (keyIdx == nextExpectedKey) {
+        boolean validSequence = keyIdx == nextExpectedKey && pendingTimerID == NO_TIMER_ID;
+        if (validSequence && pressedConfigKeys.isEmpty() && pressedKeyCount != 0) {
+            // If this is the first key of the sequence, but there are already some pressed keys,
+            // do not start the sequence.
+            validSequence = false;
+        }
+
+        pressedKeyCount++;
+        if (validSequence) {
             // track user's progress in the unlock-sequence
             pressedConfigKeys.add(keyIdx);
             if (pressedConfigKeys.size() == CONFIG_TRIGGER_COUNT) {
-                // Sequence complete!
-                reset(); // clear it so it's no longer counted as in-progress.
-                // Open Sesame!
-                cb.requestConfig();
+                nextExpectedKey = -1;
+                pendingTimerID = nextTimerID++ & 0x7FFF_FFFF;
+                scheduleTimer(TRIGGER_DELAY_MS, pendingTimerID);
             } else {
                 nextExpectedKey = calculateNextExpectedKey();
             }
@@ -190,12 +223,38 @@ class AppConfigTrigger implements PianoListener {
      */
     @Override
     public void onKeyUp(int keyIdx) {
+        pressedKeyCount = Math.max(0, pressedKeyCount - 1);
+
         if (pressedConfigKeys.contains(keyIdx)) {
             // The released key was part of an in-progress unlock-sequence
             // (completed sequence would have invoked reset, thus clearing this set, before we get here)
             tooltipReminder.registerFailedAttempt();
         }
         reset();
+    }
+
+    @Override
+    public void onAllKeysUp() {
+        pressedKeyCount = 0;
+        reset();
+    }
+
+    /**
+     * Requests that the implementation calls {@link #onTimer(int)}
+     * after some delay.
+     * @param delayMs how many milliseconds should the delay be
+     * @param timerID should be passed to {@link #onTimer(int)} as a parameter, to identify the timer
+     */
+    protected abstract void scheduleTimer(int delayMs, int timerID);
+
+    protected void onTimer(int timerID) {
+        if (timerID == pendingTimerID) {
+            pendingTimerID = NO_TIMER_ID;
+            // Sequence complete!
+            reset(); // clear it so it's no longer counted as in-progress.
+            // Open Sesame!
+            cb.requestConfig();
+        }
     }
 
     /**
