@@ -76,7 +76,7 @@ class PianoTest {
         piano.doKeyDown(i);
         assumeTrue(piano.is_key_pressed(i));
 
-        piano.resetState();
+        piano.doAllKeysUp();
 
         assertFalse(piano.is_key_pressed(i));
     }
