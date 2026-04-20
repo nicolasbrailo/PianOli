@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity implements AppConfigTrigger.AppConfigCallback {
 
     private PianoCanvas piano_canvas = null;
+    private boolean locked = false;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -56,11 +57,20 @@ public class MainActivity extends AppCompatActivity implements AppConfigTrigger.
     }
 
     void lock_app() {
-        startLockTask();
+        if (Preferences.isLockEnabled(this)) {
+            startLockTask();
+            locked = true;
+        }
     }
 
     void unlock_app() {
-        stopLockTask();
+        // According to the docs,
+        // "stopLockTask can only be called by activities that called startLockTask previously".
+        // I don't know what will happen should we call it anyway, so let's not do it.
+        if (locked) {
+            stopLockTask();
+            locked = false;
+        }
     }
 
     @Override

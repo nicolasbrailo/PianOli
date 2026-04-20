@@ -23,12 +23,15 @@
 
 
     <!-- Song player settings -->
+    <string name="preferences">Preferences</string>
     <string name="pref_enable_melodies">Auto play melodies</string>
     <string name="pref_enable_melodies_summary">Touching a key plays the next note in a melody, rather than the key\'s
         actual note.
     </string>
     <string name="pref_selected_melodies">Available melodies</string>
     <string name="pref_selected_melodies_summary">List of melodies to cycle through</string>
+    <string name="pref_app_lock_enabled">Lock piano screen</string>
+    <string name="pref_app_lock_enabled_summary">When enabled, the piano screen will be locked (using app pinning) so that children cannot easily exit from it.</string>
 
     <!-- Song catalog; translatable since quite a few tunes are known under different names,
             and with different lyrics, around the world -->
@@ -44,5 +47,5 @@
     <string name="theme_boomwhacker" translatable="false">Boomwhacker</string>
     <string name="theme_pastel">Pastel</string>
     <string name="theme_rainbow">Rainbow</string>
-    <string name="preferences">Preferences</string>
+
 </resources>
