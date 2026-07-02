@@ -1,3 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="settings">الاعدادات</string>
+    <string name="some_info_about_this_app_title">PianOli انه مفتوح المصدر !</string>
+    <string name="some_info_about_this_app">ارسل اقتراحات و اضافات و طلبات و تقرير اخطأ لموقع المشروع</string>
+    <string name="config_tooltip">اضغط مع الاستمرار على رمز الترس الأول ، ثم اضغط على الثاني لفتح الاعدادات</string>
+    <string name="soundset">مجموعة الاصوت</string>
+    <string name="soundset_guitar">غيتار</string>
+    <string name="soundset_musicbox">صندوق الموسيقى</string>
+    <string name="soundset_piano">بيانو</string>
+    <string name="soundset_piano2">بيانو 2</string>
+    <string name="soundset_vibraphone">فيبرفون</string>
+    <string name="preferences">التفضيلات</string>
+    <string name="pref_enable_melodies">لعب الالحان التلقائي</string>
+    <string name="pref_enable_melodies_summary">يؤدي لمس مفتاح إلى تشغيل النوتة التالية في اللحن ، بدلا من النوتة الفعلية للمفتاح.</string>
+    <string name="pref_selected_melodies">الألحان المتاحة</string>
+    <string name="pref_selected_melodies_summary">قائمة الألحان التي يمكن التنقل بينها</string>
+    <string name="pref_app_lock_enabled">قفل شاشة البيانو</string>
+    <string name="pref_app_lock_enabled_summary">عند التمكين ، سيتم قفل شاشة البيانو (باستخدام تثبيت التطبيق) بحيث لا يمكن للأطفال الخروج منها بسهولة.</string>
+    <string name="melody_twinkle_twinkle_little_star">كتالوج الأغاني; قابل للترجمة نظرا لأن عددا قليلا جدا من الألحان معروفة بأسماء مختلفة, ومع كلمات مختلفة, حول العالم</string>
+    <string name="melody_im_a_little_teapot">أنا إبريق شاي صغير</string>
+    <string name="theme">الوان المفاتيح</string>
 </resources>
